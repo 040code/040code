@@ -1,0 +1,22 @@
+# Site settings
+title: 040 Code
+header-img: img/klokgebouw.jpg
+copyright_name: 040 Code
+description: "A developers blog"
+baseurl: ""
+url: "https://040code.github.io/beta"
+twitter_username: niekos77
+github_username:  npalm
+linkedin_username: niekpalm
+# Google Analytics
+# To enable google analytics, uncomment below line with a valid Google Tracking ID
+google_tracking_id: UA-97020149-1
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+paginate: 5
+exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+
+gems: [jekyll-paginate, jekyll-feed]
