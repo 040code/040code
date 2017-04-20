@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "Dicover the exposed port"
+title:      "Discover the exposed port"
 subtitle:   "Enabling discovery for Spring Cloud on AWS ECS"
 date:       2017-04-20 14:22:00
 author:     "Niek Palm"
@@ -30,7 +30,7 @@ To lookup the expose port an extra agent is added to the EC2 instance. The [disc
     <img src="{{ site.baseurl }}/img/ecs2.png" height="100%" width="100%" alt="ECS">
 </a>
 
-Let’s explain the working of the discovery agent by example: Frist we have to start the agent as a docker container.
+Let’s explain the working of the discovery agent by example: First we have to start the agent as a docker container.
 
 ```
 docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
