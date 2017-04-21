@@ -7,7 +7,7 @@ author:     "Niek Palm"
 header-img: "img/lichtesroute.jpg"
 tags: [gitlab, docker]
 ---
-I am using GitLab CI now for more than a year and I really love the features in GitLab. GitLab provides a complete and powerful tool for day to day development. And of course, there are always feature that you miss. Until now there is no support for periodic builds, in the coming release the feature will be shipped as experimental feature and in the next one is should be general available. But in case you must deal for some reason with an older version, a work around is described below as I used last year.
+I am using GitLab CI now for more than a year and I really love the features in GitLab. GitLab provides a complete and powerful tool for day to day development. And of course, there are always feature that you miss. Until now there is no support for periodic builds, in the coming release the [feature](https://gitlab.com/gitlab-org/gitlab-ce/issues/2989) will be shipped as experimental feature and in the next one is should be general available. But in case you must deal for some reason with an older version, a work around is described below as I used last year.
 
 You could argue why you should need a feature as a periodic build. Ideally a build should be immutable and only trigger by a change in GIT, a commit. But the world is not always perfect, project build are sometime not of the quality that you are expect or tools are not that reliable as you hope. For example, dependencies resolving could break over the time, to avoid you find the problem once your boss is watching you when fixing a critical bug, a periodic build can alert you earlier. Another and much better reason to argue for the feature is that the GitLab build are so powerful that is handy to use them for a scenario based health check.
 
@@ -20,7 +20,7 @@ To setup a periodic build you first need to be able to trigger a build in some w
 - Make a note of the TOKEN and trigger URL. An curl example for trigger is shown as well.
 
 <a href="#">
-    <img src="{{ site.baseurl }}/img/gitlab-trigger.png" alt="GitLab trigger">
+    <img src="{{ site.baseurl }}/img/gitlabtrigger.png" alt="GitLab trigger">
 </a>
 
 Next we test that we are able to trigger the build remotely be executing the `curl` command below.
