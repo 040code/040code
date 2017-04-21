@@ -1,12 +1,15 @@
-docker:
-  slug: docker
-  name: Docker
-cloud:
-  slug: cloud
-  name: Cloud
 aws:
   slug: aws
   name: Amazon
+cloud:
+  slug: cloud
+  name: Cloud
+docker:
+  slug: docker
+  name: Docker
+gitlab:
+  slug: gitlab
+  name: GitLab
 java:
   slug: java
   name: Java
@@ -16,4 +19,3 @@ spring:
 terraform:
   slug: terraform
   name: Terraform
-  
