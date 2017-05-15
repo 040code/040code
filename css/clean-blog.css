@@ -60,7 +60,7 @@ hr.small {
 }
 @media only screen and (min-width: 768px) {
   .navbar-custom {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid transparent;
   }
   .navbar-custom .navbar-brand {
@@ -175,7 +175,7 @@ hr.small {
   }
 }
 .intro-header .post-heading h1 {
-  font-size: 15px;
+  font-size: 35px;
 }
 .intro-header .post-heading .subheading,
 .intro-header .post-heading .meta {
