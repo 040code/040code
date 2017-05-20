@@ -19,3 +19,6 @@ spring:
 terraform:
   slug: terraform
   name: Terraform
+graphql:
+  slug: graphql
+  name: GraphQL
