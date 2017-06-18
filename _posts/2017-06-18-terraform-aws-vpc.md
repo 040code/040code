@@ -212,4 +212,5 @@ module "vpc" {
   availability_zones = {
     eu-west-1 = ["eu-west-1a", "eu-west-1c"]
   }
-  ```
+}
+```
