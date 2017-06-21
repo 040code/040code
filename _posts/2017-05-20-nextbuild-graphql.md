@@ -65,9 +65,13 @@ Instead of yarn, you can use `npm install && npm start`. Once started, browse to
 The Spring Boot Java [sample](https://github.com/npalm/graphql-java-demo.git) is based on the Spring Boot Starter available for GraphQL. This starter uses a basic GraphQL java library as well the Java annotation library for GraphQL.
 ```
 git clone https://github.com/npalm/graphql-java-demo.git
+git checkout nextbuild
 cd graphql-java-demo
 docker build -t graphql-java-demo && docker run -it --rm -p 8080:8080 graphql-java-demo
 ```
 Alternatively, you can build and run via gradle. Once started, browse to [http://localhost:8080/](http://localhost:8080/) to play around with the GraphQL web interface. The Java version implementation was not as easy as expected. The GraphQL Spring Boot starter dependencies requires the GrahpQL java annotation library, which seems to be broken after an update in the Java GraphQL base library. I am not sure if the annotation library is still supported. To get the GraphQL Spring Boot library working I have to add a mandatory mutation to the scheme. And downgrade the Java GraphQL, see `gradle/depedencies.gradle` to get the annotation library to work.
 
 Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.
+
+## Update
+I have updated the Spring Boot implmentation, upgrade all libraries and removed the annotations for graphql resolving. The annoation are replaced [java-graphql-tools](https://github.com/graphql-java/graphql-java-tools). Which looks a better way to ingrate graphql in a Java service. You will see the implementation will have a lot of similarities with the javascript one.
