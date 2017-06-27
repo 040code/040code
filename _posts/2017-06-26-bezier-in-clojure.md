@@ -8,13 +8,13 @@ header-img: "img/htc.jpg"
 tags:       [clojure, bézier, functional, incanter]
 ---
 
-For reasons I might explain in another post, I was searching for [Bézier curves on wikipedia](https://en.wikipedia.org/wiki/Bézier_curve) the other day. Especially the paragraph on "Constructing Bézier curves" made me understand intuitively how these curves are constructed. I wondered if `Clojure` could help me easily visualise some of these curves so I fired up a [REPL](https://en.wikipedia.org/wiki/Read–eval–print_loop) (Read-Eval-Print-Loop) to investigate.
+For reasons I might explain in another post, I was reading about [Bézier curves on wikipedia](https://en.wikipedia.org/wiki/Bézier_curve) the other day. Especially the paragraph on "Constructing Bézier curves" made me understand intuitively how these curves are constructed. I wondered if `clojure` could help me easily visualise some of these curves so I fired up a [REPL](https://en.wikipedia.org/wiki/Read–eval–print_loop) (Read-Eval-Print-Loop) to investigate.
 
 ## Setup
 
 I assume you have a working [leiningen](https://leiningen.org) setup with the [lein-try plugin](https://github.com/rkneufeld/lein-try) installed. 
 
-- Leiningen will help you get started with clojure right away from your shell
+- Leiningen will help you get started with `clojure` right away from your shell
 - Lein-try enables you to spin up a repl and try a library without any hassle.
 
 Let's first start a repl, and specify the library we want to try:
@@ -23,7 +23,7 @@ Let's first start a repl, and specify the library we want to try:
 lein try incanter "1.5.7"
 ```
 
-[Incanter](http://incanter.org) is a clojure-based, R-like platform for statistical computing and graphics. I use it to visualise the Bézier curves.
+[Incanter](http://incanter.org) is a `clojure`-based, R-like platform for statistical computing and graphics. We'll use it to visualise the Bézier curves.
 
 Since the repl is already fired up, let's immediately require the dependencies we'll need:
 
@@ -45,48 +45,58 @@ I decided to hand-roll my own `pow` function:
 
 This function basically says:
 
-- Define a function named `pow`
-- it takes a `base` and an `exponent` as arguments
-- it's going to `repeat` the base `exponent` times
-- and reduce it with the `*'` multiply function
+- define a function named `pow`
+- let `base` and `exponent` be its arguments
+- make it `repeat` the `base` `exponent` times
+- and `reduce` that result with the `*'` multiply function
 
-I'm using the `*'` multiply function instead of the normal `*` function, because according to the docs `*'` 'supports arbitrary precision'. You can see for yourself by typing `(doc *')` in your repl, or study the code: `(source *')`
+
+```clojure
+;; so:
+(pow 2 3)
+;; will lead to
+(reduce *' '(2 2 2))
+;; which results in
+8
+```
+
+I'm using the `*'` multiply function instead of the normal `*` function, because according to the docs `*'` supports arbitrary precision. You can see for yourself by typing `(doc *')` in your repl, or study the code by typing `(source *')` in your repl.
 
 ## Bézier
 
-Bézier functions work with control points. The minimum number of control points is 2 and Bézier curves with 2 control points are straight lines.
+Bézier functions work with control points. The minimum number of control points is 2 and Bézier curves with 2 control points are straight lines (although you can also create straight lines with more than 2 control points).
 
 For the moment I only need Bézier curves with 3 control points: a start point, an end point and one point controlling the curve of the line between start and end.
 
 Quoting the [Wikipedia page](https://en.wikipedia.org/wiki/Bézier_curve): "A quadratic Bézier curve is the path traced by the function B(t), given points P0, P1, and P2":
 
-`B(t) = ((1-t)^2)P0 + 2(1-t)tP1 + (t^2)P2` for 0 <= t <= 1
+![](../../../../../../img/bezier-formula.png)
 
-So given 3 points (P0, P1 and P2) I should be able to describe the curve with this math function. The only thing this resulting `B(t)` function needs is the moment `t` and it will calculate the X or Y coördinate at that particular moment.
+So given 3 points (P0, P1 and P2) I should be able to describe the curve with this math function. Conceptually a pen is drawing the curve by starting on P0 on moment `t = 0` and following the curve described by this formula and the position of the 3 points until it hits the end point at `t = 1`. The only thing this resulting `B(t)` function needs is the moment `t` and it will calculate the X or Y coördinate at that particular moment.
 
-Let's convert the math function to clojure:
+Let's convert the math function to `clojure`:
 
 ```clojure
-(defn bezier-3 [p0 p1 p2]
+(defn bezier-3 [P0 P1 P2]
   (fn [t]
     (+ 
-      (* (pow (- 1 t) 2) p0)
-      (* 2 (- 1 t) t     p1)
-      (* (pow t 2)       p2))))
+      (* (pow (- 1 t) 2) P0)
+      (* 2 (- 1 t) t     P1)
+      (* (pow t 2)       P2))))
 ```
 
-As you can see, you'll have to translate the infix notation to clojure's prefix notation, but the advantage is there are no precedence rules to remember anymore. Just lists where the first element is a function and only brackets are used to put them into context. (If you can't live with that: you can also feed incanter with [infix notation](https://data-sorcery.org/2010/05/14/infix-math/))
+As you can see, you'll have to translate the infix notation to `clojure`'s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. _(If you can't live with that: you can also feed incanter with [infix notation](https://data-sorcery.org/2010/05/14/infix-math/))_
 
 This function basically states:
 
-- Define a function named `bezier-3`
-- it takes 3 arguments
-- it returns an anonymous function
+- define a function named `bezier-3`
+- let it have 3 arguments: `P0`, `P1` and `P2`
+- make it return an anonymous function
 
-This anonymous function
+This anonymous function:
 
 - takes `t` as an argument
-- has `p0`, `p1` and `p2` already 'injected'
+- has `P0`, `P1` and `P2` already 'injected'
 - applies the Bézier math function
 
 Excellent. Let's try it:
@@ -100,16 +110,16 @@ Excellent. Let's try it:
 
 Here I'm defining a variable `test-b3` which holds the anonymous function returned by the `bezier-3` function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.
 
-With the `(test-b3 0)` function call I'm calling the anonymous function `(fn [t] ...)` with a `t` value of `0`. This nicely returns an answer (and doesn't blow the stack or throw a NullPointerException or anything). 
+With the `(test-b3 0)` function call I'm calling the anonymous function with a `t` value of `0`. This nicely returns an answer representing the x coordinates at moment `t` if you provided the (P0, P1 and P2) x coordinates when calling the `bezier-3` function or the y coordinate at moment `t` if you provided the (P0, P1 and P2) y coordinates. 
 
-So now let's map this function over a range of t's `[0 0.25 0.5 0.75 1]`:
+Since this test didn't blow the stack or throw a NullPointerException or anything,  let's map this function over a range of `t`'s `[0 0.25 0.5 0.75 1]`:
 
 ```clojure
 (map test-b3 [0 0.25 0.5 0.75 1])
 => (1 0.9375 0.75 0.4375 0)
 ``` 
 
-Instead of typing these t's to `map` over, we could also use the range function:
+Instead of typing these `t`'s to `map` over, we could also use the `range` function:
 
 ```clojure
 (range 0 10)
@@ -126,68 +136,61 @@ As you can see, range allows you to specify a start (inclusive), an end (exclusi
 => (1 0.9900000000000001 0.9600000000000002 0.9099999999999999 0.84 0.75 0.64 0.51 0.3600000000000001 0.19000000000000014 2.220446049250313E-16)
 ```
 
-Although a certain curve is already visible in these numbers, now might be the right time to start visualising.
+Although a certain pattern is already visible in these numbers, now might be the right time to start visualising the curves.
 
 ## Visualise
 
 Let's be brave and go right to the essence:
 
 ```clojure
-(defn view-bezier-plot [[x1 y1] [x2 y2] [x3 y3]]
-  (let [b3x (bezier-3 x1 x2 x3)
-        xs (map b3x (range 0 1.0 0.01))
-        b3y (bezier-3 y1 y2 y3)
-        ys (map b3y (range 0 1.0 0.01))
+(defn view-bezier-plot [[x1 y1] [x2 y2] [x3 y3] plot-title]
+  (let [b3x         (bezier-3 x1 x2 x3)
+        xs          (map b3x (range 0 1.0 0.01))
+        b3y         (bezier-3 y1 y2 y3)
+        ys          (map b3y (range 0 1.0 0.01))
         raw-dataset (incanter/conj-cols xs ys)
-        dataset (incanter/col-names raw-dataset [:x :y])
-        xy-plot (charts/xy-plot :x :y :points true :data dataset)]
+        dataset     (incanter/col-names raw-dataset [:x :y])
+        xy-plot     (charts/xy-plot :x :y :data dataset :points true :title plot-title)]
     (incanter/view xy-plot)))
 ```
 
-The `let` form is clojure's way to define local variables. So `b3x`, `xs`, `b3y`, etc. can be seen as local variables with their values specified after their declaration.
+The `let` form is `clojure`'s way of defining local variables. So `b3x`, `xs`, `b3y`, etc. can be seen as local variables with their values specified in the functions directly after their declaration.
 
 This function basically states:
 
-- Define a function named `view-bezier-plot`
-- it takes 3 arguments which are destructured in their 2D coordinates.
-- it declares some local variables
+- define a function named `view-bezier-plot`
+- let it have 3 arguments which are destructured into their 2D x & y coordinates 
+- let the fourth argument be the title of the plot
+- `let` it have some local variables:
 	- `b3x` takes all x coordinates of the 3 points
 	- `b3y` takes the y coordinates
-	- `xs` are the all x values resulting from calling the `b3x` anonymous function with all the range values.
-	- what the `ys` are is left as an assignment for the curious reader
+	- `xs` are the all x values resulting from applying the `b3x` anonymous function with all the range values.
+	- ~~what the `ys` are is left as an assignment for the curious reader~~ `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values.
 	- incanter can work with columns similarly to spreadsheets. `raw-dataset` is an incanter dataset where 2 columns are `conj[oined]`.
 	- Default, these columns are called `col-0` and `col-1` respectively, so in `dataset` these are renamed to `:x` and `:y`
-	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `:x` and `:y` respectively and I want to see the points.
-- and eventually returns an `xy-plot`
+	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `:x` and `:y` respectively and viewing the points is set to `true`
+- and make it return an `xy-plot`
 
-Show it!
+
+## I love it when a plan comes together
 
 ```clojure
-;; Steep slope
-;; Increasing ascending:
-(view-bezier-plot [0 0] [1 0] [1 1])
-(view-bezier-plot [0 0] [0.75 0.25] [1 1])
-;; Lineair
-(view-bezier-plot [0 0] [0.5 0.5] [1 1])
-;; Decreasing ascending:
-(view-bezier-plot [0 0] [0 1] [1 1])
-(view-bezier-plot [0 0] [0.25 0.75] [1 1])
 
-;; Medium slope
-;; Increasing ascending
-(view-bezier-plot [0 0.25] [0.375 0.75] [1 0.75])
-;; Lineair
-(view-bezier-plot [0 0.25] [0.5   0.5]  [1 0.75])
-;; Decreasing ascending
-(view-bezier-plot [0 0.25] [0.625 0.25] [1 0.75])
+(view-bezier-plot [0 0] [1 0] [1 1] "increasing ascending")
 
-;; No slope
-(view-bezier-plot [0 0.5] [0.5 0.5] [1 0.5])
+(view-bezier-plot [0 0] [0 -1] [1 1] "swoosh")
+
+(view-bezier-plot [-2 4] [0 -4] [2 4] "y = x^2 ?")
+
+(view-bezier-plot [-1 0] [0 0] [1 0] "my pulse after a useless meeting")
+
 ```
+
+![](../../../../../../img/incanter-plots.png)
 
 ## Conclusion
 
-In a relatively short session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:
+In a relatively short repl session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:
 
 ```clojure
 (require '[incanter.core   :as incanter])
@@ -198,23 +201,39 @@ In a relatively short session I was able to get a better understanding of (3 poi
   (reduce *' (repeat exponent base)))
 
 
-(defn bezier-3 [p0 p1 p2]
+(defn bezier-3 [P0 P1 P2]
   (fn [t]
     (+ 
-      (* (pow (- 1 t) 2) p0)
-      (* 2 (- 1 t) t     p1)
-      (* (pow t 2)       p2))))
+      (* (pow (- 1 t) 2) P0)
+      (* 2 (- 1 t) t     P1)
+      (* (pow t 2)       P2))))
 
 
-(defn view-bezier-plot [[x1 y1] [x2 y2] [x3 y3]]
-  (let [b3x (bezier-3 x1 x2 x3)
-        xs (map b3x (range 0 1.0 0.01))
-        b3y (bezier-3 y1 y2 y3)
-        ys (map b3y (range 0 1.0 0.01))
+(defn view-bezier-plot [[x1 y1] [x2 y2] [x3 y3] plot-title]
+  (let [b3x         (bezier-3 x1 x2 x3)
+        xs          (map b3x (range 0 1.0 0.01))
+        b3y         (bezier-3 y1 y2 y3)
+        ys          (map b3y (range 0 1.0 0.01))
         raw-dataset (incanter/conj-cols xs ys)
-        dataset (incanter/col-names raw-dataset [:x :y])
-        xy-plot (charts/xy-plot :x :y :points true :data dataset)]
+        dataset     (incanter/col-names raw-dataset [:x :y])
+        xy-plot     (charts/xy-plot :x :y :data dataset :points true :title plot-title)]
     (incanter/view xy-plot)))
 ```
 
+One thing I learned is that `clojure` code is pretty compact in a good way. Explaining in text what the code does took my 3 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
+
 Happy coding!
+
+## Links
+
+- [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
+- [Clojure website](https://clojure.org)
+- [REPL or Read Eval Print Loop](https://en.wikipedia.org/wiki/Read–eval–print_loop)
+- [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
+- [Leiningen](https://leiningen.org)
+- [Lein-try plugin](https://github.com/rkneufeld/lein-try)
+- [Incanter](http://incanter.org)
+- [Incanter infix notation](https://data-sorcery.org/2010/05/14/infix-math/)
+- [Wikipedia page on Bézier curves](https://en.wikipedia.org/wiki/Bézier_curve)
+- [The formula for a bezier curve](https://plus.maths.org/content/formula-bezier-curve)
+- [Play around with bézier curves with 4 control points:](http://blogs.sitepointstatic.com/examples/tech/canvas-curves/bezier-curve.html)
