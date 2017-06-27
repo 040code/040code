@@ -220,16 +220,16 @@ In a relatively short repl session I was able to get a better understanding of (
     (incanter/view xy-plot)))
 ```
 
-One thing I learned is that `clojure` code is pretty compact in a good way. Explaining in text what the code does took my 3 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
+Explaining in text what the code does took me 3 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
 
-Happy coding!
+Thanks Niek for posting my guest blog. Please share your comments, suggestions and thoughts about this blog with me on [twitter.com/mmz_](https://twitter.com/mmz_). Thanks for reading and Happy Coding!
 
 ## Links
 
 - [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
 - [Clojure website](https://clojure.org)
 - [REPL or Read Eval Print Loop](https://en.wikipedia.org/wiki/Read–eval–print_loop)
-- [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
+- [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests and test data by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
 - [Leiningen](https://leiningen.org)
 - [Lein-try plugin](https://github.com/rkneufeld/lein-try)
 - [Incanter](http://incanter.org)
