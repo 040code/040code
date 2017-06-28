@@ -55,12 +55,12 @@ This function basically says:
 ;; so:
 (pow 2 3)
 ;; will lead to
-(reduce *' '(2 2 2))
+(reduce *' [2 2 2])
 ;; which results in
 8
 ```
 
-I'm using the `*'` multiply function instead of the normal `*` function, because according to the docs `*'` supports arbitrary precision. You can see for yourself by typing `(doc *')` in your repl, or study the code by typing `(source *')` in your repl.
+I'm using the `*'` multiply function instead of the normal `*` multiply function, because according to the docs `*'` supports arbitrary precision. You can see for yourself by typing `(doc *')` in your repl, or study the code by typing `(source *')` in your repl.
 
 ## Bézier
 
@@ -85,7 +85,7 @@ Let's convert the math function to `clojure`:
       (* (pow t 2)       P2))))
 ```
 
-As you can see, you'll have to translate the infix notation to `clojure`'s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. _(If you can't live with that: you can also feed incanter with [infix notation](https://data-sorcery.org/2010/05/14/infix-math/))_
+As you can see, you'll have to translate the infix notation to `clojure`'s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. _(If you can't live with that: you can also use infix notation in clojure. For instance incanter can also be fed with [infix notation](https://data-sorcery.org/2010/05/14/infix-math/). However, you'll lose [the power of the 𝝺](https://en.wikipedia.org/wiki/Lambda_calculus))_
 
 This function basically states:
 
@@ -129,7 +129,7 @@ Instead of typing these `t`'s to `map` over, we could also use the `range` funct
 => (0 2 4 6 8)
 ```
 
-As you can see, range allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).
+As you can see, `range` allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).
 
 ```clojure
 (map test-b3 (range 0 1 0.1))
@@ -220,14 +220,17 @@ In a relatively short repl session I was able to get a better understanding of (
     (incanter/view xy-plot)))
 ```
 
-Explaining in text what the code does took me 3 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
+Actually, the hand-rolled `pow` function isn't really needed. I could have used `clojure`'s java interop: `(Math/pow 2 3)`. Here I'm calling the `pow` method directly on java's `Math` class. I weighted the option of hand-rolling the `pow` function, showing some functional code and explaining how function are defined in `clojure` versus explaining java interop. 
+
+Explaining in text what the code does took me 5 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
 
 Thanks Niek for posting my guest blog. Please share your comments, suggestions and thoughts about this blog with me on [twitter.com/mmz_](https://twitter.com/mmz_). Thanks for reading and Happy Coding!
 
 ## Links
 
-- [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
 - [Clojure website](https://clojure.org)
+- [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
+- [𝝺 calculus](https://en.wikipedia.org/wiki/Lambda_calculus)
 - [REPL or Read Eval Print Loop](https://en.wikipedia.org/wiki/Read–eval–print_loop)
 - [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests and test data by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
 - [Leiningen](https://leiningen.org)
@@ -236,4 +239,4 @@ Thanks Niek for posting my guest blog. Please share your comments, suggestions a
 - [Incanter infix notation](https://data-sorcery.org/2010/05/14/infix-math/)
 - [Wikipedia page on Bézier curves](https://en.wikipedia.org/wiki/Bézier_curve)
 - [The formula for a bezier curve](https://plus.maths.org/content/formula-bezier-curve)
-- [Play around with bézier curves with 4 control points:](http://blogs.sitepointstatic.com/examples/tech/canvas-curves/bezier-curve.html)
+- [Play around with bézier curves with 4 control points](http://blogs.sitepointstatic.com/examples/tech/canvas-curves/bezier-curve.html)
