@@ -73,5 +73,10 @@ Alternatively, you can build and run via gradle. Once started, browse to [http:/
 
 Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.
 
-## Update
+## Updates
+
+### Refactored Java implementation (June 20, 2017)
 I have updated the Spring Boot implmentation, upgrade all libraries and removed the annotations for graphql resolving. The annoation are replaced [java-graphql-tools](https://github.com/graphql-java/graphql-java-tools). Which looks a better way to ingrate graphql in a Java service. You will see the implementation will have a lot of similarities with the javascript one.
+
+### Developers.nl meetup Rotterdam (June 28, 2017)
+On June, the 28th I have presented the GraphQL talk at the [developers.nl Meetup](https://www.meetup.com/Developers-nl-Meetup/events/240419508/) in Rotterdom. I have used a slightly minimal version for the slides, which can be found [here](https://npalm.github.io/graphql-slides-20170628/#/5). Comparing the to the presentaton on the nextbuild I have also walked through the code examples mentioned above.
