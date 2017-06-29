@@ -36,7 +36,7 @@ Nothing fancy going on here. Simply 'import' statements the `clojure` way.
 
 ## Helper function
 
-I decided to hand-roll my own `pow` function:
+I decided to hand-roll my own `pow` function, because we'll need it later in the creation of bézier curves:
 
 ```clojure
 (defn pow [base exponent]
@@ -165,8 +165,8 @@ This function basically states:
 	- `b3x` takes all x coordinates of the 3 points
 	- `b3y` takes the y coordinates
 	- `xs` are the all x values resulting from applying the `b3x` anonymous function with all the range values.
-	- ~~what the `ys` are is left as an assignment for the curious reader~~ `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values.
-	- incanter can work with columns similarly to spreadsheets. `raw-dataset` is an incanter dataset where 2 columns are `conj[oined]`.
+	- `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values.
+	- incanter can work with columns similarly to spreadsheets. `raw-dataset` is an incanter dataset where 2 columns are 'brought together', or in [lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) terms `conj`[oined].
 	- Default, these columns are called `col-0` and `col-1` respectively, so in `dataset` these are renamed to `:x` and `:y`
 	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `:x` and `:y` respectively and viewing the points is set to `true`
 - and make it return an `xy-plot`
@@ -187,6 +187,8 @@ This function basically states:
 ```
 
 ![](../../../../../../img/incanter-plots.png)
+
+The generated charts will be opened in external java windows. Sometimes they stay hidden behind other windows on your screen, so you might have to bring your java windows to the foreground in order to see them.
 
 ## Conclusion
 
@@ -220,7 +222,7 @@ In a relatively short repl session I was able to get a better understanding of (
     (incanter/view xy-plot)))
 ```
 
-Actually, the hand-rolled `pow` function isn't really needed. I could have used `clojure`'s java interop: `(Math/pow 2 3)`. Here I'm calling the `pow` method directly on java's `Math` class. I weighted the option of hand-rolling the `pow` function, showing some functional code and explaining how function are defined in `clojure` versus explaining java interop. 
+Actually, the hand-rolled `pow` function isn't really needed. I could have used `clojure`'s java interop: `(Math/pow 2 3)`. In that case I would have been calling the `pow` method directly on java's `Math` class. I weighted the option of hand-rolling the `pow` function, showing some functional code and explaining how functions are defined in `clojure` versus explaining java interop. 
 
 Explaining in text what the code does took me 5 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
 
@@ -228,11 +230,12 @@ Thanks Niek for posting my guest blog. Please share your comments, suggestions a
 
 ## Links
 
+- [A gist with the code from this post](https://gist.github.com/mmzsource/833ddfb2cf87c54fe4fc26996466cd1d) 
 - [Clojure website](https://clojure.org)
 - [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
 - [𝝺 calculus](https://en.wikipedia.org/wiki/Lambda_calculus)
 - [REPL or Read Eval Print Loop](https://en.wikipedia.org/wiki/Read–eval–print_loop)
-- [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests and test data by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
+- [REPL Driven Development](http://www.davidtanzer.net/rdd_and_tests) - a blog which is a bit outdated on the test part, because nowadays, with [clojure spec](https://clojure.org/about/spec) we easily generate our tests and test data by specifying our data structures, functions, etc. in `clojure` itself. With proper specs, you'll get even more than generative testing; you'll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power & pleasure of a dynamic programming language!
 - [Leiningen](https://leiningen.org)
 - [Lein-try plugin](https://github.com/rkneufeld/lein-try)
 - [Incanter](http://incanter.org)
