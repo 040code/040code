@@ -148,9 +148,8 @@ Let's be brave and go right to the essence:
         xs          (map b3x (range 0 1.0 0.01))
         b3y         (bezier-3 y1 y2 y3)
         ys          (map b3y (range 0 1.0 0.01))
-        raw-dataset (incanter/conj-cols xs ys)
-        dataset     (incanter/col-names raw-dataset [:x :y])
-        xy-plot     (charts/xy-plot :x :y :data dataset :points true :title plot-title)]
+        dataset     (incanter/conj-cols xs ys)
+        xy-plot     (charts/xy-plot "col-0" "col-1" :data dataset :points true :title plot-title)]
     (incanter/view xy-plot)))
 ```
 
@@ -166,9 +165,8 @@ This function basically states:
 	- `b3y` takes the y coordinates
 	- `xs` are the all x values resulting from applying the `b3x` anonymous function with all the range values.
 	- `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values.
-	- incanter can work with columns similarly to spreadsheets. `raw-dataset` is an incanter dataset where 2 columns are 'brought together', or in [lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) terms `conj`[oined].
-	- Default, these columns are called `col-0` and `col-1` respectively, so in `dataset` these are renamed to `:x` and `:y`
-	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `:x` and `:y` respectively and viewing the points is set to `true`
+	- incanter can work with columns similarly to spreadsheets. `dataset` is an incanter dataset where 2 columns are 'brought together', or in [lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) terms `conj`[oined]. By default, these columns are called `col-0` and `col-1` respectively
+	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `col-0` and `col-1` respectively and viewing the points is set to `true`
 - and make it return an `xy-plot`
 
 
@@ -216,9 +214,8 @@ In a relatively short repl session I was able to get a better understanding of (
         xs          (map b3x (range 0 1.0 0.01))
         b3y         (bezier-3 y1 y2 y3)
         ys          (map b3y (range 0 1.0 0.01))
-        raw-dataset (incanter/conj-cols xs ys)
-        dataset     (incanter/col-names raw-dataset [:x :y])
-        xy-plot     (charts/xy-plot :x :y :data dataset :points true :title plot-title)]
+        dataset     (incanter/conj-cols xs ys)
+        xy-plot     (charts/xy-plot "col-0" "col-1" :data dataset :points true :title plot-title)]
     (incanter/view xy-plot)))
 ```
 
