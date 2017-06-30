@@ -163,9 +163,9 @@ This function basically states:
 - `let` it have some local variables:
 	- `b3x` takes all x coordinates of the 3 points
 	- `b3y` takes the y coordinates
-	- `xs` are the all x values resulting from applying the `b3x` anonymous function with all the range values.
-	- `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values.
-	- incanter can work with columns similarly to spreadsheets. `dataset` is an incanter dataset where 2 columns are 'brought together', or in [lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) terms `conj`[oined]. By default, these columns are called `col-0` and `col-1` respectively
+	- `xs` are the all x values resulting from applying the `b3x` anonymous function with all the range values
+	- `ys` are the all y values resulting from applying the `b3y` anonymous function with all the range values
+	- incanter can work with columns similarly to spreadsheets. `dataset` is an incanter dataset where 2 columns are 'brought together', or in [lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) terms `conj`[oined]. By default, these columns are called `col-0`, `col-1`, ... , `col-n`
 	- xy-plot contains an incanter chart where `dataset` provides the data, the x-axis - and y-axis values are found in columns `col-0` and `col-1` respectively and viewing the points is set to `true`
 - and make it return an `xy-plot`
 
