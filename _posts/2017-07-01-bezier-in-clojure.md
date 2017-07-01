@@ -2,7 +2,7 @@
 layout:     post
 title:      "Visualising Bézier Curves"
 subtitle:   "Experimenting with Clojure"
-date:       2017-06-26
+date:       2017-07-01
 author:     "Maarten Metz"
 header-img: "img/htc.jpg"
 tags:       [clojure, bézier, functional, incanter]
