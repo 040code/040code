@@ -4,7 +4,7 @@ title:      "Visualising Bézier Curves Part II"
 subtitle:   "Experimenting with ClojureScript"
 date:       2017-07-08
 author:     "Maarten Metz"
-header-img: "img/htc.jpg"
+header-img: "img/HDP.JPG"
 tags:       [clojure, clojurescript, bézier, functional, klipse, canvas]
 ---
 
@@ -48,7 +48,7 @@ Lisp in the browser. Embedded in this blog. No setup required. Excellent!
 
 But hang on, better things will follow soon.
 
-# Clojure is designed to be a hosted language
+## Clojure is designed to be a hosted language
 
 Why reinvent your own platform, your own runtime, your own garbage collector, your own ecosystem, when all you need is a decent language? `Clojure` is designed to be a hosted language. It runs on:
 
