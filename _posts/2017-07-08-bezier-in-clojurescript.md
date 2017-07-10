@@ -8,7 +8,7 @@ header-img: "img/HDP.JPG"
 tags:       [clojure, clojurescript, bézier, functional, klipse, canvas]
 ---
 
-In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I wanted to visualise simple Bézier curves and chose `Clojure` as my implementation tool. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.
+In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I described how to visualise simple Bézier curves. I chose `Clojure` as implementation language. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.
 
 This post will be easier for you - at least in terms of setup. You won't have to leave your browser and can experiment with `Clojure(Script)` right here on this page!
 
@@ -52,8 +52,8 @@ But hang on, better things will follow soon.
 
 Why reinvent your own platform, your own runtime, your own garbage collector, your own ecosystem, when all you need is a decent language? `Clojure` is designed to be a hosted language. It runs on:
 
-- [the JVM](https://www.clojure.org/about/jvm_hosted)
-- [the CLR](https://www.clojure.org/about/clojureclr) 
+- [The JVM](https://www.clojure.org/about/jvm_hosted)
+- [The CLR](https://www.clojure.org/about/clojureclr) 
 - [Javascript engines](https://clojurescript.org)
 
 `Clojurescript` - a compiler for `Clojure` that emits javascript - will be the tool we use in this blog to visualise Bézier curves. We are going to manipulate a html canvas right from a klipse plugin.
@@ -159,7 +159,7 @@ Scanning the code quickly without going into detail, this is what happens:
 	- Draw Bézier curves with 3 control points
 - Draw the actual curves and points
 
-Since `Clojure` is a hosted language, it must be able to access its host language and libraries. `Clojure` and `ClojureScript` have good [interop documentation](http://cljs.github.io/api/syntax/#dot) so I won't go into detail here, but we're basically using these forms in this blog:
+Since `Clojure` is a hosted language, it must be able to access its host platform and libraries. `Clojure` and `ClojureScript` have good [interop](https://clojure.org/reference/java_interop) [documentation](http://cljs.github.io/api/syntax/#dot) so I won't go into detail here, but we're basically using these forms in this blog:
 
 - `js/document`       => the global document object
 - `(.beginPath ctx)`  => `ctx.beginPath()`
@@ -178,17 +178,17 @@ Other than that it's basic `Clojure` and [HTML Canvas functionality](https://www
 Thanks to the klipse plugin and a bit of preparation from my side, you can now play around with Bézier Curves in `ClojureScript` directly in this blog. I do realise this post is probably not a compelling case for using `ClojureScript`:
 
 - Javascript "in the small" is not really the place where `ClojureScript` shines, especially when the largest part of that small program is javascript interop
-- `ClojureScript` fits large browser applications better where you need sane state management, immutable datastructures, lazy sequences, and a fast,  stable and robust language
-- I'm not interested in 'religious' discussions about technology A versus technology B. `Clojure` and `ClojureScript` are THE sane way forward for me, in my context. I hope to share the fun I'm experiencing with it
-- Goethe said it best:
+- `ClojureScript` fits large browser applications better, where you need sane state management, immutable datastructures, lazy sequences, and a fast,  stable and robust language
+
+I'm not interested in 'religious' discussions about technology A versus technology B. `Clojure` and `ClojureScript` are THE sane way forward for me, in my context. I hope to share the fun I'm experiencing with it. Goethe said it best:
 
 > It is always better to say right out what you think without trying to prove anything much: for all our proofs are only variations of our opinions, and the contrary-minded listen neither to one nor the other.
 
 But with all this talk about language, we're almost forgetting what it's all about: building useful stuff and having a great time doing it.
 
-I hope you enjoyed experimenting with Bézier curves. The [Klipse Blog](http://blog.klipse.tech) has several great examples of using Klipse, for instance [to write data driven documents](http://blog.klipse.tech/data/2017/03/17/data-driven-documents-google-charts.html).
+I hope you enjoyed experimenting with Bézier curves. The [Klipse Blog](http://blog.klipse.tech) has several great examples of using Klipse for 'interactive programming', for instance [to write data driven documents](http://blog.klipse.tech/data/2017/03/17/data-driven-documents-google-charts.html).
 
-Thanks Niek for sharing the 040code repo with me. Please share your comments, suggestions and thoughts about this blog on [twitter.com/mmz_](https://twitter.com/mmz_). Thanks for reading and Happy Coding!
+Thanks Niek for sharing the 040code repo with me. Please share your comments, suggestions and thoughts about this blog post on [twitter.com/mmz_](https://twitter.com/mmz_). Thanks for reading and Happy Coding!
 
 ## Links
 
