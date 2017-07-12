@@ -2,10 +2,11 @@
 layout:     post
 title:      "Visualising Bézier Curves Part II"
 subtitle:   "Experimenting with ClojureScript"
-date:       2017-07-08
+date:       2017-07-12
 author:     "Maarten Metz"
-header-img: "img/HDP.JPG"
+header-img: "img/hendry_dunant_park.jpg"
 tags:       [clojure, clojurescript, bézier, functional, klipse, canvas]
+enable_klipsejs: 1
 ---
 
 In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I described how to visualise simple Bézier curves. I chose `Clojure` as implementation language. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.
@@ -30,7 +31,7 @@ Defining functions and calling them? No problem:
   (if (= 1 n)
     n
     (* n (factorial (- n 1)))))
-    
+
 (factorial 4)
   </code>
 </pre>
@@ -53,12 +54,12 @@ But hang on, better things will follow soon.
 Why reinvent your own platform, your own runtime, your own garbage collector, your own ecosystem, when all you need is a decent language? `Clojure` is designed to be a hosted language. It runs on:
 
 - [The JVM](https://www.clojure.org/about/jvm_hosted)
-- [The CLR](https://www.clojure.org/about/clojureclr) 
+- [The CLR](https://www.clojure.org/about/clojureclr)
 - [Javascript engines](https://clojurescript.org)
 
 `Clojurescript` - a compiler for `Clojure` that emits javascript - will be the tool we use in this blog to visualise Bézier curves. We are going to manipulate a html canvas right from a klipse plugin.
 
-## Bézier in ClojureScript 
+## Bézier in ClojureScript
 
 In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I tried to explain how (simple) Bézier curves 'work'. You might want to go there or scan the [Wikipedia page on Bézier curves](https://en.wikipedia.org/wiki/Bézier_curve) if you have no clue what I'm talking about. Otherwise, let's dive right in and try to play with Bézier curves directly on this page.
 
@@ -69,7 +70,7 @@ In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I
 (def ctx    (.getContext canvas "2d"))
 
 
-;; Draws a blue circle with radius `r` on the canvas on point [x y] 
+;; Draws a blue circle with radius `r` on the canvas on point [x y]
 (defn draw-point [x y]
   (let [r 5] ;; radius
     (set! (.-fillStyle ctx) "blue")
@@ -96,7 +97,7 @@ In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I
 
 ;; Center the *drawing* canvas within the *html* canvas and draw the curves
 ;;
-;; Reason for centering: keep the coordinates simple AND 
+;; Reason for centering: keep the coordinates simple AND
 ;; see the complete shapes (not cropped at the edge of the html canvas)
 ;; make the ratio 1 to see what I mean with 'cropped at the edge'
 ;;
@@ -104,13 +105,13 @@ In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I
       hc (.-height canvas) ;; height of *html* canvas
       ratio 0.9            ;; ratio of *html* canvas to use as *drawing* canvas
       t  (/ (- 1 ratio) 2) ;; translation constant
-      w  (* ratio wc)      ;; width of *drawing* canvas 
+      w  (* ratio wc)      ;; width of *drawing* canvas
       h  (* ratio hc)      ;; height of *drawing* canvas
       x  (* 1/2 w)         ;; x val in the middle of 0 and w
       y  (* 1/2 h)]        ;; y val in the middle of 0 and h
 
   ;; clear *html* canvas
-  (.clearRect ctx 0 0 wc hc)  
+  (.clearRect ctx 0 0 wc hc)
 
   ;; Center the *drawing* canvas in the *html* canvas
   (.save ctx)
@@ -129,7 +130,7 @@ In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I
 
   ;; Increasing ascending curve
   (draw-bezier-curve [0 h] [w h] [w 0])
-  
+
   ;; Swoosh
   ;; (draw-bezier-curve [0 y] [0 h] [w 0])
 
@@ -168,7 +169,7 @@ Since `Clojure` is a hosted language, it must be able to access its host platfor
 
 The last form is used for instance in `(set! (.-lineWidth ctx) 1)` and translates to `ctx.lineWidth = 1`. The more general syntax is `(set! var-symbol expr)`.
 
-The second form `(.beginPath ctx)` can also have arguments. The general syntax is `(.instanceMember instance args*)` in that case. 
+The second form `(.beginPath ctx)` can also have arguments. The general syntax is `(.instanceMember instance args*)` in that case.
 
 Other than that it's basic `Clojure` and [HTML Canvas functionality](https://www.w3schools.com/tags/ref_canvas.asp)
 
