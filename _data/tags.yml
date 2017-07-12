@@ -22,3 +22,21 @@ terraform:
 graphql:
   slug: graphql
   name: GraphQL
+clojure:
+  slug: clojure
+  name: Clojure
+clojurescript:
+  slug: clojurescript
+  name: Clojure Script
+bézier:
+  slug: bézier
+  name: Bézier
+functional:
+  slug: functional
+  name: Functional
+klipse:
+  slug: klipse
+  name: Klipse
+canvas:
+  slug: canvas
+  name: Canvas
