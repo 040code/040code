@@ -32,8 +32,9 @@
 
     {% feed_meta %}
 
+    {% if page.enable_klipsejs %}
     <link rel="stylesheet" type="text/css"
-      href="http://app.klipse.tech/css/codemirror.css">
+      href="https://storage.googleapis.com/app.klipse.tech">
 
     <script>
       window.klipse_settings = {
@@ -41,6 +42,7 @@
         selector_js: '.language-klipse-js'
       };
     </script>
+    {% endif %}
 
 
 </head>

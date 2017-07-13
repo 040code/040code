@@ -28,8 +28,8 @@ clojure:
 clojurescript:
   slug: clojurescript
   name: Clojure Script
-bézier:
-  slug: bézier
+bezier:
+  slug: bezier
   name: Bézier
 functional:
   slug: functional
