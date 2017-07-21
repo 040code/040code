@@ -3,7 +3,7 @@ layout:     post
 title:      "Discover the exposed port"
 subtitle:   "Enabling discovery for Spring Cloud on AWS ECS"
 date:       2017-04-20 14:22:00
-author:     "Niek Palm"
+authors:     [niek]
 header-img: "img/silly-walk-this-way-dommeltunnel.png"
 tags: [docker, aws, spring]
 ---

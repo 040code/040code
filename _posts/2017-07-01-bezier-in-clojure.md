@@ -3,7 +3,7 @@ layout:     post
 title:      "Visualising Bézier Curves"
 subtitle:   "Experimenting with Clojure"
 date:       2017-07-01
-author:     "Maarten Metz"
+authors:     [maarten]
 header-img: "img/htc.jpg"
 tags:       [clojure, bézier, functional, incanter]
 ---
@@ -12,7 +12,7 @@ For reasons I might explain in another post, I was reading about [Bézier curves
 
 ## Setup
 
-I assume you have a working [leiningen](https://leiningen.org) setup with the [lein-try plugin](https://github.com/rkneufeld/lein-try) installed. 
+I assume you have a working [leiningen](https://leiningen.org) setup with the [lein-try plugin](https://github.com/rkneufeld/lein-try) installed.
 
 - Leiningen will help you get started with `clojure` right away from your shell
 - Lein-try enables you to spin up a repl and try a library without any hassle.
@@ -81,7 +81,7 @@ Let's convert the math function to `clojure`:
 ```clojure
 (defn bezier-3 [P0 P1 P2]
   (fn [t]
-    (+ 
+    (+
       (* (pow (- 1 t) 2) P0)
       (* 2 (- 1 t) t     P1)
       (* (pow t 2)       P2))))
@@ -112,14 +112,14 @@ Excellent. Let's try it:
 
 Here I'm defining a variable `test-b3` which holds the anonymous function returned by the `bezier-3` function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.
 
-With the `(test-b3 0)` function call I'm calling the anonymous function with a `t` value of `0`. This nicely returns an answer representing the x coordinates at moment `t` if you provided the (P0, P1 and P2) x coordinates when calling the `bezier-3` function or the y coordinate at moment `t` if you provided the (P0, P1 and P2) y coordinates. 
+With the `(test-b3 0)` function call I'm calling the anonymous function with a `t` value of `0`. This nicely returns an answer representing the x coordinates at moment `t` if you provided the (P0, P1 and P2) x coordinates when calling the `bezier-3` function or the y coordinate at moment `t` if you provided the (P0, P1 and P2) y coordinates.
 
 Since this test didn't blow the stack or throw a NullPointerException or anything,  let's map this function over a range of `t`'s `[0 0.25 0.5 0.75 1]`:
 
 ```clojure
 (map test-b3 [0 0.25 0.5 0.75 1])
 => (1 0.9375 0.75 0.4375 0)
-``` 
+```
 
 Instead of typing these `t`'s to `map` over, we could also use the `range` function:
 
@@ -160,7 +160,7 @@ The `let` form is `clojure`'s way of defining local variables. So `b3x`, `xs`, `
 This function basically states:
 
 - define a function named `view-bezier-plot`
-- let it have 3 arguments which are destructured into their 2D x & y coordinates 
+- let it have 3 arguments which are destructured into their 2D x & y coordinates
 - let the fourth argument be the title of the plot
 - `let` it have some local variables:
 	- `b3x` takes all x coordinates of the 3 points
@@ -207,7 +207,7 @@ In a relatively short repl session I was able to get a better understanding of (
 
 (defn bezier-3 [P0 P1 P2]
   (fn [t]
-    (+ 
+    (+
       (* (pow (- 1 t) 2) P0)
       (* 2 (- 1 t) t     P1)
       (* (pow t 2)       P2))))
@@ -223,7 +223,7 @@ In a relatively short repl session I was able to get a better understanding of (
     (incanter/view xy-plot)))
 ```
 
-Actually, the hand-rolled `pow` function isn't really needed. I could have used `clojure`'s java interop: `(Math/pow 2 3)`. In that case I would have been calling the `pow` method directly on java's `Math` class. I weighted the option of hand-rolling the `pow` function, showing some functional code and explaining how functions are defined in `clojure` versus explaining java interop. 
+Actually, the hand-rolled `pow` function isn't really needed. I could have used `clojure`'s java interop: `(Math/pow 2 3)`. In that case I would have been calling the `pow` method directly on java's `Math` class. I weighted the option of hand-rolling the `pow` function, showing some functional code and explaining how functions are defined in `clojure` versus explaining java interop.
 
 Explaining in text what the code does took me 5 times as long as writing the code itself. That's a great thing about [lisps](https://en.wikipedia.org/wiki/Lisp_(programming_language)) in general and `clojure` in particular: no fluff, just stuff!
 
@@ -231,7 +231,7 @@ Thanks Niek for posting my guest blog. Please share your comments, suggestions a
 
 ## Links
 
-- [A gist with the code from this post](https://gist.github.com/mmzsource/833ddfb2cf87c54fe4fc26996466cd1d) 
+- [A gist with the code from this post](https://gist.github.com/mmzsource/833ddfb2cf87c54fe4fc26996466cd1d)
 - [Clojure website](https://clojure.org)
 - [Lisps or LIst Processing Language](https://en.wikipedia.org/wiki/Lisp_(programming_language))
 - [𝝺 calculus](https://en.wikipedia.org/wiki/Lambda_calculus)

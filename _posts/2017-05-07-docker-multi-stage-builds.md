@@ -3,7 +3,7 @@ layout:     post
 title:      "Docker Multi Stage Builds"
 subtitle:   "Building and shipping in one Docker build"
 date:       2017-05-07
-author:     "Niek Palm"
+authors:     [niek]
 header-img: "img/containers-strijp-s.png"
 tags:       [docker]
 ---

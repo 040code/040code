@@ -3,7 +3,7 @@ layout:     post
 title:      "Visualising Bézier Curves Part II"
 subtitle:   "Experimenting with ClojureScript"
 date:       2017-07-12
-author:     "Maarten Metz"
+authors:     [maarten]
 header-img: "img/hendry_dunant_park.jpg"
 tags:       [clojure, clojurescript, bézier, functional, klipse, canvas]
 enable_klipsejs: 1
