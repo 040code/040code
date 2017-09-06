@@ -4,7 +4,10 @@ layout: default
 
 <!-- Page Header -->
 
-<header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.author.header-img %}{{ page.author.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
+
+<div class="overlay"></div>
+
+    <header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.author.header-img %}{{ page.author.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
     <div class="container">
         <div class="site-heading">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -14,7 +17,9 @@ layout: default
 
         </div>
     </div>
+
 </header>
+</div>
 
 
 <!-- Main Content -->
@@ -24,6 +29,7 @@ layout: default
         <div class="row">
 
           <div class="col-lg-2 col-lg-offset-2">
+
             <img src="{{ '/img/author/' | append: page.author.avatar | prepend: site.baseurl }}"
                  alt="{{ page.author.name }}" class="p-image"
                  width="100%" height="100%" style="border-radius: 50%;"/>
