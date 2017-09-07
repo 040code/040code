@@ -52,12 +52,12 @@ Rating: :star: :star: :star: :star:
 
 Comparison with the army knife. Don't be afraid of new technologies.
 One tool for everything is not going to work.
-Example with analytics service, kafka stream, bus. Frank Lyaruu ([@lyaruu](https://twitter.com/lyaruu) did a great job!
+Example with analytics service, kafka stream, bus. Frank Lyaruu ([@lyaruu](https://twitter.com/lyaruu)) did a great job!
 
 ### How booking.com serves deep learning model predictions
 Rating: :star: :star: :star:
 
-Good explaination by Sahil ([!sahildua2305](https://twitter.com/sahildua2305 )) about how to train a model and how to deploy them.
+Good explaination by Sahil ([@sahildua2305](https://twitter.com/sahildua2305 )) about how to train a model and how to deploy them.
 
 ### What to do when complex systems fail
 Rating:
@@ -86,7 +86,7 @@ Rating: :star: :star: :star: :star:
 
 Complexity of systems cause a lot of problems. `Idris` has a nice feature that Types are also values, so state changes can easialy be checked in compile time. `talk.applaud()` should only run after `talk.give()` and Idris has a way to check this easily during compile time.
 
-Inspiration for doing more with new languages. Chris Ford [@ctford](https://twitter.com/ctford), thanks!
+Inspiration for doing more with new languages. Chris Ford ([@ctford](https://twitter.com/ctford)), thanks!
 
 ### Smart grid: How iot fights climate change
 Rating: :star:
@@ -105,7 +105,7 @@ There where quite a lot fo lighting talks. In our opinion: hight quality but too
 
 - Docker talk about `docker build` was fun. Docker build takes long, and from now on I can't ignore it anymore. THANKS!!! aka we should fix the layer thing.
 - Fullstack is a zoo. Complexity of our work environment.
-- Execism.ip: Nice code kata kind of thing. (not a talk, but worth to mention)
+- [http://exercism.io/](http://exercism.io/): Nice code kata kind of thing. (not a talk, but worth to mention)
 
 ### Gone in 60 milliseconds: Offensive security in the serverless age
 Rating: :star: :star: :star: :star: :star:
