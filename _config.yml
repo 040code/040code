@@ -19,4 +19,4 @@ permalink: pretty
 paginate: 7
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","Dockerfile","*.lock","docker*","Gemfile"]
 
-gems: [jekyll-paginate, jekyll-feed, emoji_for_jekyll]
+gems: [jekyll-paginate, jekyll-feed, jemoji]
