@@ -38,5 +38,14 @@ klipse:
   slug: klipse
   name: Klipse
 canvas:
-  slug: canvas
-  name: Canvas
+  slug: fullstack
+  name: Full Stack
+canvas:
+  slug: security
+  name: Security
+canvas:
+  slug: iot
+  name: IoT
+canvas:
+  slug: microservices
+  name: Micro Services
