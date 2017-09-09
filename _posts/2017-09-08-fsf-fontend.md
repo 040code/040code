@@ -40,13 +40,7 @@ Talk by Sears israel ([@cowchimp](https://twitter.com/cowchimp)) to understand m
 ### SVG can do that?!
 Rating: :star: :star: :star: :star: :star:
 
-Awesome what you can do with SVG by Sarah Drasner ([@sarah_edo](https://twitter.com/sarah_edo)). This girl really knows her stuff. SVG is supported by all browsers including Opera Mini! Good integration with VueJS, react and other modern frameworks is possible. Lots of examples of really beautiful animations all working for all types of devices. Size does matter for images and animations. Normally it will result in ugly things, but with SVG this is absolutely not the case.
-
-<div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
-    <iframe style="position:absolute; left:0; top:0; width:100%; height:100%"
-        src="https://slides.com/sdrasner/svg-can-do-that#/">
-    </iframe>
-</div>
+Awesome what you can do with SVG by Sarah Drasner ([@sarah_edo](https://twitter.com/sarah_edo)). This girl really knows her stuff. SVG is supported by all browsers including Opera Mini! Good integration with VueJS, react and other modern frameworks is possible. Lots of examples of really beautiful animations all working for all types of devices. Size does matter for images and animations. Normally it will result in ugly things, but with SVG this is absolutely not the case, [slides](http://slides.com/sdrasner/svg-can-do-that#/).
 
 ### Using react native + clojurescript to launch ios/android apps to 1m users
 Rating: :star: :star:
