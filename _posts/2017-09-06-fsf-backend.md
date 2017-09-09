@@ -15,7 +15,7 @@ a week-long full stack development conference with a focus on solving current pr
 
 In this quite short blog we just summerizing briefly the talks and our opinion about the talks and / or the subject.
 
-The first two days are more backend focussed, the last two days have a frontend focus.
+The first two days are more backend focussed, the last two days have a frontend focus, read more [here](https://040code.github.io/2017/09/08/fsf-fontend/).
 
 ## Day one
 
@@ -71,7 +71,7 @@ Rating: :star: :star: :star: :star:
 
 Good talk by John Graham-Cummin ([@jgrahamc](https://twitter.com/jgrahamc)) about how IoT device can be used to do a DDoS attack. About port 1900 showing all kinds of information which is sent to victims address. How to block DDoS attacks by putting the ip-address in a grid to search for patterns. Talked about Trump attacks and anonymous being stupid by setting the evil flag (We're anonymous).
 
-### How to properly blame things for causing latency: An introduction to distributed tracing and Zipkin 
+### How to properly blame things for causing latency: An introduction to distributed tracing and Zipkin
 Rating: :star: :star:
 
 Difference between logs, metric and trace. Good (known) story by Adrian Cole ([@adrianfcole](https://twitter.com/adrianfcole)).
