@@ -33,9 +33,9 @@ layout: default
                           </a>
                           {% if forloop.last != true %}
                               {% if forloop.rindex0 == 1 %}
-                                   {% capture authors %}{{ authors }} and{% endcapture %}
+                                   and
                               {% else %}
-                                  {% capture authors %}{{ authors }},{% endcapture %}
+                                  ,
                               {% endif %}
                           {% endif%}
                       {% endfor %}
