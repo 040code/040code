@@ -40,3 +40,39 @@ klipse:
 canvas:
   slug: canvas
   name: Canvas
+fullstack:
+  slug: fullstack
+  name: Full Stack
+security:
+  slug: security
+  name: Security
+iot:
+  slug: iot
+  name: IoT
+microservices:
+  slug: microservices
+  name: Micro Services
+aframe:
+  slug: aframe
+  name: AFrame
+serviceworkers:
+  slug: serviceworkers
+  name: Service Workers
+css:
+  slug: css
+  name: CSS
+javascript:
+  slug: javascript
+  name: JavaScript
+ast:
+  slug: ast
+  name: AST
+svg:
+  slug: svg
+  name: SVG
+blockchain:
+  slug: blockchain
+  name: Blockchain
+react:
+  slug: react
+  name: React

@@ -191,7 +191,7 @@ Now only one problem needs to be solved in order to create a generic module: how
 
 ```
 module "vpc" {
-  source = "https://github.com/npalm/tf-aws-vpc.git"
+  source = "git::https://github.com/npalm/tf-aws-vpc.git"
 
   key        = "blog"
   aws_region = "eu-west-1"
@@ -200,7 +200,7 @@ module "vpc" {
 It is possible to overwrite module variables with default to get more control, see the ezample below:
 ```
 module "vpc" {
-  source = "https://github.com/npalm/tf-aws-vpc.git"
+  source = "git::https://github.com/npalm/tf-aws-vpc.git"
 
   key        = "blog"
   aws_region = "eu-west-1"

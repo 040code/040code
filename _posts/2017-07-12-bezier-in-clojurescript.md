@@ -146,7 +146,7 @@ In my [previous post](https://040code.github.io/2017/07/01/bezier-in-clojure/) I
 
 <canvas id="canvas-2d" width="600" height="600"></canvas>
 
-<script src="http://app.klipse.tech/plugin/js/klipse_plugin.js?"></script>
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js?"></script>
 
 Before reading further you might want to experiment a bit by (un)commenting code and seeing the results. (Un)comment the different Bézier curves and different control points in the Klipse evaluator and see what happens.
 
