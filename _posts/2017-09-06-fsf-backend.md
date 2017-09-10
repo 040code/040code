@@ -13,7 +13,7 @@ tags:       [iot, cloud, fullstack, microservices, security]
 This week we (Jeroen and Niek) enjoyining [Full Stack Fest 2017 Barcelona](https://2017.fullstackfest.com/),
 a week-long full stack development conference with a focus on solving current problems with new & inspiring perspectives.
 
-In this quite short blog we just summerizing briefly the talks and our opinion about the talks and / or the subject.
+In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective ass well.
 
 The first two days are more backend focussed, the last two days have a frontend focus, read more [here](https://040code.github.io/2017/09/08/fsf-fontend/).
 
