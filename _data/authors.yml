@@ -13,13 +13,14 @@ maarten:
   first_name: Maarten
   last_name: Metz
   github: mmzsource
-  twitter:
-  linkedin:
+  twitter: MMz_
+  linkedin: maartenmetz
   permalink: /author/maarten/
-  header-img: img/about.jpg
-  avatar:
-  email:
-  bio: "ddddd"
+  header-img: img/htc.jpg
+  avatar: maarten.png
+  email: mmz.source@gmail.com
+  bio: "Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n
+His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories."
 jeroen:
   first_name: Jeroen
   last_name: Knoops

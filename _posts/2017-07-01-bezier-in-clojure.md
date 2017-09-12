@@ -6,6 +6,7 @@ date:       2017-07-01
 authors:     [maarten]
 header-img: "img/htc.jpg"
 tags:       [clojure, bézier, functional, incanter]
+comments:   false
 ---
 
 For reasons I might explain in another post, I was reading about [Bézier curves on wikipedia](https://en.wikipedia.org/wiki/Bézier_curve) the other day. Especially the paragraph on "Constructing Bézier curves" made me understand intuitively how these curves are constructed. I wondered if `clojure` could help me easily visualise some of these curves so I fired up a [REPL](https://en.wikipedia.org/wiki/Read–eval–print_loop) (Read-Eval-Print-Loop) to investigate.
