@@ -26,15 +26,30 @@ layout: default
                     {% if page.subtitle %}
                     <h2 class="subheading">{{ page.subtitle }}</h2>
                     {% endif %}
-                    <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+                    <span class="meta">Posted by:
+                      {% for author in page.authors %}
+                          <a href="{{ author.permalink | prepend: site.baseurl }}">
+                            {{author.first_name}} {{author.last_name}}
+                          </a>
+                          {% if forloop.last != true %}
+                              {% if forloop.rindex0 == 1 %}
+                                   and
+                              {% else %}
+                                  ,
+                              {% endif %}
+                          {% endif%}
+                      {% endfor %}
+                      <!-- {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span> -->
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+
+
 <!-- Post Content -->
-<article>
+<section>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -63,6 +78,21 @@ layout: default
             </div>
         </div>
     </div>
-</article>
+</section>
+
+
+{% if page.comments %}
+<section id="three" class="wrapper spotlight style3">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" style="text-align: left;">
+        <div class="content">
+          <H1>abc</h1>
+            <div id="disqus_thread"></div>
+
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments
+                powered by Disqus.</a></noscript>
+        </div>
+    </div>
+</section>
+{% endif %}
 
 <hr>

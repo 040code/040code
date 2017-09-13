@@ -20,3 +20,12 @@ paginate: 7
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md","Dockerfile","*.lock","docker*","Gemfile"]
 
 gems: [jekyll-paginate, jekyll-feed, jemoji]
+
+sitemap:
+    filename: "/sitemap.xml"
+    exclude:
+        - "/atom.xml"
+        - "/feed.xml"
+        - "/feed/index.xml"
+    include_posts:
+        - "/index.html"

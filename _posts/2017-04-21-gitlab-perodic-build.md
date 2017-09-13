@@ -3,7 +3,7 @@ layout:     post
 title:      "Periodic builds in GitLab"
 subtitle:   "Trigger builds based on a crontab"
 date:       2017-04-21 12:21:00
-author:     "Niek Palm"
+authors:     [niek]
 header-img: "img/lichtjesroute.jpg"
 tags: [gitlab, docker]
 ---

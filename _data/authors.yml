@@ -1,0 +1,35 @@
+niek:
+  first_name: Niek
+  last_name: Palm
+  github: npalm
+  twitter: niekos77
+  linkedin: niekpalm
+  permalink: /author/niek/
+  header-img: img/about.jpg
+  avatar: niek.jpg
+  email: dev.npalm@gmail.com
+  bio: "I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike."
+maarten:
+  first_name: Maarten
+  last_name: Metz
+  github: mmzsource
+  twitter: MMz_
+  linkedin: maartenmetz
+  permalink: /author/maarten/
+  header-img: img/htc.jpg
+  avatar: maarten.png
+  email: mmz.source@gmail.com
+  bio: "Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n
+His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories."
+jeroen:
+  first_name: Jeroen
+  last_name: Knoops
+  github: JeroenKnoops
+  twitter: johnnybusca
+  linkedin: jeroenknoops
+  permalink: /author/jeroen/
+  header-img: img/vanmoll.jpg
+  avatar: jeroen.png
+  email: jeroen.knoops@gmail.com
+  bio: "Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n
+Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson."
