@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Visualising Bézier Curves Part II - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/07/12/bezier-in-clojurescript/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+    <link rel="stylesheet" type="text/css"
+      href="https://storage.googleapis.com/app.klipse.tech/css/codemirror.css">
+
+    <script>
+      window.klipse_settings = {
+        selector: '.language-klipse',
+        selector_js: '.language-klipse-js'
+      };
+    </script>
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/hendry_dunant_park.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Visualising Bézier Curves Part II</h1>
+                    
+                    <h2 class="subheading">Experimenting with ClojureScript</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/maarten/">
+                            Maarten Metz
+                          </a>
+                          
+                      
+                      <!-- 040 Code on July 12, 2017</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/clojure/">Clojure</a><a class="badge " href="/blog/tag/clojurescript/">Clojure Script</a><a class="badge " href="/blog/tag/functional/">Functional</a><a class="badge " href="/blog/tag/klipse/">Klipse</a><a class="badge " href="/blog/tag/canvas/">Canvas</a>
+
+
+				<p>In my <a href="https://040code.github.io/2017/07/01/bezier-in-clojure/">previous post</a> I described how to visualise simple Bézier curves. I chose <code class="highlighter-rouge">Clojure</code> as implementation language. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.</p>
+
+<p>This post will be easier for you - at least in terms of setup. You won’t have to leave your browser and can experiment with <code class="highlighter-rouge">Clojure(Script)</code> right here on this page!</p>
+
+<h2 id="no-setup">NO Setup</h2>
+
+<p>In this post we’re going to use the very useful <a href="https://github.com/viebel/klipse">klipse plugin</a>. Klipse is a client-side code evaluator pluggable on any web page. It can evaluate <code class="highlighter-rouge">Clojure</code>, <code class="highlighter-rouge">ClojureScript</code>, ruby, javascript, python, scheme, es2017, jsx, brainfuck, c++, reagent and probably much more languages in the near future. It’s like <a href="https://jsfiddle.net">jsfiddle</a> on steroids, right here in the 040code blog.</p>
+
+<p>Let’s start with a very simple Klipse demonstration. I’m going to <code class="highlighter-rouge">map</code> the <code class="highlighter-rouge">inc</code>(rement) function over the numbers 1, 2 and 3. The result will not surprise you:</p>
+
+<pre><code class="language-klipse">(map inc [1 2 3])</code></pre>
+
+<p>What might surprise you though, is that <strong>you can change the code in the klipse evaluator</strong> and see the results immediately in your browser. So for instance change <code class="highlighter-rouge">(map inc [1 2 3])</code> into <code class="highlighter-rouge">(map inc [41 999 2])</code> and be amazed. Or change it into something completely different like <code class="highlighter-rouge">(filter even? (range 10))</code>.</p>
+
+<p>Defining functions and calling them? No problem:</p>
+
+<pre>
+  <code class="language-klipse">
+(defn factorial [n]
+  (if (= 1 n)
+    n
+    (* n (factorial (- n 1)))))
+
+(factorial 4)
+  </code>
+</pre>
+
+<p>Now call the factorial function with some other natural number (whole number &gt; 0) and see the results.</p>
+
+<p>For those of you who don’t know <code class="highlighter-rouge">Clojure(Script)</code>, this function basically says:</p>
+
+<ul>
+  <li>define a function named <code class="highlighter-rouge">factorial</code></li>
+  <li>let <code class="highlighter-rouge">n</code> be its argument</li>
+  <li>if <code class="highlighter-rouge">n</code> equals 1, return <code class="highlighter-rouge">n</code></li>
+  <li>otherwise return the multiplication of <code class="highlighter-rouge">n</code> with the <code class="highlighter-rouge">factorial</code> of (n - 1)</li>
+</ul>
+
+<p>Lisp in the browser. Embedded in this blog. No setup required. Excellent!</p>
+
+<p>But hang on, better things will follow soon.</p>
+
+<h2 id="clojure-is-designed-to-be-a-hosted-language">Clojure is designed to be a hosted language</h2>
+
+<p>Why reinvent your own platform, your own runtime, your own garbage collector, your own ecosystem, when all you need is a decent language? <code class="highlighter-rouge">Clojure</code> is designed to be a hosted language. It runs on:</p>
+
+<ul>
+  <li><a href="https://www.clojure.org/about/jvm_hosted">The JVM</a></li>
+  <li><a href="https://www.clojure.org/about/clojureclr">The CLR</a></li>
+  <li><a href="https://clojurescript.org">Javascript engines</a></li>
+</ul>
+
+<p><code class="highlighter-rouge">Clojurescript</code> - a compiler for <code class="highlighter-rouge">Clojure</code> that emits javascript - will be the tool we use in this blog to visualise Bézier curves. We are going to manipulate a html canvas right from a klipse plugin.</p>
+
+<h2 id="bézier-in-clojurescript">Bézier in ClojureScript</h2>
+
+<p>In my <a href="https://040code.github.io/2017/07/01/bezier-in-clojure/">previous post</a> I tried to explain how (simple) Bézier curves ‘work’. You might want to go there or scan the <a href="https://en.wikipedia.org/wiki/Bézier_curve">Wikipedia page on Bézier curves</a> if you have no clue what I’m talking about. Otherwise, let’s dive right in and try to play with Bézier curves directly on this page.</p>
+
+<pre>
+    <code class="language-klipse">
+;; Get a grip on the html canvas element I inserted on this page
+(def canvas (.getElementById js/document "canvas-2d"))
+(def ctx    (.getContext canvas "2d"))
+
+
+;; Draws a blue circle with radius `r` on the canvas on point [x y]
+(defn draw-point [x y]
+  (let [r 5] ;; radius
+    (set! (.-fillStyle ctx) "blue")
+    (.beginPath ctx)
+    (.arc ctx x y r 0 (* 2 Math/PI))
+    (.fill ctx)))
+
+
+;; Draws a red Bézier curve and its blue control points on the canvas
+(defn draw-bezier-curve [[x1 y1] [x2 y2] [x3 y3]]
+  ;; draw curve
+  (set! (.-strokeStyle ctx) "red")
+  (set! (.-lineWidth   ctx) 2)
+  (.beginPath ctx)
+  (.moveTo ctx x1 y1)
+  (.quadraticCurveTo ctx x2 y2 x3 y3)
+  (.stroke ctx)
+  (.closePath ctx)
+  ;; draw control points
+  (draw-point x1 y1)
+  (draw-point x2 y2)
+  (draw-point x3 y3))
+
+
+;; Center the *drawing* canvas within the *html* canvas and draw the curves
+;;
+;; Reason for centering: keep the coordinates simple AND
+;; see the complete shapes (not cropped at the edge of the html canvas)
+;; make the ratio 1 to see what I mean with 'cropped at the edge'
+;;
+(let [wc (.-width canvas)  ;; width of *html* canvas
+      hc (.-height canvas) ;; height of *html* canvas
+      ratio 0.9            ;; ratio of *html* canvas to use as *drawing* canvas
+      t  (/ (- 1 ratio) 2) ;; translation constant
+      w  (* ratio wc)      ;; width of *drawing* canvas
+      h  (* ratio hc)      ;; height of *drawing* canvas
+      x  (* 1/2 w)         ;; x val in the middle of 0 and w
+      y  (* 1/2 h)]        ;; y val in the middle of 0 and h
+
+  ;; clear *html* canvas
+  (.clearRect ctx 0 0 wc hc)
+
+  ;; Center the *drawing* canvas in the *html* canvas
+  (.save ctx)
+  (.translate ctx (* t wc) (* t hc))
+
+  ;; Draw a grey border around the *drawing* canvas
+  (set! (.-lineWidth ctx) 1)
+  (set! (.-strokeStyle ctx) "grey")
+  (.strokeRect ctx 0 0 w h)
+
+  ;; Draw main 'anchor' points
+  ;; This is what I meant with 'simple coordinates':
+  ;; (draw-point 0 0)
+  ;; (draw-point x y)
+  ;; (draw-point w h)
+
+  ;; Increasing ascending curve
+  (draw-bezier-curve [0 h] [w h] [w 0])
+
+  ;; Swoosh
+  ;; (draw-bezier-curve [0 y] [0 h] [w 0])
+
+  ;; normal curve
+  ;; (draw-bezier-curve [0 h] [x 0] [w h])
+
+  ;; my pulse after a useless meeting
+  ;; (draw-bezier-curve [0 y] [x y] [w y])
+
+  (.restore ctx))
+    </code>
+  </pre>
+
+<canvas id="canvas-2d" width="600" height="600"></canvas>
+
+<script src="https://storage.googleapis.com/app.klipse.tech/plugin/js/klipse_plugin.js?"></script>
+
+<p>Before reading further you might want to experiment a bit by (un)commenting code and seeing the results. (Un)comment the different Bézier curves and different control points in the Klipse evaluator and see what happens.</p>
+
+<h2 id="explanation">Explanation</h2>
+
+<p>Scanning the code quickly without going into detail, this is what happens:</p>
+
+<ul>
+  <li>Get a grip on the html canvas element</li>
+  <li>Define functions to:
+    <ul>
+      <li>Draw (control) points</li>
+      <li>Draw Bézier curves with 3 control points</li>
+    </ul>
+  </li>
+  <li>Draw the actual curves and points</li>
+</ul>
+
+<p>Since <code class="highlighter-rouge">Clojure</code> is a hosted language, it must be able to access its host platform and libraries. <code class="highlighter-rouge">Clojure</code> and <code class="highlighter-rouge">ClojureScript</code> have good <a href="https://clojure.org/reference/java_interop">interop</a> <a href="http://cljs.github.io/api/syntax/#dot">documentation</a> so I won’t go into detail here, but we’re basically using these forms in this blog:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">js/document</code>       =&gt; the global document object</li>
+  <li><code class="highlighter-rouge">(.beginPath ctx)</code>  =&gt; <code class="highlighter-rouge">ctx.beginPath()</code></li>
+  <li><code class="highlighter-rouge">Math/PI</code>           =&gt; 3.141592653589793</li>
+  <li><code class="highlighter-rouge">(.-lineWidth ctx)</code> =&gt; <code class="highlighter-rouge">ctx.lineWidth</code></li>
+</ul>
+
+<p>The last form is used for instance in <code class="highlighter-rouge">(set! (.-lineWidth ctx) 1)</code> and translates to <code class="highlighter-rouge">ctx.lineWidth = 1</code>. The more general syntax is <code class="highlighter-rouge">(set! var-symbol expr)</code>.</p>
+
+<p>The second form <code class="highlighter-rouge">(.beginPath ctx)</code> can also have arguments. The general syntax is <code class="highlighter-rouge">(.instanceMember instance args*)</code> in that case.</p>
+
+<p>Other than that it’s basic <code class="highlighter-rouge">Clojure</code> and <a href="https://www.w3schools.com/tags/ref_canvas.asp">HTML Canvas functionality</a></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Thanks to the klipse plugin and a bit of preparation from my side, you can now play around with Bézier Curves in <code class="highlighter-rouge">ClojureScript</code> directly in this blog. I do realise this post is probably not a compelling case for using <code class="highlighter-rouge">ClojureScript</code>:</p>
+
+<ul>
+  <li>Javascript “in the small” is not really the place where <code class="highlighter-rouge">ClojureScript</code> shines, especially when the largest part of that small program is javascript interop</li>
+  <li><code class="highlighter-rouge">ClojureScript</code> fits large browser applications better, where you need sane state management, immutable datastructures, lazy sequences, and a fast,  stable and robust language</li>
+</ul>
+
+<p>I’m not interested in ‘religious’ discussions about technology A versus technology B. <code class="highlighter-rouge">Clojure</code> and <code class="highlighter-rouge">ClojureScript</code> are THE sane way forward for me, in my context. I hope to share the fun I’m experiencing with it. Goethe said it best:</p>
+
+<blockquote>
+  <p>It is always better to say right out what you think without trying to prove anything much: for all our proofs are only variations of our opinions, and the contrary-minded listen neither to one nor the other.</p>
+</blockquote>
+
+<p>But with all this talk about language, we’re almost forgetting what it’s all about: building useful stuff and having a great time doing it.</p>
+
+<p>I hope you enjoyed experimenting with Bézier curves. The <a href="http://blog.klipse.tech">Klipse Blog</a> has several great examples of using Klipse for ‘interactive programming’, for instance <a href="http://blog.klipse.tech/data/2017/03/17/data-driven-documents-google-charts.html">to write data driven documents</a>.</p>
+
+<p>Thanks Niek for sharing the 040code repo with me. Please share your comments, suggestions and thoughts about this blog post on <a href="https://twitter.com/mmz_">twitter.com/mmz_</a>. Thanks for reading and Happy Coding!</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://040code.github.io/2017/07/01/bezier-in-clojure/">Bézier in Clojure - Part I</a></li>
+  <li><a href="https://github.com/viebel/klipse">Klipse plugin</a></li>
+  <li><a href="http://blog.klipse.tech">Klipse Blog</a></li>
+  <li><a href="http://app.klipse.tech">Klipse App in the browser</a></li>
+  <li><a href="http://blog.klipse.tech/clojure/2016/03/17/klipse.html">Explanation about the Klipse app</a></li>
+  <li><a href="http://blog.klipse.tech/data/2017/03/17/data-driven-documents-google-charts.html">Using Klipse for generating data driven charts</a></li>
+  <li><a href="https://jsfiddle.net">JSfiddle</a></li>
+  <li><a href="http://cljs.github.io/api/syntax/#dot">Javascript interop</a></li>
+  <li><a href="https://clojure.org/reference/java_interop">Java interop</a></li>
+  <li><a href="https://www.w3schools.com/tags/ref_canvas.asp">HTML Canvas functionality</a></li>
+</ul>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/01/bezier-in-clojure/" data-toggle="tooltip" data-placement="top" title="Visualising Bézier Curves">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/09/05/fsf-backend/" data-toggle="tooltip" data-placement="top" title="Full Stack Fest 2017">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

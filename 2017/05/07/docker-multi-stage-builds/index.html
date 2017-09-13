@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Docker Multi Stage Builds - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/05/07/docker-multi-stage-builds/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/containers-strijp-s.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Docker Multi Stage Builds</h1>
+                    
+                    <h2 class="subheading">Building and shipping in one Docker build</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      <!-- 040 Code on May 7, 2017</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/docker/">Docker</a>
+
+
+				<h1 id="the-problem">The problem</h1>
+<p>Building an application requires typically multiple steps. First compiling the application, next testing it and finally shipping the artifact in a Docker image for execution. All these steps can be combined in one <code class="highlighter-rouge">Dockerfile</code>, but typically you end up with a Docker image that contains all kinds of tools that are not necessary for running the application.</p>
+
+<p>We could try to get rid of all unneeded files in the image after build, but a more useful approach is to separate Docker images for building and running the application. However, this approach requires two separate Dockerfiles that needs to be maintained.</p>
+
+<p>Let’s have a look on a <a href="https://github.com/040code/blog_docker-mulit-stage-build.git">example</a> for a simple Java micro service. The micro services require the JDK and Gradle to build. The JDK needs to be installed before the build and Gradle will be download by the build itself. We can build the micro service in the following way.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/040code/blog_docker-mulit-stage-build.git
+cd notes-service
+docker run -it --rm -v $(pwd):/build -w /build openjdk:8u121-jdk-alpine ./gradlew build
+</code></pre>
+</div>
+<p>Now the artifact is available, we can create a Docker runtime image. The application only needs the Java Runtime (JRE) to run. We create a <code class="highlighter-rouge">Dockerfile</code> based JRE alpine image and add our application.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-00)
+FROM openjdk:8u121-jre-alpine
+COPY build/libs/notes-service.jar /app/notes-service.jar
+
+EXPOSE 8080
+CMD java -jar /app/notes-service.jar
+</code></pre>
+</div>
+<p>Next, we build the production image as follows:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:00 .
+</code></pre>
+</div>
+<p>Now we have created a clean Docker images that only containes the needed libraries to run the application. But would it not be nice if we can do this more straightforward? For example, in one Docker build.</p>
+
+<h1 id="moving-on-to-a-multi-stage-build">Moving on to a multi stage build</h1>
+<p>Docker 17.05.x brings a new feature; it is now possible to define a <a href="https://docs.docker.com/engine/userguide/eng-image/multistage-build/">multi stage builds</a> in one Dockerfile. The Dockerfile can contain multiple FROM lines and each stage starts with a new FROM line and a fresh context. You can copy artifacts from stage to stage.</p>
+
+<p><a href="#">
+    <img src="/img/docker-multi-stages-build.png" alt="docker-multi-stages-build" />
+</a></p>
+
+<p>Now it is time to have a second look on the same example. Instead of passing the build arguments and mounting our sources, we will build our software using a single Dockerfile.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-01)
+FROM openjdk:8u121-jdk-alpine AS build
+
+WORKDIR /build-env
+ADD . /build-env
+RUN ./gradlew build
+
+CMD java -jar /build-env/build/notes-service.jar
+</code></pre>
+</div>
+<p>And build it:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:01 .
+</code></pre>
+</div>
+<p>Nothing new here, we are now able to build our software in a container and ship an image, but the image contains all kinds of build stuff that we do not want in a runtime image. So, the next step is to solve this problem by getting rid of all the unwanted build tools.</p>
+
+<p>We update the <code class="highlighter-rouge">Dockerfile</code> and make a few modifications.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-02)
+FROM openjdk:8u121-jdk-alpine AS build                                               # (1)
+
+WORKDIR /build-env
+ADD . /build-env
+RUN ./gradlew build
+
+FROM openjdk:8u121-jre-alpine                                                        # (2)
+COPY --from=build /build-env/build/libs/notes-service.jar /app/notes-service.jar     # (3)
+
+EXPOSE 8080
+CMD java -jar /app/notes-service.jar
+</code></pre>
+</div>
+<p>In the <code class="highlighter-rouge">Dockerfile</code> above we marked the first stage (1) as <em>build</em> to refer later, if not specifying a name you can refer to the stage as 0. Next (2), we add the second stage which specifies the base image that we need to run our application. Finally (3), we copy the results from the build stage to the image for executing.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:02 .
+</code></pre>
+</div>
+<p>And now we can run via the following docker run command.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it --rm -p 8080 notes-service:2
+</code></pre>
+</div>
+<p>Inspection of the tree images build will show that version 0 and 2 are equal in size, version 1 that contains all the build files and the JDK is almost three times bigger.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+<p>Docker’s new multi layer build feature can be quite useful when build pipeline without parallel builds will suite your needs. In that case, you can reduce your build to a single image. For projects that requires a more complex multi stage build, including parallel builds, this new Docker feature will not provide an added value.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/04/21/gitlab-perodic-build/" data-toggle="tooltip" data-placement="top" title="Periodic builds in GitLab">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/05/20/nextbuild-graphql/" data-toggle="tooltip" data-placement="top" title="GraphQL">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

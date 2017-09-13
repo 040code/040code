@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Visualising Bézier Curves - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/07/01/bezier-in-clojure/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/htc.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Visualising Bézier Curves</h1>
+                    
+                    <h2 class="subheading">Experimenting with Clojure</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/maarten/">
+                            Maarten Metz
+                          </a>
+                          
+                      
+                      <!-- 040 Code on July 1, 2017</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/clojure/">Clojure</a><a class="badge " href="/blog/tag/functional/">Functional</a>
+
+
+				<p>For reasons I might explain in another post, I was reading about <a href="https://en.wikipedia.org/wiki/Bézier_curve">Bézier curves on wikipedia</a> the other day. Especially the paragraph on “Constructing Bézier curves” made me understand intuitively how these curves are constructed. I wondered if <code class="highlighter-rouge">clojure</code> could help me easily visualise some of these curves so I fired up a <a href="https://en.wikipedia.org/wiki/Read–eval–print_loop">REPL</a> (Read-Eval-Print-Loop) to investigate.</p>
+
+<h2 id="setup">Setup</h2>
+
+<p>I assume you have a working <a href="https://leiningen.org">leiningen</a> setup with the <a href="https://github.com/rkneufeld/lein-try">lein-try plugin</a> installed.</p>
+
+<ul>
+  <li>Leiningen will help you get started with <code class="highlighter-rouge">clojure</code> right away from your shell</li>
+  <li>Lein-try enables you to spin up a repl and try a library without any hassle.</li>
+</ul>
+
+<p>Let’s first start a repl, and specify the library we want to try:</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>lein try incanter <span class="s2">"1.5.7"</span>
+</code></pre>
+</div>
+
+<p><a href="http://incanter.org">Incanter</a> is a <code class="highlighter-rouge">clojure</code>-based, R-like platform for statistical computing and graphics. We’ll use it to visualise the Bézier curves.</p>
+
+<p>Since the repl is already fired up, let’s immediately require the dependencies we’ll need:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
+</span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.charts</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">charts</span><span class="p">])</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Nothing fancy going on here. Simply ‘import’ statements the <code class="highlighter-rouge">clojure</code> way.</p>
+
+<h2 id="helper-function">Helper function</h2>
+
+<p>I decided to hand-roll my own <code class="highlighter-rouge">pow</code> function, because we’ll need it later in the creation of bézier curves:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">pow</span><span class="w"> </span><span class="p">[</span><span class="n">base</span><span class="w"> </span><span class="n">exponent</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">*</span><span class="o">'</span><span class="w"> </span><span class="p">(</span><span class="nb">repeat</span><span class="w"> </span><span class="n">exponent</span><span class="w"> </span><span class="n">base</span><span class="p">)))</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>This function basically says:</p>
+
+<ul>
+  <li>define a function named <code class="highlighter-rouge">pow</code></li>
+  <li>let <code class="highlighter-rouge">base</code> and <code class="highlighter-rouge">exponent</code> be its arguments</li>
+  <li>make it <code class="highlighter-rouge">repeat</code> the <code class="highlighter-rouge">base</code> <code class="highlighter-rouge">exponent</code> times</li>
+  <li>and <code class="highlighter-rouge">reduce</code> that result with the <code class="highlighter-rouge">*'</code> multiply function</li>
+</ul>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="c1">;; so:
+</span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">
+</span><span class="c1">;; will lead to
+</span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">*</span><span class="o">'</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span><span class="w">
+</span><span class="c1">;; which results in
+</span><span class="mi">8</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>I’m using the <code class="highlighter-rouge">*'</code> multiply function instead of the normal <code class="highlighter-rouge">*</code> multiply function, because according to the docs <code class="highlighter-rouge">*'</code> supports arbitrary precision. You can see for yourself by typing <code class="highlighter-rouge">(doc *')</code> in your repl, or study the code by typing <code class="highlighter-rouge">(source *')</code> in your repl.</p>
+
+<h2 id="bézier">Bézier</h2>
+
+<p>Bézier functions work with control points. The minimum number of control points is 2 and Bézier curves with 2 control points are straight lines (although you can also create straight lines with more than 2 control points).</p>
+
+<p>For the moment I only need Bézier curves with 3 control points: a start point, an end point and one point controlling the curve of the line between start and end.</p>
+
+<p>Quoting the <a href="https://en.wikipedia.org/wiki/Bézier_curve">Wikipedia page</a>: “A quadratic Bézier curve is the path traced by the function B(t), given points P0, P1, and P2”:</p>
+
+<p><a href="#">
+    <img src="/img/bezier-formula.png" alt="bezier-formula" />
+</a></p>
+
+<p>So given 3 points (P0, P1 and P2) I should be able to describe the curve with this math function. Conceptually a pen is drawing the curve by starting on P0 on moment <code class="highlighter-rouge">t = 0</code> and following the curve described by this formula and the position of the 3 points until it hits the end point at <code class="highlighter-rouge">t = 1</code>. The only thing this resulting <code class="highlighter-rouge">B(t)</code> function needs is the moment <code class="highlighter-rouge">t</code> and it will calculate the X or Y coördinate at that particular moment.</p>
+
+<p>Let’s convert the math function to <code class="highlighter-rouge">clojure</code>:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">bezier-3</span><span class="w"> </span><span class="p">[</span><span class="n">P0</span><span class="w"> </span><span class="n">P1</span><span class="w"> </span><span class="n">P2</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w">
+    </span><span class="p">(</span><span class="nb">+</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">P0</span><span class="p">)</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w">     </span><span class="n">P1</span><span class="p">)</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="n">P2</span><span class="p">))))</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>As you can see, you’ll have to translate the infix notation to <code class="highlighter-rouge">clojure</code>’s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. <em>(If you can’t live with that: you can also use infix notation in clojure. For instance incanter can also be fed with <a href="https://data-sorcery.org/2010/05/14/infix-math/">infix notation</a>. However, you’ll lose <a href="https://en.wikipedia.org/wiki/Lambda_calculus">the power of the 𝝺</a>)</em></p>
+
+<p>This function basically states:</p>
+
+<ul>
+  <li>define a function named <code class="highlighter-rouge">bezier-3</code></li>
+  <li>let it have 3 arguments: <code class="highlighter-rouge">P0</code>, <code class="highlighter-rouge">P1</code> and <code class="highlighter-rouge">P2</code></li>
+  <li>make it return an anonymous function</li>
+</ul>
+
+<p>This anonymous function:</p>
+
+<ul>
+  <li>takes <code class="highlighter-rouge">t</code> as an argument</li>
+  <li>has <code class="highlighter-rouge">P0</code>, <code class="highlighter-rouge">P1</code> and <code class="highlighter-rouge">P2</code> already ‘injected’</li>
+  <li>applies the Bézier math function</li>
+</ul>
+
+<p>Excellent. Let’s try it:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">test-b3</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Here I’m defining a variable <code class="highlighter-rouge">test-b3</code> which holds the anonymous function returned by the <code class="highlighter-rouge">bezier-3</code> function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.</p>
+
+<p>With the <code class="highlighter-rouge">(test-b3 0)</code> function call I’m calling the anonymous function with a <code class="highlighter-rouge">t</code> value of <code class="highlighter-rouge">0</code>. This nicely returns an answer representing the x coordinates at moment <code class="highlighter-rouge">t</code> if you provided the (P0, P1 and P2) x coordinates when calling the <code class="highlighter-rouge">bezier-3</code> function or the y coordinate at moment <code class="highlighter-rouge">t</code> if you provided the (P0, P1 and P2) y coordinates.</p>
+
+<p>Since this test didn’t blow the stack or throw a NullPointerException or anything,  let’s map this function over a range of <code class="highlighter-rouge">t</code>’s <code class="highlighter-rouge">[0 0.25 0.5 0.75 1]</code>:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.25</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mf">0.9375</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mf">0.4375</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Instead of typing these <code class="highlighter-rouge">t</code>’s to <code class="highlighter-rouge">map</code> over, we could also use the <code class="highlighter-rouge">range</code> function:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">0</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>As you can see, <code class="highlighter-rouge">range</code> allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mf">0.1</span><span class="p">))</span><span class="w">
+</span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mf">0.9900000000000001</span><span class="w"> </span><span class="mf">0.9600000000000002</span><span class="w"> </span><span class="mf">0.9099999999999999</span><span class="w"> </span><span class="mf">0.84</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mf">0.64</span><span class="w"> </span><span class="mf">0.51</span><span class="w"> </span><span class="mf">0.3600000000000001</span><span class="w"> </span><span class="mf">0.19000000000000014</span><span class="w"> </span><span class="mf">2.220446049250313</span><span class="n">E-16</span><span class="p">)</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Although a certain pattern is already visible in these numbers, now might be the right time to start visualising the curves.</p>
+
+<h2 id="visualise">Visualise</h2>
+
+<p>Let’s be brave and go right to the essence:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">view-bezier-plot</span><span class="w"> </span><span class="p">[[</span><span class="n">x1</span><span class="w"> </span><span class="n">y1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x2</span><span class="w"> </span><span class="n">y2</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x3</span><span class="w"> </span><span class="n">y3</span><span class="p">]</span><span class="w"> </span><span class="n">plot-title</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">b3x</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">x1</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="n">x3</span><span class="p">)</span><span class="w">
+        </span><span class="n">xs</span><span class="w">          </span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">b3x</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">0.01</span><span class="p">))</span><span class="w">
+        </span><span class="n">b3y</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="n">y2</span><span class="w"> </span><span class="n">y3</span><span class="p">)</span><span class="w">
+        </span><span class="n">ys</span><span class="w">          </span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">b3y</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">0.01</span><span class="p">))</span><span class="w">
+        </span><span class="n">dataset</span><span class="w">     </span><span class="p">(</span><span class="nf">incanter/conj-cols</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">ys</span><span class="p">)</span><span class="w">
+        </span><span class="n">xy-plot</span><span class="w">     </span><span class="p">(</span><span class="nf">charts/xy-plot</span><span class="w"> </span><span class="s">"col-0"</span><span class="w"> </span><span class="s">"col-1"</span><span class="w"> </span><span class="no">:data</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="no">:points</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="no">:title</span><span class="w"> </span><span class="n">plot-title</span><span class="p">)]</span><span class="w">
+    </span><span class="p">(</span><span class="nf">incanter/view</span><span class="w"> </span><span class="n">xy-plot</span><span class="p">)))</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">let</code> form is <code class="highlighter-rouge">clojure</code>’s way of defining local variables. So <code class="highlighter-rouge">b3x</code>, <code class="highlighter-rouge">xs</code>, <code class="highlighter-rouge">b3y</code>, etc. can be seen as local variables with their values specified in the functions directly after their declaration.</p>
+
+<p>This function basically states:</p>
+
+<ul>
+  <li>define a function named <code class="highlighter-rouge">view-bezier-plot</code></li>
+  <li>let it have 3 arguments which are destructured into their 2D x &amp; y coordinates</li>
+  <li>let the fourth argument be the title of the plot</li>
+  <li><code class="highlighter-rouge">let</code> it have some local variables:
+    <ul>
+      <li><code class="highlighter-rouge">b3x</code> takes all x coordinates of the 3 points</li>
+      <li><code class="highlighter-rouge">b3y</code> takes the y coordinates</li>
+      <li><code class="highlighter-rouge">xs</code> are the all x values resulting from applying the <code class="highlighter-rouge">b3x</code> anonymous function with all the range values</li>
+      <li><code class="highlighter-rouge">ys</code> are the all y values resulting from applying the <code class="highlighter-rouge">b3y</code> anonymous function with all the range values</li>
+      <li>incanter can work with columns similarly to spreadsheets. <code class="highlighter-rouge">dataset</code> is an incanter dataset where 2 columns are ‘brought together’, or in <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">lisp</a> terms <code class="highlighter-rouge">conj</code>[oined]. By default, these columns are called <code class="highlighter-rouge">col-0</code>, <code class="highlighter-rouge">col-1</code>, … , <code class="highlighter-rouge">col-n</code></li>
+      <li>xy-plot contains an incanter chart where <code class="highlighter-rouge">dataset</code> provides the data, the x-axis - and y-axis values are found in columns <code class="highlighter-rouge">col-0</code> and <code class="highlighter-rouge">col-1</code> respectively and viewing the points is set to <code class="highlighter-rouge">true</code></li>
+    </ul>
+  </li>
+  <li>and make it return an <code class="highlighter-rouge">xy-plot</code></li>
+</ul>
+
+<h2 id="i-love-it-when-a-plan-comes-together">I love it when a plan comes together</h2>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="w">
+</span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="s">"increasing ascending"</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="s">"swoosh"</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">-2</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">-4</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="s">"y = x^2 ?"</span><span class="p">)</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">-1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="s">"my pulse after a useless meeting"</span><span class="p">)</span><span class="w">
+
+</span></code></pre>
+</div>
+
+<p><a href="#">
+    <img src="/img/incanter-plots.png" alt="incanter-plots" />
+</a></p>
+
+<p>The generated charts will be opened in external java windows. Sometimes they stay hidden behind other windows on your screen, so you might have to bring your java windows to the foreground in order to see them.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>In a relatively short repl session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:</p>
+
+<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
+</span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.charts</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">charts</span><span class="p">])</span><span class="w">
+
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">pow</span><span class="w"> </span><span class="p">[</span><span class="n">base</span><span class="w"> </span><span class="n">exponent</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">*</span><span class="o">'</span><span class="w"> </span><span class="p">(</span><span class="nb">repeat</span><span class="w"> </span><span class="n">exponent</span><span class="w"> </span><span class="n">base</span><span class="p">)))</span><span class="w">
+
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">bezier-3</span><span class="w"> </span><span class="p">[</span><span class="n">P0</span><span class="w"> </span><span class="n">P1</span><span class="w"> </span><span class="n">P2</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w">
+    </span><span class="p">(</span><span class="nb">+</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">P0</span><span class="p">)</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w">     </span><span class="n">P1</span><span class="p">)</span><span class="w">
+      </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="n">P2</span><span class="p">))))</span><span class="w">
+
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">view-bezier-plot</span><span class="w"> </span><span class="p">[[</span><span class="n">x1</span><span class="w"> </span><span class="n">y1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x2</span><span class="w"> </span><span class="n">y2</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x3</span><span class="w"> </span><span class="n">y3</span><span class="p">]</span><span class="w"> </span><span class="n">plot-title</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">b3x</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">x1</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="n">x3</span><span class="p">)</span><span class="w">
+        </span><span class="n">xs</span><span class="w">          </span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">b3x</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">0.01</span><span class="p">))</span><span class="w">
+        </span><span class="n">b3y</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="n">y2</span><span class="w"> </span><span class="n">y3</span><span class="p">)</span><span class="w">
+        </span><span class="n">ys</span><span class="w">          </span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">b3y</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">0.01</span><span class="p">))</span><span class="w">
+        </span><span class="n">dataset</span><span class="w">     </span><span class="p">(</span><span class="nf">incanter/conj-cols</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">ys</span><span class="p">)</span><span class="w">
+        </span><span class="n">xy-plot</span><span class="w">     </span><span class="p">(</span><span class="nf">charts/xy-plot</span><span class="w"> </span><span class="s">"col-0"</span><span class="w"> </span><span class="s">"col-1"</span><span class="w"> </span><span class="no">:data</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="no">:points</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="no">:title</span><span class="w"> </span><span class="n">plot-title</span><span class="p">)]</span><span class="w">
+    </span><span class="p">(</span><span class="nf">incanter/view</span><span class="w"> </span><span class="n">xy-plot</span><span class="p">)))</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>Actually, the hand-rolled <code class="highlighter-rouge">pow</code> function isn’t really needed. I could have used <code class="highlighter-rouge">clojure</code>’s java interop: <code class="highlighter-rouge">(Math/pow 2 3)</code>. In that case I would have been calling the <code class="highlighter-rouge">pow</code> method directly on java’s <code class="highlighter-rouge">Math</code> class. I weighted the option of hand-rolling the <code class="highlighter-rouge">pow</code> function, showing some functional code and explaining how functions are defined in <code class="highlighter-rouge">clojure</code> versus explaining java interop.</p>
+
+<p>Explaining in text what the code does took me 5 times as long as writing the code itself. That’s a great thing about <a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">lisps</a> in general and <code class="highlighter-rouge">clojure</code> in particular: no fluff, just stuff!</p>
+
+<p>Thanks Niek for posting my guest blog. Please share your comments, suggestions and thoughts about this blog with me on <a href="https://twitter.com/mmz_">twitter.com/mmz_</a>. Thanks for reading and Happy Coding!</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://gist.github.com/mmzsource/833ddfb2cf87c54fe4fc26996466cd1d">A gist with the code from this post</a></li>
+  <li><a href="https://clojure.org">Clojure website</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisps or LIst Processing Language</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Lambda_calculus">𝝺 calculus</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Read–eval–print_loop">REPL or Read Eval Print Loop</a></li>
+  <li><a href="http://www.davidtanzer.net/rdd_and_tests">REPL Driven Development</a> - a blog which is a bit outdated on the test part, because nowadays, with <a href="https://clojure.org/about/spec">clojure spec</a> we easily generate our tests and test data by specifying our data structures, functions, etc. in <code class="highlighter-rouge">clojure</code> itself. With proper specs, you’ll get even more than generative testing; you’ll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power &amp; pleasure of a dynamic programming language!</li>
+  <li><a href="https://leiningen.org">Leiningen</a></li>
+  <li><a href="https://github.com/rkneufeld/lein-try">Lein-try plugin</a></li>
+  <li><a href="http://incanter.org">Incanter</a></li>
+  <li><a href="https://data-sorcery.org/2010/05/14/infix-math/">Incanter infix notation</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Bézier_curve">Wikipedia page on Bézier curves</a></li>
+  <li><a href="https://plus.maths.org/content/formula-bezier-curve">The formula for a bezier curve</a></li>
+  <li><a href="http://blogs.sitepointstatic.com/examples/tech/canvas-curves/bezier-curve.html">Play around with bézier curves with 4 control points</a></li>
+</ul>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/06/18/terraform-aws-vpc/" data-toggle="tooltip" data-placement="top" title="Coding a VPC in Terraform">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/07/12/bezier-in-clojurescript/" data-toggle="tooltip" data-placement="top" title="Visualising Bézier Curves Part II">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

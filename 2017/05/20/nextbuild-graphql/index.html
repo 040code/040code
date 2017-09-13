@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>GraphQL - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/05/20/nextbuild-graphql/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/radioroyaal.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>GraphQL</h1>
+                    
+                    <h2 class="subheading">Nextbuild talk - The Next API Language</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      <!-- 040 Code on May 20, 2017</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/graphql/">GraphQL</a>
+
+
+				<p>A short post to share the slides and examples I used in my talk at the <a href="http://nextbuild.nl/">Nextbuild</a> conference on May the 20th in Eindhoven.</p>
+
+<h2 id="slides">Slides</h2>
+<p>Below the slides that I for the talk, the slides are available as well on <a href="https://npalm.github.io/graphql-slides-20170520/">GitHub</a>. You can easy navigate through the slides with the spacebar.</p>
+
+<div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
+    <iframe style="position:absolute; left:0; top:0; width:100%; height:100%" src="https://npalm.github.io/graphql-slides-20170520/">
+    </iframe>
+</div>
+
+<p>To get started with GraphQL the best starting points are:</p>
+<ul>
+  <li><a href="https://graphql.org">GraphQL.org</a></li>
+  <li><a href="https://github.com/chentsulin/awesome-graphql">Awesome GraphQL</a></li>
+</ul>
+
+<h2 id="examples">Examples</h2>
+<p>During the talk, I demonstrated GraphQL via <a href="https://www.graph.cool/">graphcool</a>, which is cloud service for creating a flexible GraphGL backend. I modelled a basic model of a Talk and Person with relation speakers and visitors on graphcool. Furthermore, I modelled two basic sample implementations of a GraphQL backend in Java and JavaScript that are available via GitHub. Those implementation are more limited than the online one, but both serve the following minimal queries.</p>
+
+<p>Query for the name and the title of the talks given by all persons:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="err">persons</span><span class="w"> </span><span class="err">{</span><span class="w">
+    </span><span class="err">name</span><span class="w">
+    </span><span class="err">talks</span><span class="w"> </span><span class="err">{</span><span class="w">
+      </span><span class="err">title</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="err">}</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>And secondly, a query for all titles of talks with their speaker’s names.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="err">talks</span><span class="w"> </span><span class="err">{</span><span class="w">
+    </span><span class="err">title</span><span class="w">
+    </span><span class="err">speakers</span><span class="w"> </span><span class="err">{</span><span class="w">
+      </span><span class="err">name</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="err">}</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<h3 id="javascript-sample">JavaScript sample</h3>
+<p>The JavaScript <a href="https://github.com/npalm/graphql-js-demo.git">sample</a> is based on <a href="https://github.com/apollostack/apollo-starter-kit">Apollo GraphQL tutorial kit</a>.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-js-demo.git
+cd graphql-js-demo
+yarn &amp;&amp; yarn start
+</code></pre>
+</div>
+<p>Instead of yarn, you can use <code class="highlighter-rouge">npm install &amp;&amp; npm start</code>. Once started, browse to <a href="http://localhost:8080/graphiql">http://localhost:8080/graphiql</a> and play around with the GraphQL web interface. Implementing the JavaScript version was straightforward due to the many examples and good tutorials around.</p>
+
+<h3 id="spring-boot-java-sample">Spring Boot Java sample</h3>
+<p>The Spring Boot Java <a href="https://github.com/npalm/graphql-java-demo.git">sample</a> is based on the Spring Boot Starter available for GraphQL. This starter uses a basic GraphQL java library as well the Java annotation library for GraphQL.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-java-demo.git
+git checkout nextbuild
+cd graphql-java-demo
+docker build -t graphql-java-demo &amp;&amp; docker run -it --rm -p 8080:8080 graphql-java-demo
+</code></pre>
+</div>
+<p>Alternatively, you can build and run via gradle. Once started, browse to <a href="http://localhost:8080/">http://localhost:8080/</a> to play around with the GraphQL web interface. The Java version implementation was not as easy as expected. The GraphQL Spring Boot starter dependencies requires the GrahpQL java annotation library, which seems to be broken after an update in the Java GraphQL base library. I am not sure if the annotation library is still supported. To get the GraphQL Spring Boot library working I have to add a mandatory mutation to the scheme. And downgrade the Java GraphQL, see <code class="highlighter-rouge">gradle/depedencies.gradle</code> to get the annotation library to work.</p>
+
+<p>Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.</p>
+
+<h2 id="updates">Updates</h2>
+
+<h3 id="refactored-java-implementation-june-20-2017">Refactored Java implementation (June 20, 2017)</h3>
+<p>I have updated the Spring Boot implmentation, upgrade all libraries and removed the annotations for graphql resolving. The annoation are replaced <a href="https://github.com/graphql-java/graphql-java-tools">java-graphql-tools</a>. Which looks a better way to ingrate graphql in a Java service. You will see the implementation will have a lot of similarities with the javascript one.</p>
+
+<h3 id="developersnl-meetup-rotterdam-june-28-2017">Developers.nl meetup Rotterdam (June 28, 2017)</h3>
+<p>On June, the 28th I have presented the GraphQL talk at the <a href="https://www.meetup.com/Developers-nl-Meetup/events/240419508/">developers.nl Meetup</a> in Rotterdom. I have used a slightly minimal version for the slides, which can be found <a href="https://npalm.github.io/graphql-slides-20170628/">here</a>. Comparing the to the presentaton on the nextbuild I have also walked through the code examples mentioned above.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/05/07/docker-multi-stage-builds/" data-toggle="tooltip" data-placement="top" title="Docker Multi Stage Builds">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/18/terraform-aws-vpc/" data-toggle="tooltip" data-placement="top" title="Coding a VPC in Terraform">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
