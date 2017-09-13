@@ -3,7 +3,7 @@ layout:     post
 title:      "Full Stack Fest 2017"
 subtitle:   "Frontend days"
 date:       2017-09-08
-authors:    [jeroen, niek]
+author:     "Jeroen Knoops and Niek Palm"
 header-img: "img/graffiti-hooftlaan.jpg"
 tags:       [aframe, serviceworkers, css, javascript, ast, svg, blockchain, react]
 ---
