@@ -3,7 +3,7 @@ layout:     post
 title:      "GraphQL"
 subtitle:   "Nextbuild talk - The Next API Language"
 date:       2017-05-20 23:50
-authors:     [niek]
+author:     "Niek Palm"
 header-img: "img/radioroyaal.png"
 tags:       [graphql]
 ---

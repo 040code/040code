@@ -14,24 +14,7 @@ description: "A developers blog"
         </h3>
         {% endif %}
     </a>
-    <p class="post-meta">Posted by
-      {% if post.authors %}
-      {% for author in post.authors %}
-          <a href="{{ author.permalink | prepend: site.baseurl }}">
-            {{author.first_name}} {{author.last_name}}
-          </a>
-          {% if forloop.last != true %}
-              {% if forloop.rindex0 == 1 %}
-                   {% capture authors %}{{ authors }} and{% endcapture %}
-              {% else %}
-                  {% capture authors %}{{ authors }},{% endcapture %}
-              {% endif %}
-          {% endif%}
-      {% endfor %}
-      {% else %}{{ site.title }}
-      {% endif %}
-      on {{ post.date | date: "%B %-d, %Y" }}</p>
-
+    <p class="post-meta">Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}</p>
 </div>
 <hr>
 {% endfor %}
