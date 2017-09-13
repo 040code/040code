@@ -36,25 +36,25 @@ layout: default
           </div>
           <div class="col-lg-6 col-lg-offset-1">
                 <h2>About {{ page.author.first_name }}</h2>
-                    <a href="https://twitter.com/{{ author.twitter }}">
+                    <a href="https://twitter.com/{{ page.author.twitter }}">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-twitter fa-stack-1x"></i>
                         </span>
                     </a>
 
-                    <a href="https://github.com/{{ author.github }}">
+                    <a href="https://github.com/{{ page.author.github }}">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-github fa-stack-1x"></i>
                         </span>
                     </a>
 
-                    <a href="https://www.linkedin.com/in/{{ author.linkedin }}">
+                    <a href="https://www.linkedin.com/in/{{ page.author.linkedin }}">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-linkedin fa-stack-1x"></i>
                         </span>
                     </a>
 
-                    <a href="mailto:{{ author.email }}">
+                    <a href="mailto:{{ page.author.email }}">
                         <span class="fa-stack fa-lg">
                             <i class="fa fa-envelope fa-stack-1x"></i>
                         </span>
