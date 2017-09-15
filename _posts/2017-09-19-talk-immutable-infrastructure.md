@@ -4,11 +4,11 @@ title:      "Immutable Infrastructure"
 subtitle:   "Talk Devops Days Riga 2017"
 date:       2017-09-15
 authors:     [niek]
-header-img: "img/strijp-s-olsopen .png"
+header-img: "img/strijp-s-ols.png"
 tags:       [terraform, aws, docker]
 ---
 
-A post to share the slides and examples I have used in my talk at the [DevOps Days Riga 2017](devopsdays.org/events/2017-riga/) on September the 19th.
+A post to share the slides and examples I have used in my talk at the [DevOps Days Riga 2017](https://www.devopsdays.org/events/2017-riga/program/niek-palm/) on September the 19th.
 
 ## Slides
 Below the slides that I used for the talk, the slides are available as well on [GitHub](https://npalm.github.io/immutable-infra-slides-20170919/). You can easy navigate through the slides with the spacebar.
@@ -50,6 +50,7 @@ You should also have Terraform installed (`home brew install terraform`) or use 
 docker run -it --env-file <AWS_KEYS_FILE>  -v $(pwd):/data -w /data \
   hashicorp/terraform:0.10.4 <terraform command>
 ```
+<br><br>
 
 #### Create network layers (VPC)
 In the next steps we will create the network layers.
