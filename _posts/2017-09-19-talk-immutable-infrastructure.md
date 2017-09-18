@@ -2,7 +2,7 @@
 layout:     post
 title:      "Immutable Infrastructure"
 subtitle:   "Devops Days Riga 2017"
-date:       2017-09-15
+date:       2017-09-19
 authors:     [niek]
 header-img: "img/strijp-s-ols.png"
 tags:       [terraform, aws, docker, microservices]
@@ -14,11 +14,11 @@ The Docker slogan 'Build, Ship, and Run' advertises easy set up of immutable sof
 In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..
 
 ## Slides
-Below the slides that I used for the talk, the slides are available as well on [GitHub](https://npalm.github.io/immutable-infra-slides-20170919/). You can easy navigate through the slides with the spacebar.
+Below the slides that I used for the talk, the slides are available as well on [GitLab](https://immutable-infrastructure.gitlab.io/dodr-2017/). You can easy navigate through the slides with the spacebar.
 
 <div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
     <iframe style="position:absolute; left:0; top:0; width:100%; height:100%"
-        src="https://npalm.github.io/immutable-infra-slides-20170919/">
+        src="https://immutable-infrastructure.gitlab.io/dodr-2017/">
     </iframe>
 </div>
 
