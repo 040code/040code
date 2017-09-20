@@ -47,7 +47,7 @@ Awesome what you can do with SVG by Sarah Drasner ([@sarah_edo](https://twitter.
 ### Using react native + clojurescript to launch ios/android apps to 1m users
 Rating: :star: :star:
 
-A long intro to `react native`, which is most likely not necessary on this conference. A nice twist with `closureScript`. The code looks very clean. It is possible to create apps for both iOS and Android with a 99% simular codebase. The crashlogs of apps created with closurescript and reactnative are unfortunately almost not readible. This set of tools is also great to use in combination with `codepush`. Now we can update the app on the fly without bothering appstores. Talk by Emin Hasanov ([@hasanove](https://twitter.com/hasanove))
+A long intro to `react native`, which is most likely not necessary on this conference. A nice twist with `clojureScript`. The code looks very clean. It is possible to create apps for both iOS and Android with a 99% simular codebase. The crashlogs of apps created with clojurescript and reactnative are unfortunately almost not readible. This set of tools is also great to use in combination with `codepush`. Now we can update the app on the fly without bothering appstores. Talk by Emin Hasanov ([@hasanove](https://twitter.com/hasanove))
 
 
 ### Blasting react into space: building fluid, beautiful interfaces with react and webgl (and other exotic explorations)
