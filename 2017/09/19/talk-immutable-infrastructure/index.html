@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on September 19, 2017</span> -->
+                      on 2017-09-19</span>
                 </div>
             </div>
         </div>
@@ -176,40 +176,36 @@
 
 <p>Clone the repository containing the ECS <a href="https://github.com/npalm/tf-ecs-demo.git">sample</a> terraform code. To create the infrastructure step-by-step you can check out the tags <code class="highlighter-rouge">vpc</code> and <code class="highlighter-rouge">ecs</code>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/npalm/tf-ecs-demo.git
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/tf-ecs-demo.git
 git checkout vpc
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>You should also have Terraform installed (<code class="highlighter-rouge">home brew install terraform</code>) or use a docker container to run the terraform commands, for example:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it --env-file &lt;AWS_KEYS_FILE&gt; -v $(pwd):/data -w /data \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -it --env-file &lt;AWS_KEYS_FILE&gt; -v $(pwd):/data -w /data \
   hashicorp/terraform:0.10.4 &lt;terraform command&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><br /></p>
 
 <h4 id="create-network-layers-vpc">Create network layers (VPC)</h4>
 <p>In the next steps we will create the network layers.</p>
 
 <p>First, we initialize and plan our changes.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>terraform init
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform init
 terraform plan
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Terraform should print on the console that 19 needs to be added and 0 to change or destroyed. Next we apply the change be executing <code class="highlighter-rouge">terraform apply</code>.</p>
 
 <h4 id="add-ecs-cluster">Add ECS cluster</h4>
 <p>Now we have the network layer created, we will add the ECS cluster. By default the bastion host is disabled, the bastion can be enabled by updating the variable <code class="highlighter-rouge">enable_bastion</code> in the <code class="highlighter-rouge">terraform.tfvars</code> file. Time to plan and apply the new resources for ECS.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>git checkout ecs
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout ecs
 terraform plan
 terraform apply
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Once terraform is ready it will print the url of two applications on the console. One application, is a simple micro service that just prints the AWS availabilty zone where it is running, the other is a <a href="/2017/05/20/nextbuild-graphql/">graphql micro service</a>. It will take a few minutes before the services are available.</p>
 
 <h4 id="adding-your-own-service">Adding your own service.</h4>
 <p>Time to have some more fun. Edit the <code class="highlighter-rouge">main.tf</code> and start making changes. Remove all the services, add your own service. By default for each service an application load balancer (ALB) is created. Add for each services that you want to deploy a configuration as below and update the variables as required.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>module "your-service" {
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module "your-service" {
   source = "ecs-service"
 
   service_name   = "&lt;service-name&gt;"
@@ -226,8 +222,7 @@ terraform apply
   cluster_id            = "${module.ecs-cluster.cluster_id}"
   ecs_service_role_name = "${module.ecs-cluster.ecs_service_role_name}"
 }
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.</p>
 
 <h3 id="clean-up">Clean up</h3>

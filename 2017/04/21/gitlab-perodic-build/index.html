@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on April 21, 2017</span> -->
+                      on 2017-04-21</span>
                 </div>
             </div>
         </div>
@@ -159,30 +159,27 @@
 
 <p>Next we test that we are able to trigger the build remotely be executing the <code class="highlighter-rouge">curl</code> command below.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -X POST \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X POST \
      -F token=&lt;TOKEN&gt; \
      -F ref=&lt;REF_NAME&gt; \
      &lt;URL&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Verify in GitLab the build is triggered</p>
 
 <h2 id="periodic-trigger-the-build-in-a-docker-container">Periodic trigger the build in a Docker container</h2>
 <p>The next step is to execute the trigger periodic. A standard way of running a job periodic is by defining crontab. We will use a docker container to execute the crontab so we can deploy it anywhere.</p>
 
 <p>I have createe a base docker image containing a script to trigger GitLab by executing a curl command as shown above. The crontab will be copied to the image <code class="highlighter-rouge">ONBUILD</code>. In the crontab we point to the script that can be executed as follow:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>trigger-gitlab.sh -t &lt;token&gt; -r &lt;ref&gt; -u &lt;gitlab_trigger_url&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>trigger-gitlab.sh -t &lt;token&gt; -r &lt;ref&gt; -u &lt;gitlab_trigger_url&gt;
+</code></pre></div></div>
 <p>For the sources see <a href="https://github.com/npalm/gitlab-periodic-trigger">npalm/gitlab-periodic-trigger</a> on GitHub.</p>
 
 <p>Now all peace’s are ready we only have to build our docker image and run it to trigger the build. First, we create a Dockerfile and only extend the base image <code class="highlighter-rouge">npalm/gitlab-periodic-trigger</code>. Create a new directory, and add a Dockerfile with only the line:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>FROM npalm/gitlab-periodic-trigger:1.0.0
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM npalm/gitlab-periodic-trigger:1.0.0
+</code></pre></div></div>
 <p>This image expects a file <code class="highlighter-rouge">gitlabcrontab</code> containing the <a href="https://en.wikipedia.org/wiki/Cron">crontab</a> and will copy it to the image once build. Create a file named <code class="highlighter-rouge">gitlabcrontab</code>, and add one ore more triggers, an example is below.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># Example of job definition:
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Example of job definition:
 # .---------------- minute (0 - 59)
 # |  .------------- hour (0 - 23)
 # |  |  .---------- day of month (1 - 31)
@@ -190,8 +187,7 @@
 # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7)
 # |  |  |  |  |
 22 11 * * * trigger-gitlab.sh -t &lt;token&gt; -r &lt;ref&gt; -u &lt;gitlab_trigger_url&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Now we build the container <code class="highlighter-rouge">docker build -t periodic-trigger .</code> and finally start the container <code class="highlighter-rouge">docker run -d periodic-trigger</code></p>
 
 <p>To enable the feature for your teams you could set up a build to build the docker image as described below and push it automated to an environment.</p>

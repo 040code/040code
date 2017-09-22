@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on July 1, 2017</span> -->
+                      on 2017-07-01</span>
                 </div>
             </div>
         </div>
@@ -152,18 +152,16 @@
 
 <p>Let’s first start a repl, and specify the library we want to try:</p>
 
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>lein try incanter <span class="s2">"1.5.7"</span>
-</code></pre>
-</div>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lein try incanter <span class="s2">"1.5.7"</span>
+</code></pre></div></div>
 
 <p><a href="http://incanter.org">Incanter</a> is a <code class="highlighter-rouge">clojure</code>-based, R-like platform for statistical computing and graphics. We’ll use it to visualise the Bézier curves.</p>
 
 <p>Since the repl is already fired up, let’s immediately require the dependencies we’ll need:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
 </span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.charts</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">charts</span><span class="p">])</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Nothing fancy going on here. Simply ‘import’ statements the <code class="highlighter-rouge">clojure</code> way.</p>
 
@@ -171,10 +169,9 @@
 
 <p>I decided to hand-roll my own <code class="highlighter-rouge">pow</code> function, because we’ll need it later in the creation of bézier curves:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">pow</span><span class="w"> </span><span class="p">[</span><span class="n">base</span><span class="w"> </span><span class="n">exponent</span><span class="p">]</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">pow</span><span class="w"> </span><span class="p">[</span><span class="n">base</span><span class="w"> </span><span class="n">exponent</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">*</span><span class="o">'</span><span class="w"> </span><span class="p">(</span><span class="nb">repeat</span><span class="w"> </span><span class="n">exponent</span><span class="w"> </span><span class="n">base</span><span class="p">)))</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>This function basically says:</p>
 
@@ -185,14 +182,13 @@
   <li>and <code class="highlighter-rouge">reduce</code> that result with the <code class="highlighter-rouge">*'</code> multiply function</li>
 </ul>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="c1">;; so:
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">;; so:</span><span class="w">
 </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">
-</span><span class="c1">;; will lead to
+</span><span class="c1">;; will lead to</span><span class="w">
 </span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">*</span><span class="o">'</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span><span class="w">
-</span><span class="c1">;; which results in
+</span><span class="c1">;; which results in</span><span class="w">
 </span><span class="mi">8</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>I’m using the <code class="highlighter-rouge">*'</code> multiply function instead of the normal <code class="highlighter-rouge">*</code> multiply function, because according to the docs <code class="highlighter-rouge">*'</code> supports arbitrary precision. You can see for yourself by typing <code class="highlighter-rouge">(doc *')</code> in your repl, or study the code by typing <code class="highlighter-rouge">(source *')</code> in your repl.</p>
 
@@ -212,14 +208,13 @@
 
 <p>Let’s convert the math function to <code class="highlighter-rouge">clojure</code>:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">bezier-3</span><span class="w"> </span><span class="p">[</span><span class="n">P0</span><span class="w"> </span><span class="n">P1</span><span class="w"> </span><span class="n">P2</span><span class="p">]</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">bezier-3</span><span class="w"> </span><span class="p">[</span><span class="n">P0</span><span class="w"> </span><span class="n">P1</span><span class="w"> </span><span class="n">P2</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w">
     </span><span class="p">(</span><span class="nb">+</span><span class="w">
       </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">P0</span><span class="p">)</span><span class="w">
       </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w">     </span><span class="n">P1</span><span class="p">)</span><span class="w">
       </span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="p">(</span><span class="nf">pow</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="n">P2</span><span class="p">))))</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>As you can see, you’ll have to translate the infix notation to <code class="highlighter-rouge">clojure</code>’s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. <em>(If you can’t live with that: you can also use infix notation in clojure. For instance incanter can also be fed with <a href="https://data-sorcery.org/2010/05/14/infix-math/">infix notation</a>. However, you’ll lose <a href="https://en.wikipedia.org/wiki/Lambda_calculus">the power of the 𝝺</a>)</em></p>
 
@@ -241,12 +236,11 @@
 
 <p>Excellent. Let’s try it:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="w">
 
 </span><span class="p">(</span><span class="nf">test-b3</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Here I’m defining a variable <code class="highlighter-rouge">test-b3</code> which holds the anonymous function returned by the <code class="highlighter-rouge">bezier-3</code> function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.</p>
 
@@ -254,27 +248,24 @@
 
 <p>Since this test didn’t blow the stack or throw a NullPointerException or anything,  let’s map this function over a range of <code class="highlighter-rouge">t</code>’s <code class="highlighter-rouge">[0 0.25 0.5 0.75 1]</code>:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.25</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mf">0.25</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mf">0.9375</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mf">0.4375</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Instead of typing these <code class="highlighter-rouge">t</code>’s to <code class="highlighter-rouge">map</code> over, we could also use the <code class="highlighter-rouge">range</code> function:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="mi">9</span><span class="p">)</span><span class="w">
 
 </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">0</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>As you can see, <code class="highlighter-rouge">range</code> allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mf">0.1</span><span class="p">))</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">test-b3</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mf">0.1</span><span class="p">))</span><span class="w">
 </span><span class="n">=&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mf">0.9900000000000001</span><span class="w"> </span><span class="mf">0.9600000000000002</span><span class="w"> </span><span class="mf">0.9099999999999999</span><span class="w"> </span><span class="mf">0.84</span><span class="w"> </span><span class="mf">0.75</span><span class="w"> </span><span class="mf">0.64</span><span class="w"> </span><span class="mf">0.51</span><span class="w"> </span><span class="mf">0.3600000000000001</span><span class="w"> </span><span class="mf">0.19000000000000014</span><span class="w"> </span><span class="mf">2.220446049250313</span><span class="n">E-16</span><span class="p">)</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Although a certain pattern is already visible in these numbers, now might be the right time to start visualising the curves.</p>
 
@@ -282,7 +273,7 @@
 
 <p>Let’s be brave and go right to the essence:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">view-bezier-plot</span><span class="w"> </span><span class="p">[[</span><span class="n">x1</span><span class="w"> </span><span class="n">y1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x2</span><span class="w"> </span><span class="n">y2</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x3</span><span class="w"> </span><span class="n">y3</span><span class="p">]</span><span class="w"> </span><span class="n">plot-title</span><span class="p">]</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">view-bezier-plot</span><span class="w"> </span><span class="p">[[</span><span class="n">x1</span><span class="w"> </span><span class="n">y1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x2</span><span class="w"> </span><span class="n">y2</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">x3</span><span class="w"> </span><span class="n">y3</span><span class="p">]</span><span class="w"> </span><span class="n">plot-title</span><span class="p">]</span><span class="w">
   </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">b3x</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">x1</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="n">x3</span><span class="p">)</span><span class="w">
         </span><span class="n">xs</span><span class="w">          </span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="n">b3x</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="mf">0.01</span><span class="p">))</span><span class="w">
         </span><span class="n">b3y</span><span class="w">         </span><span class="p">(</span><span class="nf">bezier-3</span><span class="w"> </span><span class="n">y1</span><span class="w"> </span><span class="n">y2</span><span class="w"> </span><span class="n">y3</span><span class="p">)</span><span class="w">
@@ -290,8 +281,7 @@
         </span><span class="n">dataset</span><span class="w">     </span><span class="p">(</span><span class="nf">incanter/conj-cols</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">ys</span><span class="p">)</span><span class="w">
         </span><span class="n">xy-plot</span><span class="w">     </span><span class="p">(</span><span class="nf">charts/xy-plot</span><span class="w"> </span><span class="s">"col-0"</span><span class="w"> </span><span class="s">"col-1"</span><span class="w"> </span><span class="no">:data</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="no">:points</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="no">:title</span><span class="w"> </span><span class="n">plot-title</span><span class="p">)]</span><span class="w">
     </span><span class="p">(</span><span class="nf">incanter/view</span><span class="w"> </span><span class="n">xy-plot</span><span class="p">)))</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">let</code> form is <code class="highlighter-rouge">clojure</code>’s way of defining local variables. So <code class="highlighter-rouge">b3x</code>, <code class="highlighter-rouge">xs</code>, <code class="highlighter-rouge">b3y</code>, etc. can be seen as local variables with their values specified in the functions directly after their declaration.</p>
 
@@ -316,7 +306,7 @@
 
 <h2 id="i-love-it-when-a-plan-comes-together">I love it when a plan comes together</h2>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w">
 </span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="s">"increasing ascending"</span><span class="p">)</span><span class="w">
 
 </span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">-1</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="s">"swoosh"</span><span class="p">)</span><span class="w">
@@ -325,8 +315,7 @@
 
 </span><span class="p">(</span><span class="nf">view-bezier-plot</span><span class="w"> </span><span class="p">[</span><span class="mi">-1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="s">"my pulse after a useless meeting"</span><span class="p">)</span><span class="w">
 
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p><a href="#">
     <img src="/img/incanter-plots.png" alt="incanter-plots" />
@@ -338,7 +327,7 @@
 
 <p>In a relatively short repl session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:</p>
 
-<div class="language-clojure highlighter-rouge"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.core</span><span class="w">   </span><span class="no">:as</span><span class="w"> </span><span class="n">incanter</span><span class="p">])</span><span class="w">
 </span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">incanter.charts</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">charts</span><span class="p">])</span><span class="w">
 
 
@@ -362,8 +351,7 @@
         </span><span class="n">dataset</span><span class="w">     </span><span class="p">(</span><span class="nf">incanter/conj-cols</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="n">ys</span><span class="p">)</span><span class="w">
         </span><span class="n">xy-plot</span><span class="w">     </span><span class="p">(</span><span class="nf">charts/xy-plot</span><span class="w"> </span><span class="s">"col-0"</span><span class="w"> </span><span class="s">"col-1"</span><span class="w"> </span><span class="no">:data</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="no">:points</span><span class="w"> </span><span class="n">true</span><span class="w"> </span><span class="no">:title</span><span class="w"> </span><span class="n">plot-title</span><span class="p">)]</span><span class="w">
     </span><span class="p">(</span><span class="nf">incanter/view</span><span class="w"> </span><span class="n">xy-plot</span><span class="p">)))</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <p>Actually, the hand-rolled <code class="highlighter-rouge">pow</code> function isn’t really needed. I could have used <code class="highlighter-rouge">clojure</code>’s java interop: <code class="highlighter-rouge">(Math/pow 2 3)</code>. In that case I would have been calling the <code class="highlighter-rouge">pow</code> method directly on java’s <code class="highlighter-rouge">Math</code> class. I weighted the option of hand-rolling the <code class="highlighter-rouge">pow</code> function, showing some functional code and explaining how functions are defined in <code class="highlighter-rouge">clojure</code> versus explaining java interop.</p>
 

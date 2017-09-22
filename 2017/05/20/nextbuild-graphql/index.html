@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on May 20, 2017</span> -->
+                      on 2017-05-20</span>
                 </div>
             </div>
         </div>
@@ -159,47 +159,43 @@
 <p>During the talk, I demonstrated GraphQL via <a href="https://www.graph.cool/">graphcool</a>, which is cloud service for creating a flexible GraphGL backend. I modelled a basic model of a Talk and Person with relation speakers and visitors on graphcool. Furthermore, I modelled two basic sample implementations of a GraphQL backend in Java and JavaScript that are available via GitHub. Those implementation are more limited than the online one, but both serve the following minimal queries.</p>
 
 <p>Query for the name and the title of the talks given by all persons:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="err">persons</span><span class="w"> </span><span class="err">{</span><span class="w">
-    </span><span class="err">name</span><span class="w">
-    </span><span class="err">talks</span><span class="w"> </span><span class="err">{</span><span class="w">
-      </span><span class="err">title</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="err">}</span><span class="w">
-</span><span class="err">}</span><span class="w">
-</span></code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  persons {
+    name
+    talks {
+      title
+    }
+  }
+}
+</code></pre></div></div>
 
 <p>And secondly, a query for all titles of talks with their speaker’s names.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="err">talks</span><span class="w"> </span><span class="err">{</span><span class="w">
-    </span><span class="err">title</span><span class="w">
-    </span><span class="err">speakers</span><span class="w"> </span><span class="err">{</span><span class="w">
-      </span><span class="err">name</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="err">}</span><span class="w">
-</span><span class="err">}</span><span class="w">
-</span></code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  talks {
+    title
+    speakers {
+      name
+    }
+  }
+}
+</code></pre></div></div>
 
 <h3 id="javascript-sample">JavaScript sample</h3>
 <p>The JavaScript <a href="https://github.com/npalm/graphql-js-demo.git">sample</a> is based on <a href="https://github.com/apollostack/apollo-starter-kit">Apollo GraphQL tutorial kit</a>.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-js-demo.git
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-js-demo.git
 cd graphql-js-demo
 yarn &amp;&amp; yarn start
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Instead of yarn, you can use <code class="highlighter-rouge">npm install &amp;&amp; npm start</code>. Once started, browse to <a href="http://localhost:8080/graphiql">http://localhost:8080/graphiql</a> and play around with the GraphQL web interface. Implementing the JavaScript version was straightforward due to the many examples and good tutorials around.</p>
 
 <h3 id="spring-boot-java-sample">Spring Boot Java sample</h3>
 <p>The Spring Boot Java <a href="https://github.com/npalm/graphql-java-demo.git">sample</a> is based on the Spring Boot Starter available for GraphQL. This starter uses a basic GraphQL java library as well the Java annotation library for GraphQL.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-java-demo.git
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-java-demo.git
 git checkout nextbuild
 cd graphql-java-demo
 docker build -t graphql-java-demo &amp;&amp; docker run -it --rm -p 8080:8080 graphql-java-demo
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Alternatively, you can build and run via gradle. Once started, browse to <a href="http://localhost:8080/">http://localhost:8080/</a> to play around with the GraphQL web interface. The Java version implementation was not as easy as expected. The GraphQL Spring Boot starter dependencies requires the GrahpQL java annotation library, which seems to be broken after an update in the Java GraphQL base library. I am not sure if the annotation library is still supported. To get the GraphQL Spring Boot library working I have to add a mandatory mutation to the scheme. And downgrade the Java GraphQL, see <code class="highlighter-rouge">gradle/depedencies.gradle</code> to get the annotation library to work.</p>
 
 <p>Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.</p>

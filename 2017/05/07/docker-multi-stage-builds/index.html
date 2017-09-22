@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on May 7, 2017</span> -->
+                      on 2017-05-07</span>
                 </div>
             </div>
         </div>
@@ -146,25 +146,22 @@
 
 <p>Let’s have a look on a <a href="https://github.com/040code/blog_docker-mulit-stage-build.git">example</a> for a simple Java micro service. The micro services require the JDK and Gradle to build. The JDK needs to be installed before the build and Gradle will be download by the build itself. We can build the micro service in the following way.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git clone https://github.com/040code/blog_docker-mulit-stage-build.git
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/040code/blog_docker-mulit-stage-build.git
 cd notes-service
 docker run -it --rm -v $(pwd):/build -w /build openjdk:8u121-jdk-alpine ./gradlew build
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Now the artifact is available, we can create a Docker runtime image. The application only needs the Java Runtime (JRE) to run. We create a <code class="highlighter-rouge">Dockerfile</code> based JRE alpine image and add our application.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-00)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># file: Dockerfile (git checkout step-00)
 FROM openjdk:8u121-jre-alpine
 COPY build/libs/notes-service.jar /app/notes-service.jar
 
 EXPOSE 8080
 CMD java -jar /app/notes-service.jar
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Next, we build the production image as follows:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:00 .
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t notes-service:00 .
+</code></pre></div></div>
 <p>Now we have created a clean Docker images that only containes the needed libraries to run the application. But would it not be nice if we can do this more straightforward? For example, in one Docker build.</p>
 
 <h1 id="moving-on-to-a-multi-stage-build">Moving on to a multi stage build</h1>
@@ -176,7 +173,7 @@ CMD java -jar /app/notes-service.jar
 
 <p>Now it is time to have a second look on the same example. Instead of passing the build arguments and mounting our sources, we will build our software using a single Dockerfile.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-01)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># file: Dockerfile (git checkout step-01)
 FROM openjdk:8u121-jdk-alpine AS build
 
 WORKDIR /build-env
@@ -184,16 +181,14 @@ ADD . /build-env
 RUN ./gradlew build
 
 CMD java -jar /build-env/build/notes-service.jar
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>And build it:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:01 .
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t notes-service:01 .
+</code></pre></div></div>
 <p>Nothing new here, we are now able to build our software in a container and ship an image, but the image contains all kinds of build stuff that we do not want in a runtime image. So, the next step is to solve this problem by getting rid of all the unwanted build tools.</p>
 
 <p>We update the <code class="highlighter-rouge">Dockerfile</code> and make a few modifications.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code># file: Dockerfile (git checkout step-02)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># file: Dockerfile (git checkout step-02)
 FROM openjdk:8u121-jdk-alpine AS build                                               # (1)
 
 WORKDIR /build-env
@@ -205,16 +200,13 @@ COPY --from=build /build-env/build/libs/notes-service.jar /app/notes-service.jar
 
 EXPOSE 8080
 CMD java -jar /app/notes-service.jar
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>In the <code class="highlighter-rouge">Dockerfile</code> above we marked the first stage (1) as <em>build</em> to refer later, if not specifying a name you can refer to the stage as 0. Next (2), we add the second stage which specifies the base image that we need to run our application. Finally (3), we copy the results from the build stage to the image for executing.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>docker build -t notes-service:02 .
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build -t notes-service:02 .
+</code></pre></div></div>
 <p>And now we can run via the following docker run command.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>docker run -it --rm -p 8080 notes-service:2
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -it --rm -p 8080 notes-service:2
+</code></pre></div></div>
 <p>Inspection of the tree images build will show that version 0 and 2 are equal in size, version 1 that contains all the build files and the JDK is almost three times bigger.</p>
 
 <h1 id="conclusion">Conclusion</h1>

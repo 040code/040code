@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-09-20T11:24:13+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2017-09-19T00:00:00+00:00</published><updated>2017-09-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/19/talk-immutable-infrastructure</id><content type="html" xml:base="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. &lt;a href=&quot;https://www.devopsdays.org/events/2017-riga/program/niek-palm/&quot;&gt;In the talk at the DevOps Days in Riga&lt;/a&gt; I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.0">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-09-22T12:08:34+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2017-09-19T00:00:00+00:00</published><updated>2017-09-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/19/talk-immutable-infrastructure</id><content type="html" xml:base="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. &lt;a href=&quot;https://www.devopsdays.org/events/2017-riga/program/niek-palm/&quot;&gt;In the talk at the DevOps Days in Riga&lt;/a&gt; I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.&lt;/p&gt;
 
 &lt;p&gt;In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..&lt;/p&gt;
 
@@ -35,40 +35,36 @@
 
 &lt;p&gt;Clone the repository containing the ECS &lt;a href=&quot;https://github.com/npalm/tf-ecs-demo.git&quot;&gt;sample&lt;/a&gt; terraform code. To create the infrastructure step-by-step you can check out the tags &lt;code class=&quot;highlighter-rouge&quot;&gt;vpc&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ecs&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/tf-ecs-demo.git
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/tf-ecs-demo.git
 git checkout vpc
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;You should also have Terraform installed (&lt;code class=&quot;highlighter-rouge&quot;&gt;home brew install terraform&lt;/code&gt;) or use a docker container to run the terraform commands, for example:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file &amp;lt;AWS_KEYS_FILE&amp;gt; -v $(pwd):/data -w /data \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file &amp;lt;AWS_KEYS_FILE&amp;gt; -v $(pwd):/data -w /data \
   hashicorp/terraform:0.10.4 &amp;lt;terraform command&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;create-network-layers-vpc&quot;&gt;Create network layers (VPC)&lt;/h4&gt;
 &lt;p&gt;In the next steps we will create the network layers.&lt;/p&gt;
 
 &lt;p&gt;First, we initialize and plan our changes.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;terraform init
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;terraform init
 terraform plan
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Terraform should print on the console that 19 needs to be added and 0 to change or destroyed. Next we apply the change be executing &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h4 id=&quot;add-ecs-cluster&quot;&gt;Add ECS cluster&lt;/h4&gt;
 &lt;p&gt;Now we have the network layer created, we will add the ECS cluster. By default the bastion host is disabled, the bastion can be enabled by updating the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;enable_bastion&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform.tfvars&lt;/code&gt; file. Time to plan and apply the new resources for ECS.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout ecs
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git checkout ecs
 terraform plan
 terraform apply
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Once terraform is ready it will print the url of two applications on the console. One application, is a simple micro service that just prints the AWS availabilty zone where it is running, the other is a &lt;a href=&quot;/2017/05/20/nextbuild-graphql/&quot;&gt;graphql micro service&lt;/a&gt;. It will take a few minutes before the services are available.&lt;/p&gt;
 
 &lt;h4 id=&quot;adding-your-own-service&quot;&gt;Adding your own service.&lt;/h4&gt;
 &lt;p&gt;Time to have some more fun. Edit the &lt;code class=&quot;highlighter-rouge&quot;&gt;main.tf&lt;/code&gt; and start making changes. Remove all the services, add your own service. By default for each service an application load balancer (ALB) is created. Add for each services that you want to deploy a configuration as below and update the variables as required.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;your-service&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;your-service&quot; {
   source = &quot;ecs-service&quot;
 
   service_name   = &quot;&amp;lt;service-name&amp;gt;&quot;
@@ -85,8 +81,7 @@ terraform apply
   cluster_id            = &quot;${module.ecs-cluster.cluster_id}&quot;
   ecs_service_role_name = &quot;${module.ecs-cluster.ecs_service_role_name}&quot;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.&lt;/p&gt;
 
 &lt;h3 id=&quot;clean-up&quot;&gt;Clean up&lt;/h3&gt;
@@ -519,18 +514,16 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;Let’s first start a repl, and specify the library we want to try:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lein try incanter &lt;span class=&quot;s2&quot;&gt;&quot;1.5.7&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lein try incanter &lt;span class=&quot;s2&quot;&gt;&quot;1.5.7&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://incanter.org&quot;&gt;Incanter&lt;/a&gt; is a &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;-based, R-like platform for statistical computing and graphics. We’ll use it to visualise the Bézier curves.&lt;/p&gt;
 
 &lt;p&gt;Since the repl is already fired up, let’s immediately require the dependencies we’ll need:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.charts&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;charts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Nothing fancy going on here. Simply ‘import’ statements the &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; way.&lt;/p&gt;
 
@@ -538,10 +531,9 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;I decided to hand-roll my own &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function, because we’ll need it later in the creation of bézier curves:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;This function basically says:&lt;/p&gt;
 
@@ -552,14 +544,13 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
   &lt;li&gt;and &lt;code class=&quot;highlighter-rouge&quot;&gt;reduce&lt;/code&gt; that result with the &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; multiply function&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;;; so:
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;;; so:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; will lead to
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; will lead to&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; which results in
+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; which results in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;I’m using the &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; multiply function instead of the normal &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; multiply function, because according to the docs &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; supports arbitrary precision. You can see for yourself by typing &lt;code class=&quot;highlighter-rouge&quot;&gt;(doc *')&lt;/code&gt; in your repl, or study the code by typing &lt;code class=&quot;highlighter-rouge&quot;&gt;(source *')&lt;/code&gt; in your repl.&lt;/p&gt;
 
@@ -579,14 +570,13 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;Let’s convert the math function to &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
       &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
       &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
       &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;       &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;As you can see, you’ll have to translate the infix notation to &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. &lt;em&gt;(If you can’t live with that: you can also use infix notation in clojure. For instance incanter can also be fed with &lt;a href=&quot;https://data-sorcery.org/2010/05/14/infix-math/&quot;&gt;infix notation&lt;/a&gt;. However, you’ll lose &lt;a href=&quot;https://en.wikipedia.org/wiki/Lambda_calculus&quot;&gt;the power of the 𝝺&lt;/a&gt;)&lt;/em&gt;&lt;/p&gt;
 
@@ -608,12 +598,11 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;Excellent. Let’s try it:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Here I’m defining a variable &lt;code class=&quot;highlighter-rouge&quot;&gt;test-b3&lt;/code&gt; which holds the anonymous function returned by the &lt;code class=&quot;highlighter-rouge&quot;&gt;bezier-3&lt;/code&gt; function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.&lt;/p&gt;
 
@@ -621,27 +610,24 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;Since this test didn’t blow the stack or throw a NullPointerException or anything,  let’s map this function over a range of &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;’s &lt;code class=&quot;highlighter-rouge&quot;&gt;[0 0.25 0.5 0.75 1]&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.25&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.25&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9375&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.4375&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Instead of typing these &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;’s to &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt; over, we could also use the &lt;code class=&quot;highlighter-rouge&quot;&gt;range&lt;/code&gt; function:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;As you can see, &lt;code class=&quot;highlighter-rouge&quot;&gt;range&lt;/code&gt; allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9900000000000001&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9600000000000002&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9099999999999999&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.84&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.64&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.51&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.3600000000000001&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.19000000000000014&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.220446049250313&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E-16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Although a certain pattern is already visible in these numbers, now might be the right time to start visualising the curves.&lt;/p&gt;
 
@@ -649,7 +635,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;Let’s be brave and go right to the essence:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
@@ -657,8 +643,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/conj-cols&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;charts/xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:points&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/view&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; form is &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s way of defining local variables. So &lt;code class=&quot;highlighter-rouge&quot;&gt;b3x&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;xs&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;b3y&lt;/code&gt;, etc. can be seen as local variables with their values specified in the functions directly after their declaration.&lt;/p&gt;
 
@@ -683,7 +668,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;h2 id=&quot;i-love-it-when-a-plan-comes-together&quot;&gt;I love it when a plan comes together&lt;/h2&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;increasing ascending&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;swoosh&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
@@ -692,8 +677,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;my pulse after a useless meeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;a href=&quot;#&quot;&gt;
     &lt;img src=&quot;/img/incanter-plots.png&quot; alt=&quot;incanter-plots&quot; /&gt;
@@ -705,7 +689,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 
 &lt;p&gt;In a relatively short repl session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:&lt;/p&gt;
 
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.charts&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;charts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 
 
@@ -729,8 +713,7 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/conj-cols&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;charts/xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:points&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/view&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Actually, the hand-rolled &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function isn’t really needed. I could have used &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s java interop: &lt;code class=&quot;highlighter-rouge&quot;&gt;(Math/pow 2 3)&lt;/code&gt;. In that case I would have been calling the &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; method directly on java’s &lt;code class=&quot;highlighter-rouge&quot;&gt;Math&lt;/code&gt; class. I weighted the option of hand-rolling the &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function, showing some functional code and explaining how functions are defined in &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; versus explaining java interop.&lt;/p&gt;
 
@@ -767,29 +750,27 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
 &lt;h2 id=&quot;setting-up-your-system&quot;&gt;Setting up your system.&lt;/h2&gt;
 &lt;p&gt;The easiest way to use terraform is via docker. In that case you do not need any locally isntalled tools. We simply create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;.aws&lt;/code&gt; where we put the AWS key and secret to athentication API calls, as shown below:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;AWS_ACCESS_KEY_ID=&amp;lt;KEY&amp;gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;AWS_ACCESS_KEY_ID=&amp;lt;KEY&amp;gt;
 AWS_SECRET_ACCESS_KEY=&amp;lt;SECRET&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;creating-a-vpc-part-1&quot;&gt;Creating a VPC part 1&lt;/h2&gt;
 &lt;p&gt;All code for part 1 is available on &lt;a href=&quot;https://github.com/040code/blog_terraform-aws-vpc&quot;&gt;github&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;By default, terraform expects the configuration in a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;main.tf&lt;/code&gt;. Create the file and add the terraform provide for Amazon:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# main.tf
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# main.tf
 provider &quot;aws&quot; {
   region = &quot;eu-west-1&quot;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;We are now ready to, step-by-step, add the terraform resources to create the VPC setup. First, have a look on the VPC setup as shown in the picture below.
 &lt;a href=&quot;#&quot;&gt;
     &lt;img src=&quot;/img/nat-gateway-diagram.png&quot; alt=&quot;nat-gateway-diagram&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;We will start by creating the VPC itself: add the following snippet to your &lt;code class=&quot;highlighter-rouge&quot;&gt;main.tf&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_vpc&quot; &quot;vpc&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_vpc&quot; &quot;vpc&quot; {
   cidr_block           = &quot;10.0.0.0/16&quot;
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -798,15 +779,13 @@ provider &quot;aws&quot; {
     label = &quot;blog&quot;
   }
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Before we make the change effective we run a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform plan&lt;/code&gt; to inspect the planned changes. You can install terraform locally or run the commands in a docker container. The docker command will export the AWS credentials to the container, mount the current directory to &lt;code class=&quot;highlighter-rouge&quot;&gt;/data&lt;/code&gt; in the container, and set &lt;code class=&quot;highlighter-rouge&quot;&gt;/data&lt;/code&gt; as working directory to ensure the container will execute the &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform plan&lt;/code&gt; command on the directory that contains the terraform files.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file ./.aws  -v $(pwd):/data -w /data \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file ./.aws  -v $(pwd):/data -w /data \
   hashicorp/terraform:0.9.8 plan
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;After executing the plan command, you should see output similar to:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+ aws_vpc.vpc
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+ aws_vpc.vpc
     assign_generated_ipv6_cidr_block: &quot;false&quot;
     cidr_block:                       &quot;10.0.0.0/16&quot;
     default_network_acl_id:           &quot;&amp;lt;computed&amp;gt;&quot;
@@ -825,16 +804,14 @@ provider &quot;aws&quot; {
 
 
 Plan: 1 to add, 0 to change, 0 to destroy.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;This looks correct, so we can apply the change to create the VPC by running &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file ./.aws  -v $(pwd):/data -w /data \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --env-file ./.aws  -v $(pwd):/data -w /data \
   hashicorp/terraform:0.9.8 apply
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You can go VPC via the AWS console, where you should now see a VPC in the list named &lt;code class=&quot;highlighter-rouge&quot;&gt;blog&lt;/code&gt;. Now we have the VPC, we create a public and private subnet by adding the following to the main.tf.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_subnet&quot; &quot;public_subnet_a&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_subnet&quot; &quot;public_subnet_a&quot; {
   vpc_id                  = &quot;${aws_vpc.vpc.id}&quot;
   cidr_block              = &quot;10.0.0.0/24&quot;
   availability_zone       = &quot;eu-west-1a&quot;
@@ -854,13 +831,12 @@ resource &quot;aws_subnet&quot; &quot;private_subnet_a&quot; {
     Name = &quot;blog&quot;
   }
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Run now &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform plan&lt;/code&gt; again, it will show that the resources will be added, one for each subnet. Apply the change using &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; and inspect your changes again via the VPC section in the AWS console.&lt;/p&gt;
 
 &lt;p&gt;Next, we connect the public subnet via an &lt;em&gt;internet gateway&lt;/em&gt;. Create a routing table and an internet gateway. And a &lt;em&gt;aws_route_table_association&lt;/em&gt; to create an association between a subnet and routing table. Update your &lt;code class=&quot;highlighter-rouge&quot;&gt;main.tf&lt;/code&gt; with the snippet below, and run a plan and apply.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_internet_gateway&quot; &quot;internet_gateway&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_internet_gateway&quot; &quot;internet_gateway&quot; {
   vpc_id = &quot;${aws_vpc.vpc.id}&quot;
 }
 
@@ -882,12 +858,11 @@ resource &quot;aws_route_table_association&quot; &quot;public_subnet_a&quot; {
   route_table_id = &quot;${aws_route_table.public_routetable.id}&quot;
 }
 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;We are now able to deploy an application to the public subnet and make it accessible via a security group. However, it is not yet possible to route traffic to the private subnet or let instances on the private subnet connect to internet. To do so, we add a NAT gateway and connect the gateway via a route table to the private subnet. The NAT gateway requires an elastic IP, which we will create first. Add the next terraform snippet to your &lt;code class=&quot;highlighter-rouge&quot;&gt;main.tf&lt;/code&gt; and run a &lt;code class=&quot;highlighter-rouge&quot;&gt;plan&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;apply&lt;/code&gt; to inspect and make the changes effective.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_eip&quot; &quot;nat&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_eip&quot; &quot;nat&quot; {
   vpc = true
 }
 
@@ -913,8 +888,7 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
   subnet_id      = &quot;${aws_subnet.private_subnet_a.id}&quot;
   route_table_id = &quot;${aws_route_table.private_routetable.id}&quot;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Setting up the VPC with subnets is quite verbose, and imagine then when you must support more availability zones, the code will almost double per zone. So we refactor it to a generic module to support the multiple subnets that are available in a zone.&lt;/p&gt;
 
@@ -927,25 +901,23 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
 
 &lt;p&gt;I will not describe all code in the module again but only will pay attention to the significant changes I made. In the code above the zone, availability zone where hard coded. This will not work in a generic module. A common way to solve this in terraform is by creating a map where a zone is mapped to a list of availability zondes. By passing the zone to the moudle, the module can find out which availability zones there are. A default map is available in the module but can be ovewritten as follow:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;availability_zones = {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;availability_zones = {
   eu-west-1 = [&quot;eu-west-1a&quot;, &quot;eu-west-1b&quot;, &quot;eu-west-1c&quot;]
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;The cdir block in the code show above was hard coded, but terraform contains a function to calculate the cdir block. In the module I use the terraform &lt;a href=&quot;https://www.terraform.io/docs/configuration/interpolation.html#cidrsubnet-iprange-newbits-netnum-&quot;&gt;function&lt;/a&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;cidrsubnet()&lt;/code&gt; to calculate the cdir block.&lt;/p&gt;
 
 &lt;p&gt;Now only one problem needs to be solved in order to create a generic module: how can we create a AWS resource for each element in a list? Do we create subnet or route table association for each availability zone? Or how can we avoid creating a private subnet at all? The solution is to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;count&lt;/code&gt; variable in a module to iterate over the list of availability zones, which is available on my &lt;a href=&quot;https://github.com/npalm/tf-aws-vpc.git&quot;&gt;github&lt;/a&gt;. We can now create a VPC similar to the one above with just a few line of code. Add the following lines to your terraform script to create a VPC.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;vpc&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;vpc&quot; {
   source = &quot;git::https://github.com/npalm/tf-aws-vpc.git&quot;
 
   key        = &quot;blog&quot;
   aws_region = &quot;eu-west-1&quot;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;It is possible to overwrite module variables with default to get more control, see the ezample below:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;vpc&quot; {
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;vpc&quot; {
   source = &quot;git::https://github.com/npalm/tf-aws-vpc.git&quot;
 
   key        = &quot;blog&quot;
@@ -960,8 +932,7 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
     eu-west-1 = [&quot;eu-west-1a&quot;, &quot;eu-west-1c&quot;]
   }
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/05/20/nextbuild-graphql/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-05-20T23:50:00+00:00</published><updated>2017-05-20T23:50:00+00:00</updated><id>https://040code.github.io//2017/05/20/nextbuild-graphql</id><content type="html" xml:base="https://040code.github.io//2017/05/20/nextbuild-graphql/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;http://nextbuild.nl/&quot;&gt;Nextbuild&lt;/a&gt; conference on May the 20th in Eindhoven.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/05/20/nextbuild-graphql/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-05-20T23:50:00+00:00</published><updated>2017-05-20T23:50:00+00:00</updated><id>https://040code.github.io//2017/05/20/nextbuild-graphql</id><content type="html" xml:base="https://040code.github.io//2017/05/20/nextbuild-graphql/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;http://nextbuild.nl/&quot;&gt;Nextbuild&lt;/a&gt; conference on May the 20th in Eindhoven.&lt;/p&gt;
 
 &lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
 &lt;p&gt;Below the slides that I for the talk, the slides are available as well on &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170520/&quot;&gt;GitHub&lt;/a&gt;. You can easy navigate through the slides with the spacebar.&lt;/p&gt;
@@ -981,47 +952,43 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
 &lt;p&gt;During the talk, I demonstrated GraphQL via &lt;a href=&quot;https://www.graph.cool/&quot;&gt;graphcool&lt;/a&gt;, which is cloud service for creating a flexible GraphGL backend. I modelled a basic model of a Talk and Person with relation speakers and visitors on graphcool. Furthermore, I modelled two basic sample implementations of a GraphQL backend in Java and JavaScript that are available via GitHub. Those implementation are more limited than the online one, but both serve the following minimal queries.&lt;/p&gt;
 
 &lt;p&gt;Query for the name and the title of the talks given by all persons:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;persons&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;talks&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+  persons {
+    name
+    talks {
+      title
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;And secondly, a query for all titles of talks with their speaker’s names.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;talks&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;speakers&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+  talks {
+    title
+    speakers {
+      name
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;javascript-sample&quot;&gt;JavaScript sample&lt;/h3&gt;
 &lt;p&gt;The JavaScript &lt;a href=&quot;https://github.com/npalm/graphql-js-demo.git&quot;&gt;sample&lt;/a&gt; is based on &lt;a href=&quot;https://github.com/apollostack/apollo-starter-kit&quot;&gt;Apollo GraphQL tutorial kit&lt;/a&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-js-demo.git
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-js-demo.git
 cd graphql-js-demo
 yarn &amp;amp;&amp;amp; yarn start
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Instead of yarn, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install &amp;amp;&amp;amp; npm start&lt;/code&gt;. Once started, browse to &lt;a href=&quot;http://localhost:8080/graphiql&quot;&gt;http://localhost:8080/graphiql&lt;/a&gt; and play around with the GraphQL web interface. Implementing the JavaScript version was straightforward due to the many examples and good tutorials around.&lt;/p&gt;
 
 &lt;h3 id=&quot;spring-boot-java-sample&quot;&gt;Spring Boot Java sample&lt;/h3&gt;
 &lt;p&gt;The Spring Boot Java &lt;a href=&quot;https://github.com/npalm/graphql-java-demo.git&quot;&gt;sample&lt;/a&gt; is based on the Spring Boot Starter available for GraphQL. This starter uses a basic GraphQL java library as well the Java annotation library for GraphQL.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-java-demo.git
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-java-demo.git
 git checkout nextbuild
 cd graphql-java-demo
 docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080:8080 graphql-java-demo
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Alternatively, you can build and run via gradle. Once started, browse to &lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; to play around with the GraphQL web interface. The Java version implementation was not as easy as expected. The GraphQL Spring Boot starter dependencies requires the GrahpQL java annotation library, which seems to be broken after an update in the Java GraphQL base library. I am not sure if the annotation library is still supported. To get the GraphQL Spring Boot library working I have to add a mandatory mutation to the scheme. And downgrade the Java GraphQL, see &lt;code class=&quot;highlighter-rouge&quot;&gt;gradle/depedencies.gradle&lt;/code&gt; to get the annotation library to work.&lt;/p&gt;
 
 &lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;
@@ -1039,25 +1006,22 @@ docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080
 
 &lt;p&gt;Let’s have a look on a &lt;a href=&quot;https://github.com/040code/blog_docker-mulit-stage-build.git&quot;&gt;example&lt;/a&gt; for a simple Java micro service. The micro services require the JDK and Gradle to build. The JDK needs to be installed before the build and Gradle will be download by the build itself. We can build the micro service in the following way.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/040code/blog_docker-mulit-stage-build.git
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/040code/blog_docker-mulit-stage-build.git
 cd notes-service
 docker run -it --rm -v $(pwd):/build -w /build openjdk:8u121-jdk-alpine ./gradlew build
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Now the artifact is available, we can create a Docker runtime image. The application only needs the Java Runtime (JRE) to run. We create a &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; based JRE alpine image and add our application.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-00)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-00)
 FROM openjdk:8u121-jre-alpine
 COPY build/libs/notes-service.jar /app/notes-service.jar
 
 EXPOSE 8080
 CMD java -jar /app/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Next, we build the production image as follows:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:00 .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:00 .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Now we have created a clean Docker images that only containes the needed libraries to run the application. But would it not be nice if we can do this more straightforward? For example, in one Docker build.&lt;/p&gt;
 
 &lt;h1 id=&quot;moving-on-to-a-multi-stage-build&quot;&gt;Moving on to a multi stage build&lt;/h1&gt;
@@ -1069,7 +1033,7 @@ CMD java -jar /app/notes-service.jar
 
 &lt;p&gt;Now it is time to have a second look on the same example. Instead of passing the build arguments and mounting our sources, we will build our software using a single Dockerfile.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-01)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-01)
 FROM openjdk:8u121-jdk-alpine AS build
 
 WORKDIR /build-env
@@ -1077,16 +1041,14 @@ ADD . /build-env
 RUN ./gradlew build
 
 CMD java -jar /build-env/build/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;And build it:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:01 .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:01 .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Nothing new here, we are now able to build our software in a container and ship an image, but the image contains all kinds of build stuff that we do not want in a runtime image. So, the next step is to solve this problem by getting rid of all the unwanted build tools.&lt;/p&gt;
 
 &lt;p&gt;We update the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; and make a few modifications.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-02)
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-02)
 FROM openjdk:8u121-jdk-alpine AS build                                               # (1)
 
 WORKDIR /build-env
@@ -1098,16 +1060,13 @@ COPY --from=build /build-env/build/libs/notes-service.jar /app/notes-service.jar
 
 EXPOSE 8080
 CMD java -jar /app/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; above we marked the first stage (1) as &lt;em&gt;build&lt;/em&gt; to refer later, if not specifying a name you can refer to the stage as 0. Next (2), we add the second stage which specifies the base image that we need to run our application. Finally (3), we copy the results from the build stage to the image for executing.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:02 .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:02 .
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;And now we can run via the following docker run command.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --rm -p 8080 notes-service:2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --rm -p 8080 notes-service:2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Inspection of the tree images build will show that version 0 and 2 are equal in size, version 1 that contains all the build files and the JDK is almost three times bigger.&lt;/p&gt;
 
 &lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
@@ -1131,30 +1090,27 @@ CMD java -jar /app/notes-service.jar
 
 &lt;p&gt;Next we test that we are able to trigger the build remotely be executing the &lt;code class=&quot;highlighter-rouge&quot;&gt;curl&lt;/code&gt; command below.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -X POST \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -X POST \
      -F token=&amp;lt;TOKEN&amp;gt; \
      -F ref=&amp;lt;REF_NAME&amp;gt; \
      &amp;lt;URL&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Verify in GitLab the build is triggered&lt;/p&gt;
 
 &lt;h2 id=&quot;periodic-trigger-the-build-in-a-docker-container&quot;&gt;Periodic trigger the build in a Docker container&lt;/h2&gt;
 &lt;p&gt;The next step is to execute the trigger periodic. A standard way of running a job periodic is by defining crontab. We will use a docker container to execute the crontab so we can deploy it anywhere.&lt;/p&gt;
 
 &lt;p&gt;I have createe a base docker image containing a script to trigger GitLab by executing a curl command as shown above. The crontab will be copied to the image &lt;code class=&quot;highlighter-rouge&quot;&gt;ONBUILD&lt;/code&gt;. In the crontab we point to the script that can be executed as follow:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;trigger-gitlab.sh -t &amp;lt;token&amp;gt; -r &amp;lt;ref&amp;gt; -u &amp;lt;gitlab_trigger_url&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;trigger-gitlab.sh -t &amp;lt;token&amp;gt; -r &amp;lt;ref&amp;gt; -u &amp;lt;gitlab_trigger_url&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;For the sources see &lt;a href=&quot;https://github.com/npalm/gitlab-periodic-trigger&quot;&gt;npalm/gitlab-periodic-trigger&lt;/a&gt; on GitHub.&lt;/p&gt;
 
 &lt;p&gt;Now all peace’s are ready we only have to build our docker image and run it to trigger the build. First, we create a Dockerfile and only extend the base image &lt;code class=&quot;highlighter-rouge&quot;&gt;npalm/gitlab-periodic-trigger&lt;/code&gt;. Create a new directory, and add a Dockerfile with only the line:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM npalm/gitlab-periodic-trigger:1.0.0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;FROM npalm/gitlab-periodic-trigger:1.0.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;This image expects a file &lt;code class=&quot;highlighter-rouge&quot;&gt;gitlabcrontab&lt;/code&gt; containing the &lt;a href=&quot;https://en.wikipedia.org/wiki/Cron&quot;&gt;crontab&lt;/a&gt; and will copy it to the image once build. Create a file named &lt;code class=&quot;highlighter-rouge&quot;&gt;gitlabcrontab&lt;/code&gt;, and add one ore more triggers, an example is below.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Example of job definition:
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Example of job definition:
 # .---------------- minute (0 - 59)
 # |  .------------- hour (0 - 23)
 # |  |  .---------- day of month (1 - 31)
@@ -1162,8 +1118,7 @@ CMD java -jar /app/notes-service.jar
 # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7)
 # |  |  |  |  |
 22 11 * * * trigger-gitlab.sh -t &amp;lt;token&amp;gt; -r &amp;lt;ref&amp;gt; -u &amp;lt;gitlab_trigger_url&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Now we build the container &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build -t periodic-trigger .&lt;/code&gt; and finally start the container &lt;code class=&quot;highlighter-rouge&quot;&gt;docker run -d periodic-trigger&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;To enable the feature for your teams you could set up a build to build the docker image as described below and push it automated to an environment.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="gitlab" /><category term="docker" /><summary type="html">I am using GitLab CI now for more than a year and I really love the features in GitLab. GitLab provides a complete and powerful tool for day to day development. And of course, there are always feature that you miss. Until now there is no support for periodic builds, in the coming release the feature will be shipped as experimental feature and in the next one is should be general available. But in case you must deal for some reason with an older version, a work around is described below as I used last year.</summary></entry><entry><title type="html">Discover the exposed port</title><link href="https://040code.github.io//2017/04/20/discovery-agent/" rel="alternate" type="text/html" title="Discover the exposed port" /><published>2017-04-20T14:22:00+00:00</published><updated>2017-04-20T14:22:00+00:00</updated><id>https://040code.github.io//2017/04/20/discovery-agent</id><content type="html" xml:base="https://040code.github.io//2017/04/20/discovery-agent/">&lt;p&gt;This post describes a solution for implementing the discovery of the unknown exposed port by a &lt;a href=&quot;https://www.docker.com/&quot;&gt;Docker&lt;/a&gt; container. A specific situation where the problem occurs is when you deploy &lt;a href=&quot;http://projects.spring.io/spring-cloud/&quot;&gt;Spring Cloud&lt;/a&gt; micro services as &lt;a href=&quot;https://aws.amazon.com/ecs/&quot;&gt;Amazon ECS&lt;/a&gt; services to the cloud.&lt;/p&gt;
@@ -1190,55 +1145,48 @@ CMD java -jar /app/notes-service.jar
 
 &lt;p&gt;Let’s explain the working of the discovery agent by example: First we have to start the agent as a docker container.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
   --name docker-discovery-agent -p 5555:8080 npalm/docker-discovery-agent:1.0.0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Now the agent is running, it can be tested. For testing we start another container, remember the problem is that we need to find the exposed port from &lt;strong&gt;within&lt;/strong&gt; a container. The local ip address will be added as extra host to the container. The test container is just a linux (CentOS) container containing the tool &lt;code class=&quot;highlighter-rouge&quot;&gt;curl&lt;/code&gt; and for which port 80 is exposed to a random port.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export DOCKERHOST=$(ifconfig | grep -E &quot;([0-9]{1,3}\.){3}[0-9]{1,3}&quot; | \
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export DOCKERHOST=$(ifconfig | grep -E &quot;([0-9]{1,3}\.){3}[0-9]{1,3}&quot; | \
   grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
 docker run -it -p 80 --add-host=&quot;dockerhost:$(DOCKERHOST)&quot; --rm centos /bin/bash
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;We are now in the shell of the CentOS container, the host file contains a DNS entry that points to the host. First, we have to search for the id of the current container.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CONTAINER_ID=$(cat /proc/self/cgroup | grep &quot;cpu:/&quot; | sed 's/\([0-9]\):cpu:\/docker\///g')
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;CONTAINER_ID=$(cat /proc/self/cgroup | grep &quot;cpu:/&quot; | sed 's/\([0-9]\):cpu:\/docker\///g')
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Then, we ask the discovery agent for our external mapped port by sending the container id and the internal port.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &quot;http://dockerhost:5555/container/${CONTAINER_ID}/portbinding?port=80&amp;amp;protocol=tcp&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &quot;http://dockerhost:5555/container/${CONTAINER_ID}/portbinding?port=80&amp;amp;protocol=tcp&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;The result is a JSON string container with the hostIp and hostPort, for example:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;HostIp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-	&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;HostPort&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;32779&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
+	&quot;HostIp&quot;: &quot;0.0.0.0&quot;,
+	&quot;HostPort&quot;: &quot;32779&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Alternative to passing the host ip address, it is possible to register a static ip address and use this to find the dicovery agent.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ifconfig lo0 alias 172.16.123.1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sudo ifconfig lo0 alias 172.16.123.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Now we can discover the exposed port, let’s give some direction on how this can be combined with Spring Cloud on ECS. First deploy Eureka (service discover) as container. Register an ALB (internal) to the service. Now we have an endpoint that we can use to inject the service that needs to register itself. Next create a spring service that is aware of discovery. Before the services can be started, the exposed port needs to be found. Add the snippet below to the start script to start the services in the container.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DOCKER_HOST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;curl -s 169.254.169.254/latest/meta-data/local-ipv4&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CONTAINER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;cat /proc/self/cgroup | grep &lt;span class=&quot;s2&quot;&gt;&quot;cpu:/&quot;&lt;/span&gt; | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DOCKER_HOST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;curl &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt; 169.254.169.254/latest/meta-data/local-ipv4&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CONTAINER_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; /proc/self/cgroup | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;cpu:/&quot;&lt;/span&gt; | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   sed &lt;span class=&quot;s1&quot;&gt;'s/\([0-9]\):cpu:\/docker\///g'&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NETWORK_BINDING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;curl &lt;span class=&quot;s2&quot;&gt;&quot;http://&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DOCKER_HOST&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;:5555/container/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;CONTAINER_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/portbinding?port=8080&amp;amp;protocol=tcp&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;EXPOSED_PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NETWORK_BINDING&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; | jq -c &lt;span class=&quot;s1&quot;&gt;'.[0].HostPort'&lt;/span&gt; | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  sed -e &lt;span class=&quot;s1&quot;&gt;'s/^&quot;//'&lt;/span&gt;  -e &lt;span class=&quot;s1&quot;&gt;'s/&quot;$//'&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;EXPOSED_PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;NETWORK_BINDING&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; | jq &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'.[0].HostPort'&lt;/span&gt; | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  sed &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/^&quot;//'&lt;/span&gt;  &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/&quot;$//'&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;java -jar /service.jar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; /service.jar
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;The last step is to update the &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; and add a few lines to force the ip address and port during service registration.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eureka:
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URL} // Needs to be injected as environment variable
@@ -1246,8 +1194,7 @@ docker run -it -p 80 --add-host=&quot;dockerhost:$(DOCKERHOST)&quot; --rm centos
     preferIpAddress: true
     ip-address: ${DOCKER_HOST}
     non-secure-port: ${EXPOSED_PORT}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;alternatives&quot;&gt;Alternatives&lt;/h3&gt;
 &lt;p&gt;Discovery of the unknown exposed port is a highly discussed topic and there are many alternative solutions, Please see &lt;a href=&quot;https://github.com/docker/docker/issues/3778&quot;&gt;docker issue&lt;/a&gt;, which is a good starting point for alternatives. The following alternatives came to my mind:&lt;/p&gt;

@@ -120,7 +120,7 @@
                           </a>
                           
                       
-                      <!-- 040 Code on April 20, 2017</span> -->
+                      on 2017-04-20</span>
                 </div>
             </div>
         </div>
@@ -163,55 +163,48 @@
 
 <p>Let’s explain the working of the discovery agent by example: First we have to start the agent as a docker container.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d -v /var/run/docker.sock:/var/run/docker.sock \
   --name docker-discovery-agent -p 5555:8080 npalm/docker-discovery-agent:1.0.0
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>Now the agent is running, it can be tested. For testing we start another container, remember the problem is that we need to find the exposed port from <strong>within</strong> a container. The local ip address will be added as extra host to the container. The test container is just a linux (CentOS) container containing the tool <code class="highlighter-rouge">curl</code> and for which port 80 is exposed to a random port.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | \
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export DOCKERHOST=$(ifconfig | grep -E "([0-9]{1,3}\.){3}[0-9]{1,3}" | \
   grep -v 127.0.0.1 | awk '{ print $2 }' | cut -f2 -d: | head -n1)
 docker run -it -p 80 --add-host="dockerhost:$(DOCKERHOST)" --rm centos /bin/bash
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>We are now in the shell of the CentOS container, the host file contains a DNS entry that points to the host. First, we have to search for the id of the current container.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>CONTAINER_ID=$(cat /proc/self/cgroup | grep "cpu:/" | sed 's/\([0-9]\):cpu:\/docker\///g')
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CONTAINER_ID=$(cat /proc/self/cgroup | grep "cpu:/" | sed 's/\([0-9]\):cpu:\/docker\///g')
+</code></pre></div></div>
 <p>Then, we ask the discovery agent for our external mapped port by sending the container id and the internal port.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>curl "http://dockerhost:5555/container/${CONTAINER_ID}/portbinding?port=80&amp;protocol=tcp"
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl "http://dockerhost:5555/container/${CONTAINER_ID}/portbinding?port=80&amp;protocol=tcp"
+</code></pre></div></div>
 <p>The result is a JSON string container with the hostIp and hostPort, for example:</p>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="nt">"HostIp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.0.0"</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"HostPort"</span><span class="p">:</span><span class="w"> </span><span class="s2">"32779"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+	"HostIp": "0.0.0.0",
+	"HostPort": "32779"
+}
+</code></pre></div></div>
 <p>Alternative to passing the host ip address, it is possible to register a static ip address and use this to find the dicovery agent.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo ifconfig lo0 alias 172.16.123.1
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ifconfig lo0 alias 172.16.123.1
+</code></pre></div></div>
 
 <p>Now we can discover the exposed port, let’s give some direction on how this can be combined with Spring Cloud on ECS. First deploy Eureka (service discover) as container. Register an ALB (internal) to the service. Now we have an endpoint that we can use to inject the service that needs to register itself. Next create a spring service that is aware of discovery. Before the services can be started, the exposed port needs to be found. Add the snippet below to the start script to start the services in the container.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="k">$(</span>curl -s 169.254.169.254/latest/meta-data/local-ipv4<span class="k">)</span>
-<span class="nb">export </span><span class="nv">CONTAINER_ID</span><span class="o">=</span><span class="k">$(</span>cat /proc/self/cgroup | grep <span class="s2">"cpu:/"</span> | <span class="se">\</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="k">$(</span>curl <span class="nt">-s</span> 169.254.169.254/latest/meta-data/local-ipv4<span class="k">)</span>
+<span class="nb">export </span><span class="nv">CONTAINER_ID</span><span class="o">=</span><span class="k">$(</span><span class="nb">cat</span> /proc/self/cgroup | <span class="nb">grep</span> <span class="s2">"cpu:/"</span> | <span class="se">\</span>
   sed <span class="s1">'s/\([0-9]\):cpu:\/docker\///g'</span><span class="k">)</span>
 <span class="nb">export </span><span class="nv">NETWORK_BINDING</span><span class="o">=</span><span class="se">\</span>
   <span class="k">$(</span>curl <span class="s2">"http://</span><span class="k">${</span><span class="nv">DOCKER_HOST</span><span class="k">}</span><span class="s2">:5555/container/</span><span class="k">${</span><span class="nv">CONTAINER_ID</span><span class="k">}</span><span class="s2">/portbinding?port=8080&amp;protocol=tcp"</span><span class="k">)</span>
-<span class="nb">export </span><span class="nv">EXPOSED_PORT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">NETWORK_BINDING</span><span class="k">}</span> | jq -c <span class="s1">'.[0].HostPort'</span> | <span class="se">\</span>
-  sed -e <span class="s1">'s/^"//'</span>  -e <span class="s1">'s/"$//'</span><span class="k">)</span>
+<span class="nb">export </span><span class="nv">EXPOSED_PORT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">NETWORK_BINDING</span><span class="k">}</span> | jq <span class="nt">-c</span> <span class="s1">'.[0].HostPort'</span> | <span class="se">\</span>
+  sed <span class="nt">-e</span> <span class="s1">'s/^"//'</span>  <span class="nt">-e</span> <span class="s1">'s/"$//'</span><span class="k">)</span>
 
-<span class="nb">exec </span>java -jar /service.jar
-</code></pre>
-</div>
+<span class="nb">exec </span>java <span class="nt">-jar</span> /service.jar
+</code></pre></div></div>
 <p>The last step is to update the <code class="highlighter-rouge">application.yml</code> and add a few lines to force the ip address and port during service registration.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>eureka:
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URL} // Needs to be injected as environment variable
@@ -219,8 +212,7 @@ docker run -it -p 80 --add-host="dockerhost:$(DOCKERHOST)" --rm centos /bin/bash
     preferIpAddress: true
     ip-address: ${DOCKER_HOST}
     non-secure-port: ${EXPOSED_PORT}
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="alternatives">Alternatives</h3>
 <p>Discovery of the unknown exposed port is a highly discussed topic and there are many alternative solutions, Please see <a href="https://github.com/docker/docker/issues/3778">docker issue</a>, which is a good starting point for alternatives. The following alternatives came to my mind:</p>
