@@ -76,3 +76,12 @@ blockchain:
 react:
   slug: react
   name: React
+serverless:
+  slug: serverless
+  name: Serverless
+microhack:
+  slug: microhack
+  name: MicroHack
+python:
+  slug: python
+  name: Python
