@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>MicroHack Zappa.io - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/htc-lake.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>MicroHack Zappa.io</h1>
+                    
+                    <h2 class="subheading">A quick test for using the Zappa.io serverless framework to run a python service in the cloud</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/jeroen/">
+                            Jeroen Knoops
+                          </a>
+                          
+                      
+                      on 2017-10-01</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/serverless/">Serverless</a><a class="badge " href="/blog/tag/microhack/">MicroHack</a><a class="badge " href="/blog/tag/python/">Python</a><a class="badge " href="/blog/tag/aws/">Amazon</a><a class="badge " href="/blog/tag/cloud/">Cloud</a>
+
+
+				<h1 id="microhack---python-serverless-with-zappaio">MicroHack - Python serverless with Zappa.io</h1>
+
+<h2 id="the-context">The context</h2>
+
+<p>I’ve visited one of the best conferences last september, Full Stack Fest in Barcelona. Since then, two talks are constantly in the back of my mind.</p>
+
+<p>The first one is the talk by Ben Foxall (<a href="https://twitter.com/benjaminbenben">@benjaminbenben</a>). He talked about Microhacks and how to become better in your experiments by constraining them. Write small reports / blogs of your Microhacks to so you have a nice overview of some of the experiments you’ve done. Guess what this blog is about..</p>
+
+<p>The second talk I’m frequently think of was the talk by Rich Jones (<a href="https://twitter.com/GUNdotIO">@GUNdotIO</a>) titled “Gone in 60 milliseconds: Offensive security in the serverless age”. A DDoS attack of slides, 452 in total. The talk main focus was about security and how you can hack the AWS infrastructure if things are not setup correctly. He knows his ways in AWS. That’s comes very handy if you want to build a cli which helps other people to run serverless python apps in the cloud. And this is exactly what he’s been doing with <a href="https://www.zappa.io">https://www.zappa.io</a>.</p>
+
+<h2 id="whats-the-experiment">What’s the experiment</h2>
+
+<p>I wanted to test the cli zappa.io with a simple python Flask app. The specs are simple: A service which reverses an input string running in the cloud with zappa.io. Serverless services are very interesting, because it’s based on lambdas and they typically run for a few milliseconds. So the costs are very low, utilization is very high.
+I’ve asked some colleagues to join me on a friday afternoon experiment and <a href="https://github.com/13B-MSP">Jos Beijk</a> wanted to help.</p>
+
+<h2 id="lets-do-it">Let’s do it!</h2>
+
+<p>We need <a href="https://www.python.org/">Python</a>, a package manager (<a href="https://pip.pypa.io">pip</a>) and a tool to create isolated Python environments (<a href="https://virtualenv.pypa.io">Virtualenv</a>).
+Store your AWS secrets in your <code class="highlighter-rouge">.aws</code> directory.</p>
+
+<h2 id="the-experiment">The experiment</h2>
+
+<script type="text/javascript" src="https://asciinema.org/a/139025.js" id="asciicast-139025" async="" data-speed="2"></script>
+
+<p>GitHub: <a href="https://github.com/JeroenKnoops/zappa-string-reverser">https://github.com/JeroenKnoops/zappa-string-reverser</a></p>
+
+<h2 id="what-just-happened">What just happened?</h2>
+
+<h3 id="the-service">The service</h3>
+<p>Create a simple <code class="highlighter-rouge">Flask</code> service which reverses an input string.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/&lt;string:str&gt;'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">"GET"</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">reverse_str</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></div>
+<h3 id="required-libraries">Required libraries</h3>
+<p>Add required libraries Flask and Zappa in <code class="highlighter-rouge">requirements.txt</code> so pip can install it.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Flask&gt;=0.12
+zappa&gt;=0.17.6
+</code></pre></div></div>
+
+<h3 id="install-required-libraries-in-virtual-environment">Install required libraries in virtual environment</h3>
+<p>Create a virtaul environment and activate it.</p>
+
+<pre><code class="language-fish">virtualenv venv
+source venv/bin/activate.fish
+</code></pre>
+<p>Note: If you use <code class="highlighter-rouge">zsh</code> or <code class="highlighter-rouge">bash</code> you can use: <code class="highlighter-rouge">source venv/bin/activate</code></p>
+
+<pre><code class="language-fish">pip install -r requirements.txt
+</code></pre>
+
+<h3 id="setup-zappa-and-deploy-the-service">Setup Zappa and deploy the service</h3>
+<p>Setup Zappa:</p>
+
+<pre><code class="language-fish">zappa init
+</code></pre>
+
+<p>Once you finish initialization, you’ll have a file named <code class="highlighter-rouge">zappa_settings.json</code> in your project directory defining your basic deployment settings.</p>
+
+<p>Edit this file to add more service specific configurations:</p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"dev"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"app_function"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string_reverser.app"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"keep_warm"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"debug"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"log_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DEBUG"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"aws_region"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eu-west-1"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"profile_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="p">,</span><span class="w"> 
+        </span><span class="s2">"http_methods"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"GET"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"parameter_depth"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"timeout_seconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"memory_size"</span><span class="p">:</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"use_precompiled_packages"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"s3_bucket"</span><span class="p">:</span><span class="w"> </span><span class="s2">"zappa-&lt;unique-thingy-goes-here&gt;"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Deploy the app:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zappa deploy dev
+</code></pre></div></div>
+
+<p>The output is the url to our service. You see it’s https out-of-the-box.. :)</p>
+
+<h3 id="test-our-service">Test our service</h3>
+<p>The previous step will output an url to our service. In my case: https://z9cxt9gky6.execute-api.eu-west-1.amazonaws.com/dev/</p>
+
+<p>Append the test string behind it and check the result.</p>
+<pre><code class="language-fish">curl https://z9cxt9gky6.execute-api.eu-west-1.amazonaws.com/dev/thisisateststring
+</code></pre>
+
+<p>Wiehoe! We got: <code class="highlighter-rouge">gnirtstsetasisiht</code></p>
+
+<h3 id="update-the-service">Update the service</h3>
+<p>When you want to apply some changes, you can deploy it by running:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zappa update dev
+</code></pre></div></div>
+
+<p>If you add other libraries, make sure you add it in <code class="highlighter-rouge">requirements.txt</code> and install it locally in your virtual environment. All the packages in this folder will be shipped.</p>
+
+<h3 id="debugging">Debugging</h3>
+<p>You can do various things with the zappa cli.</p>
+
+<p>You can view logging for example:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zappa tail dev
+</code></pre></div></div>
+
+<p>See help for more info:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zappa --help
+</code></pre></div></div>
+
+<p>Feel free to check the created services in AWS console. You will see API gateway, CloudWatch and Lambdas.</p>
+
+<h3 id="cleanup">Cleanup</h3>
+<p>Remove the infrastructure by simply undeploy the environment:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zappa undeploy dev
+</code></pre></div></div>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Ofcourse this example has no real value, but I wanted to see how it works.
+I think zappa.io is very good in its default values, but is extremely flexible.
+You don’t like the JSON format and prefer YAML or TOML? no problem. Want to run it in a VPC, no problem. Don’t like the Keeping The Server Warm settings, you can change it.
+Look at <a href="https://github.com/Miserlou/Zappa">https://github.com/Miserlou/Zappa</a> for the complete list of options. There’s good community support with a slack channel, so I would encourage you to look at this project. Especially because you have a lot of good defaults in this setup and this guy knows a few things about AWS.</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li>Full Stack Fest - frontend: <a href="https://040code.github.io/2017/09/08/fsf-fontend/">https://040code.github.io/2017/09/08/fsf-fontend/</a></li>
+  <li>Full Stack Fest - backend: <a href="https://040code.github.io/2017/09/05/fsf-backend/">https://040code.github.io/2017/09/05/fsf-backend/</a></li>
+  <li><a href="https://www.zappa.io">https://www.zappa.io</a></li>
+  <li><a href="https://github.com/Miserlou/Zappa">https://github.com/Miserlou/Zappa</a></li>
+</ul>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/09/19/talk-immutable-infrastructure/" data-toggle="tooltip" data-placement="top" title="Immutable Infrastructure">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
