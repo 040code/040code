@@ -28,6 +28,8 @@ I've asked some colleagues to join me on a friday afternoon experiment and [Jos 
 We need [Python](https://www.python.org/), a package manager ([pip](https://pip.pypa.io)) and a tool to create isolated Python environments ([Virtualenv](https://virtualenv.pypa.io)).
 Store your AWS secrets in your `.aws` directory.
 
+If you do not have an AWS account, don't worry. Just signup and the first 1.000.000 requests per month are for free. [https://aws.amazon.com/lambda/pricing](https://aws.amazon.com/lambda/pricing/)
+
 ## The experiment
 
 <script type="text/javascript" src="https://asciinema.org/a/139025.js" id="asciicast-139025" async data-speed="2" ></script> 
