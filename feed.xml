@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.0">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-10-02T21:41:43+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.0">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-10-06T13:05:34+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
 
 &lt;h2 id=&quot;the-context&quot;&gt;The context&lt;/h2&gt;
 
@@ -17,6 +17,8 @@ I’ve asked some colleagues to join me on a friday afternoon experiment and &lt
 
 &lt;p&gt;We need &lt;a href=&quot;https://www.python.org/&quot;&gt;Python&lt;/a&gt;, a package manager (&lt;a href=&quot;https://pip.pypa.io&quot;&gt;pip&lt;/a&gt;) and a tool to create isolated Python environments (&lt;a href=&quot;https://virtualenv.pypa.io&quot;&gt;Virtualenv&lt;/a&gt;).
 Store your AWS secrets in your &lt;code class=&quot;highlighter-rouge&quot;&gt;.aws&lt;/code&gt; directory.&lt;/p&gt;
+
+&lt;p&gt;If you do not have an AWS account, don’t worry. Just signup and the first 1.000.000 requests per month are for free. &lt;a href=&quot;https://aws.amazon.com/lambda/pricing/&quot;&gt;https://aws.amazon.com/lambda/pricing&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;the-experiment&quot;&gt;The experiment&lt;/h2&gt;
 
