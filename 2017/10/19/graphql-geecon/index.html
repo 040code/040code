@@ -8,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A developers blog">
 
-    <title>040 Code</title>
+    <title>GraphQL - 040 Code</title>
 
-    <link rel="canonical" href="https://040code.github.io//page2/">
+    <link rel="canonical" href="https://040code.github.io//2017/10/19/graphql-geecon/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -99,162 +99,127 @@
 </nav>
 
 
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/klokgebouw.jpg')">
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/irisbuurt.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>040 Code</h1>
-                    <hr class="small">
-                    <span class="subheading">A developers blog</span>
+                <div class="post-heading">
+                    <h1>GraphQL</h1>
+                    
+                    <h2 class="subheading">GeeCON talk - The Next API Language</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      on 2017-10-19</span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
-<!-- Main Content -->
-<div class="container">
-	<div class="row">
-		<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			
-<div class="post-preview">
-    <a href="/2017/06/18/terraform-aws-vpc/">
-        <h2 class="post-title">            Coding a VPC in Terraform
-        </h2>
-        
-        <h3 class="post-subtitle">
-            A terraform module for a VPC with Private Subnets
-        </h3>
-        
-    </a>
-    <p class="post-meta">Posted by
-      
-      
-          <a href="/author/niek/">
-            Niek Palm
-          </a>
-          
-      
-      
-      on June 18, 2017</p>
 
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/graphql/">GraphQL</a>
+
+
+				<p>A short post to share the slides and examples I used in my talk at the <a href="https://2017.geecon.cz">GeeCON</a> conference on October the 19th in Prague.</p>
+
+<h2 id="slides">Slides</h2>
+<p>Below the slides that I for the talk, the slides are available as well on <a href="https://npalm.github.io/graphql-slides-20171019/">GitHub</a>. You can easy navigate through the slides with the spacebar.</p>
+
+<div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
+    <iframe style="position:absolute; left:0; top:0; width:100%; height:100%" src="https://npalm.github.io/graphql-slides-20171019/">
+    </iframe>
 </div>
-<hr>
 
-<div class="post-preview">
-    <a href="/2017/05/20/nextbuild-graphql/">
-        <h2 class="post-title">            GraphQL
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Nextbuild talk - The Next API Language
-        </h3>
-        
-    </a>
-    <p class="post-meta">Posted by
-      
-      
-          <a href="/author/niek/">
-            Niek Palm
-          </a>
-          
-      
-      
-      on May 20, 2017</p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/05/07/docker-multi-stage-builds/">
-        <h2 class="post-title">            Docker Multi Stage Builds
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Building and shipping in one Docker build
-        </h3>
-        
-    </a>
-    <p class="post-meta">Posted by
-      
-      
-          <a href="/author/niek/">
-            Niek Palm
-          </a>
-          
-      
-      
-      on May 7, 2017</p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/04/21/gitlab-perodic-build/">
-        <h2 class="post-title">            Periodic builds in GitLab
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Trigger builds based on a crontab
-        </h3>
-        
-    </a>
-    <p class="post-meta">Posted by
-      
-      
-          <a href="/author/niek/">
-            Niek Palm
-          </a>
-          
-      
-      
-      on April 21, 2017</p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-    <a href="/2017/04/20/discovery-agent/">
-        <h2 class="post-title">            Discover the exposed port
-        </h2>
-        
-        <h3 class="post-subtitle">
-            Enabling discovery for Spring Cloud on AWS ECS
-        </h3>
-        
-    </a>
-    <p class="post-meta">Posted by
-      
-      
-          <a href="/author/niek/">
-            Niek Palm
-          </a>
-          
-      
-      
-      on April 20, 2017</p>
-
-</div>
-<hr>
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/">&larr; Newer Posts</a>
-    </li>
-    
-    
+<p>To get started with GraphQL the best starting points are:</p>
+<ul>
+  <li><a href="https://graphql.org">GraphQL.org</a></li>
+  <li><a href="https://github.com/chentsulin/awesome-graphql">Awesome GraphQL</a></li>
 </ul>
 
+<h2 id="examples">Examples</h2>
+<p>During the talk, I demonstrated GraphQL via <a href="https://www.graph.cool/">graphcool</a>, which is cloud service for creating a flexible GraphGL backend. I modelled a basic model of a Talk and Person with relation speakers and visitors on graphcool. Furthermore, I modelled two basic sample implementations of a GraphQL backend in Java and JavaScript that are available via GitHub. Those implementation are more limited than the online one, but both serve the following minimal queries.</p>
 
-		</div>
-	</div>
-</div>
+<p>Query for the name and the title of the talks given by all persons:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  persons {
+    name
+    talks {
+      title
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>And secondly, a query for all titles of talks with their speaker’s names.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  talks {
+    title
+    speakers {
+      name
+    }
+  }
+}
+</code></pre></div></div>
+
+<h3 id="javascript-sample">JavaScript sample</h3>
+<p>The JavaScript <a href="https://github.com/npalm/graphql-js-demo.git">sample</a> is based on <a href="https://github.com/apollostack/apollo-starter-kit">Apollo GraphQL tutorial kit</a>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-js-demo.git
+cd graphql-js-demo
+yarn &amp;&amp; yarn start
+</code></pre></div></div>
+<p>Instead of yarn, you can use <code class="highlighter-rouge">npm install &amp;&amp; npm start</code>. Once started, browse to <a href="http://localhost:8080/graphiql">http://localhost:8080/graphiql</a> and play around with the GraphQL web interface. Implementing the JavaScript version was straightforward due to the many examples and good tutorials around.</p>
+
+<h3 id="spring-boot-java-sample">Spring Boot Java sample</h3>
+<p>The Spring Boot Java <a href="https://github.com/npalm/graphql-java-demo.git">sample</a> is based on the Spring Boot Starter available for GraphQL and GraphQL java tools lib with schema first support.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/graphql-java-demo.git
+git checkout nextbuild
+cd graphql-java-demo
+docker build -t graphql-java-demo &amp;&amp; docker run -it --rm -p 8080:8080 graphql-java-demo
+</code></pre></div></div>
+<p>Alternatively, you can build and run via gradle. Once started, browse to <a href="http://localhost:8080/">http://localhost:8080/</a> to play around with the GraphQL web interface.</p>
+
+<p>Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/10/01/micro-hack-zappa-io/" data-toggle="tooltip" data-placement="top" title="MicroHack Zappa.io">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
 
 <hr>
 
