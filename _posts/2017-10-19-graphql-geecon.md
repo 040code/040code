@@ -2,7 +2,7 @@
 layout:     post
 title:      "GraphQL"
 subtitle:   "GeeCON talk - The Next API Language"
-date:       2017-10-19 15:00
+date:       2017-10-19 13:00
 authors:     [niek]
 header-img: "img/irisbuurt.jpg"
 tags:       [graphql]
