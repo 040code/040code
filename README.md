@@ -19,4 +19,3 @@ From there it will be put online automatically.
 
 [See travis-ci](https://travis-ci.org/040code/040code.github.io) to
 understand the `jekyll rake` task.`
-
