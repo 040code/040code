@@ -199,3 +199,6 @@ Add the file above to a GitLab repo that has the created runner attached. Once y
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/ghost.png" alt="Build log">
 </a>
+
+## Warning
+Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black firday prices of spot instances went up to over 2 dollar occasionally.
