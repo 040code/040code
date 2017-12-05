@@ -11,7 +11,6 @@ enable_asciinema: 1
 
 ## Introduction
 
-
 GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via the [GitLab Runners](https://docs.gitlab.com/runner/), which is an agent registered to your GitLab account. The agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: [Autoscale GitLab CI runners and save 90% on EC2 costs](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/).
 
 The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The modules create for this setup is available on my [GitHub](https://github.com/npalm/tf-aws-gitlab-runner).
@@ -20,7 +19,7 @@ The GitLab blog article nicely explains how to create your infrastructure in a m
     <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner">
 </a>
 
-##P rerequisites
+## Prerequisites
 Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab use an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner, is to register a new runner. Because GitLab currently does not provide a fully automated way, we will do this by hand.
 
 Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we using a docker container to register a runner. The command will ask a few details.
@@ -55,7 +54,6 @@ module "vpc" {
 Next, we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.
 
 Next we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab Runners is done via the `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file. In the Terraform module you will find that the configuration file is loaded via a data template.
-
 
 ```
 concurrent = ${runner_concurrent}
