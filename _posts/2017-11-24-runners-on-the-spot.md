@@ -4,22 +4,22 @@ title:      "Runners on the Spot"
 subtitle:   "Auto scaling GitLab runners on AWS"
 date:       2017-11-24
 authors:     [niek]
-header-img: "img/2017-12-05_runners-on-the-spot/blob_glow.jpg"
+header-img: "assets/2017-12-05_runners-on-the-spot/img/blob_glow.jpg"
 tags:       [gitlab, docker, aws, terraform]
 enable_asciinema: 1
 ---
 
 ## Introduction
 
-[GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citinzen on GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via the [GitLab Runners](https://docs.gitlab.com/runner/) which is an agent registred to your GitLab. The agent can run jobs (builds) via docker containers or local. Looking for a place to hosts the build I came across to run them on AWS using spot instances and auto-scaling. So I can keep the costs low by using the cheap spot instances, and only scale in case a build is requested.
+[GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citinzen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via the [GitLab Runners](https://docs.gitlab.com/runner/) which is an agent registred to your GitLab. The agent can run jobs (builds) via docker containers or local shell execution. Looking for a place to hosts the build we came across to run them on AWS using spot instances and auto-scaling. So we can keep the costs low by using the cheap spot instances, and only scale in case a build is requested.
 
-On the GitLab blog the article: [Autoscale  GitLab CI runners and save 90% on EC2 costs,](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/) explains how to setup the runners on AWS. But the setup is al lot of manual work, besides setting up infrastructure manually is error-prone. It is also a bad practice which we can avoid easily using tools like CloudFormation or Terraform. In this artical I explain how you can set up GitLab Runners ons AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/).
+On the GitLab blog the article: [Autoscale  GitLab CI runners and save 90% on EC2 costs,](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/) explains how to setup the runners on AWS. But the setup is al lot of manual work, besides setting up infrastructure manually is error-prone. It is also a bad practice which we can avoid easily using tools like CloudFormation or Terraform. This artical explain show you can set up GitLab Runners ons AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/).
 
 <a href="#">
-    <img src="{{ site.baseurl }}/img/2017-12-05_runners-on-the-spot/gitlab-runner.png" alt="GitLab Runner">
+    <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner">
 </a>
 
-Before we start a few details about the GitLab runners. To orchestrate our build we use an agent that orchestrate with docker machine our builds on newly created instances. The first step is to register a new runner. Currently GitLab does not provide a fully automated way. So the first step is manually.
+Before we start a few details about the GitLab runners. To execute the builds, GitLab use an agent to orchestrate the build with docker machine. A docker machine creates instances with docker engine to run docker contianers. The first step for setting up a runner is to register a new runner. Currently GitLab does not provide a fully automated way. So the first step is manually.
 
 ## Creating infrastructure for the runners
 Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we using a docker container to register a runner.
@@ -27,7 +27,7 @@ Open you GitLab Project and lookup the token to register a runner. Beware there 
 docker run -it --rm gitlab/gitlab-runner register
 ```
 
-<asciinema-player src="{{ site.baseurl }}/content/2017-12-05_runners-on-the-spot/register.json"
+<asciinema-player src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/asciinema/register.json"
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
 
@@ -120,26 +120,35 @@ cd tf-aws-gitlab-runner/example
 ```
 The example directory contains a complete working example that only needs to be configured to your GitLab runner. Please register a runner in GitLab (see docker command above). And update the `terraform.tfvars` file. That is all, now execute the terraform code.
 ```
-# see changes
-terraform explain
+# genere SSH key pair
+./init.sh
 
-# apply them
+# initialize terraform
+terraform init
+
+# apply, or plan first
 terraform apply
 ```
+
+<asciinema-player src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/asciinema/terraform.json"
+  cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
+</asciinema-player>
+
+
 After a few minutes the runner should be running, you should see in your AWS console the runner active.
 <a href="#">
-    <img src="{{ site.baseurl }}/img/2017-12-05_runners-on-the-spot/ec2.png" alt="Running EC2 instances">
+    <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/ec2.png" alt="Running EC2 instances">
 </a>
 <br>
 In GitLab the runner should now be active as well. Check the runner pages which should now indicates the lates contact of the runner.
 <a href="#">
-    <img src="{{ site.baseurl }}/img/2017-12-05_runners-on-the-spot/runner.png" alt="GitLab Runner details">
+    <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/runner.png" alt="GitLab Runner details">
 </a>
 <br>
 
 You can also inspect CloudWatch where the systemd logging is streamed to.
 <a href="#">
-    <img src="{{ site.baseurl }}/img/2017-12-05_runners-on-the-spot/cloudwatch.png" alt="CloudWatch logging">
+    <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/cloudwatch.png" alt="CloudWatch logging">
 </a>
 
 ## Verify
@@ -180,5 +189,5 @@ verify:
 Add the file above to a GitLab repo that has the created runner attached. Once you commit the file a build should triggered. In the logging of the verification step should contain the the ascii art image.
 
 <a href="#">
-    <img src="{{ site.baseurl }}/img/2017-12-05_runners-on-the-spot/ghost.png" alt="Build log">
+    <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/ghost.png" alt="Build log">
 </a>
