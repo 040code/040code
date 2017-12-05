@@ -11,15 +11,15 @@ enable_asciinema: 1
 
 ## Introduction
 
-[GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citinzen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via the [GitLab Runners](https://docs.gitlab.com/runner/) which is an agent registred to your GitLab. The agent can run jobs (builds) via docker containers or local shell execution. Looking for a place to hosts the build we came across to run them on AWS using spot instances and auto-scaling. So we can keep the costs low by using the cheap spot instances, and only scale in case a build is requested.
+[GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citinzen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via the [GitLab Runners](https://docs.gitlab.com/runner/) which is an agent registered to your GitLab. The agent can run jobs (builds) via docker containers or local shell execution. Looking for a place to hosts the build we came across to run them on AWS using spot instances and auto-scaling. So we can keep the costs low by using the cheap spot instances, and only scale in case a build is requested.
 
-On the GitLab blog the article: [Autoscale  GitLab CI runners and save 90% on EC2 costs,](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/) explains how to setup the runners on AWS. But the setup is al lot of manual work, besides setting up infrastructure manually is error-prone. It is also a bad practice which we can avoid easily using tools like CloudFormation or Terraform. This artical explains how to set up GitLab Runners ons AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The Terraform module for the GitLab spot instance runner is available on [GitHub](https://github.com/npalm/tf-aws-gitlab-runner).
+On the GitLab blog the article: [Autoscale  GitLab CI runners and save 90% on EC2 costs,](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/) explains how to setup the runners on AWS. But the setup is al lot of manual work, besides setting up infrastructure manually is error-prone. It is also a bad practice which we can avoid easily using tools like CloudFormation or Terraform. This article explains how to set up GitLab Runners ons AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The Terraform module for the GitLab spot instance runner is available on [GitHub](https://github.com/npalm/tf-aws-gitlab-runner).
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner">
 </a>
 
-Before we start a few details about the GitLab runners. To execute the builds, GitLab use an agent to orchestrate the build with docker machine. A docker machine creates instances with docker engine to run docker contianers. The first step for setting up a runner is to register a new runner. Currently GitLab does not provide a fully automated way. So the first step is manually.
+Before we start a few details about the GitLab runners. To execute the builds, GitLab use an agent to orchestrate the build with docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner is to register a new runner. Currently GitLab does not provide a fully automated way. So the first step is manually.
 
 ## Creating infrastructure for the runners
 Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we using a docker container to register a runner.
@@ -48,7 +48,7 @@ module "vpc" {
 }
 ```
 
-Next, we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file.
+Next, we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.
 
 ```
 concurrent = ${runner_concurrent}
@@ -146,7 +146,7 @@ In GitLab the runner should now be active as well. Check the runner pages which 
 </a>
 <br>
 
-You can also inspect CloudWatch where the systemd logging is streamed to.
+You can also inspect CloudWatch where the `systemd` logging is streamed to.
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-05_runners-on-the-spot/img/cloudwatch.png" alt="CloudWatch logging">
 </a>
