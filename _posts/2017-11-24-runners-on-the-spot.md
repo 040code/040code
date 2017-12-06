@@ -35,23 +35,31 @@ docker run -it --rm gitlab/gitlab-runner register
 Provide the requested details, consult the GitLab manual for more details. Once done you should see a new runner registered at your project or globally. Open the runner settings in edit mode and record the token. This token we need later for connecting the agent.
 
 ## Creating infrastructure for the runners
-Now the runner is configured in GitLab, we can start creating the infrastructure on AWs. For setting up the network layes we use [Amazon networking scenario 2](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html), to build a VPC with a public and private subnets. For more details see the [post]({{ site.baseurl }}/2017/06/18/terraform-aws-vpc/) about coding a VPC. To create the VPC including a public and private subnet we add the following module to the `main.tf` file.
+Now the runner is configured in GitLab, we can start creating the infrastructure on AWs. For setting up the network layers we use [Amazon networking scenario 2](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html), to build a VPC with a public and private subnets. For more details see the [post]({{ site.baseurl }}/2017/06/18/terraform-aws-vpc/) about creating a VPC in terraform. You can olso simply use the [official terraform module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/1.7.0).
 
 
 ```
+
 module "vpc" {
-  source = "git::https://github.com/npalm/tf-aws-vpc.git?ref=1.0.0"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "1.5.1"
 
-  aws_region  = "eu-west-1"
-  environment = "ci-runners"
+  name = "vpc-${var.environment}"
+  cidr = "10.0.0.0/16"
 
-  availability_zones = {
-    eu-west-1 = ["eu-west-1a"]
+  azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+
+  tags = {
+    Environment = "${var.environment}"
   }
 }
 ```
 
-Next, we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.
+Next, we create a `t2.micro` instance using an auto scaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.
 
 Next we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab Runners is done via the `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file. In the Terraform module you will find that the configuration file is loaded via a data template.
 
@@ -201,4 +209,4 @@ Add the file above to a GitLab repo that has the created runner attached. Once y
 </a>
 
 ## Warning
-Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black firday prices of spot instances went up to over 2 dollar occasionally.
+Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black Friday prices of spot instances went up to over 2 dollar occasionally.
