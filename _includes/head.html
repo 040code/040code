@@ -44,5 +44,10 @@
     </script>
     {% endif %}
 
+    {% if page.enable_asciinema %}
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/css/asciinema-player.css" />
+    <script src="{{ site.baseurl }}/js/asciinema-player.js"></script>
+    {% endif %}
+
 
 </head>
