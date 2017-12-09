@@ -13,7 +13,7 @@ enable_asciinema: 1
 
 [GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via [GitLab Runners](https://docs.gitlab.com/runner/), which are agents registered to your GitLab account. An agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: [Autoscale GitLab CI runners and save 90% on EC2 costs](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/).
 
-The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The modules created for this setup are available on my [GitHub](https://github.com/npalm/tf-aws-gitlab-runner).
+The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The GitLab Runner module discussed in the post is available in the [Terraform Registery](https://registry.terraform.io/modules/npalm/gitlab-runner/aws/0.1.0).
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner">
@@ -109,8 +109,8 @@ check_interval = 0
 All variables can be configured, most of them will have default values. Only the name of the runner, token and GitLab URL needs to be configured. The configuration contains a shared cache in S3 which will expire at the end of the next day (after creation) by default. File will be deleted via S3 lifecyle managment once expired. The number of expiration days can be changed to your needs. You can find all the available variables in the `variables.tf` file of the module. Next we add the module to our Terraform file and define a minimal set of variables.
 
 ```
-module "runner" {
-  source = "https://github.com/npalm/tf-aws-gitlab-runner.git"
+module "gitlab-runner" {
+  source = "npalm/gitlab-runner/aws"
 
   aws_region     = "<region-to-use>"
   environment    = "ci-runners"
