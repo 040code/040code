@@ -1,4 +1,192 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.0">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-10-19T12:06:46+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/10/19/graphql-geecon/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-10-19T00:00:00+00:00</published><updated>2017-10-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/19/graphql-geecon</id><content type="html" xml:base="https://040code.github.io//2017/10/19/graphql-geecon/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;https://2017.geecon.cz&quot;&gt;GeeCON&lt;/a&gt; conference on October the 19th in Prague.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-12-09T12:59:09+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Runners on the Spot</title><link href="https://040code.github.io//2017/12/09/runners-on-the-spot/" rel="alternate" type="text/html" title="Runners on the Spot" /><published>2017-12-09T00:00:00+00:00</published><updated>2017-12-09T00:00:00+00:00</updated><id>https://040code.github.io//2017/12/09/runners-on-the-spot</id><content type="html" xml:base="https://040code.github.io//2017/12/09/runners-on-the-spot/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://about.gitlab.com/features/gitlab-ci-cd/&quot;&gt;GitLab CI&lt;/a&gt; is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via &lt;a href=&quot;https://docs.gitlab.com/runner/&quot;&gt;GitLab Runners&lt;/a&gt;, which are agents registered to your GitLab account. An agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: &lt;a href=&quot;https://about.gitlab.com/2017/11/23/autoscale-ci-runners/&quot;&gt;Autoscale GitLab CI runners and save 90% on EC2 costs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with &lt;a href=&quot;https://www.terraform.io/&quot;&gt;Hashicorp Terraform&lt;/a&gt;. The GitLab Runner module discussed in the post is available in the &lt;a href=&quot;https://registry.terraform.io/modules/npalm/gitlab-runner/aws/0.1.0&quot;&gt;Terraform Registery&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2017-12-09_runners-on-the-spot/img/gitlab-runner.png&quot; alt=&quot;GitLab Runner&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+&lt;p&gt;Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab uses an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner, is to register a new runner. Because GitLab currently does not provide a fully automated way, we will do this by hand.&lt;/p&gt;
+
+&lt;p&gt;Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we use a docker container to register a runner. The command will ask a few details.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --rm gitlab/gitlab-runner register
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;asciinema-player src=&quot;/assets/2017-12-09_runners-on-the-spot/asciinema/register.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;Provide the requested details and consult the GitLab manual for more details. Once done you should see a new runner registered at your project or globally. Open the runner settings in edit mode and record the token. This token is needed later for connecting the agent.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-infrastructure-for-the-runners&quot;&gt;Creating infrastructure for the runners&lt;/h2&gt;
+&lt;p&gt;Now the runner is configured in GitLab, we can start creating the infrastructure on AWs. For setting up the network layers we use &lt;a href=&quot;http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html&quot;&gt;Amazon networking scenario 2&lt;/a&gt;, to build a VPC with a public and private subnets. For more details see the &lt;a href=&quot;/2017/06/18/terraform-aws-vpc/&quot;&gt;post&lt;/a&gt; about creating a VPC in terraform. You can also simply use the &lt;a href=&quot;https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/1.7.0&quot;&gt;official terraform module&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+module &quot;vpc&quot; {
+  source  = &quot;terraform-aws-modules/vpc/aws&quot;
+  version = &quot;1.5.1&quot;
+
+  name = &quot;vpc-${var.environment}&quot;
+  cidr = &quot;10.0.0.0/16&quot;
+
+  azs             = [&quot;eu-west-1a&quot;, &quot;eu-west-1b&quot;, &quot;eu-west-1c&quot;]
+  private_subnets = [&quot;10.0.1.0/24&quot;, &quot;10.0.2.0/24&quot;, &quot;10.0.3.0/24&quot;]
+  public_subnets  = [&quot;10.0.101.0/24&quot;, &quot;10.0.102.0/24&quot;, &quot;10.0.103.0/24&quot;]
+
+  enable_nat_gateway = true
+
+  tags = {
+    Environment = &quot;${var.environment}&quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we create a &lt;code class=&quot;highlighter-rouge&quot;&gt;t2.micro&lt;/code&gt; instance using an auto scaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a &lt;code class=&quot;highlighter-rouge&quot;&gt;config.toml&lt;/code&gt; file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.&lt;/p&gt;
+
+&lt;p&gt;Next we create a &lt;code class=&quot;highlighter-rouge&quot;&gt;t2.micro&lt;/code&gt; instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab Runners is done via the &lt;code class=&quot;highlighter-rouge&quot;&gt;config.toml&lt;/code&gt; file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file. In the Terraform module you will find that the configuration file is loaded via a data template.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;concurrent = ${runner_concurrent}
+check_interval = 0
+
+[[runners]]
+  name = &quot;${runners_name}&quot;
+  url = &quot;${gitlab_url}&quot;
+  token = &quot;${runners_token}&quot;
+  executor = &quot;docker+machine&quot;
+  limit = ${runners_limit}
+  [runners.docker]
+    tls_verify = false
+    image = &quot;docker:17.11.0-ce&quot;
+    privileged = ${runners_privilled}
+    disable_cache = false
+    volumes = [&quot;/cache&quot;]
+    shm_size = 0
+  [runners.cache]
+    Type = &quot;s3&quot;
+    ServerAddress = &quot;s3-${aws_region}.amazonaws.com&quot;
+    AccessKey = &quot;${bucket_user_access_key}&quot;
+    SecretKey = &quot;${bucket_user_secret_key}&quot;
+    BucketName = &quot;${bucket_name}&quot;
+    Insecure = false
+  [runners.machine]
+    IdleCount = ${runners_idle_count}
+    IdleTime = ${runners_idle_time}
+    MachineDriver = &quot;amazonec2&quot;
+    MachineName = &quot;runner-%s&quot;
+    MachineOptions = [
+      &quot;amazonec2-access-key=${access_key}&quot;,
+      &quot;amazonec2-secret-key=${secret_key}&quot;,
+      &quot;amazonec2-instance-type=${instance_type}&quot;,
+      &quot;amazonec2-region=${aws_region}&quot;,
+      &quot;amazonec2-vpc-id=${vpc_id}&quot;,
+      &quot;amazonec2-subnet-id=${subnet_id}&quot;,
+      &quot;amazonec2-private-address-only=true&quot;,
+      &quot;amazonec2-request-spot-instance=true&quot;,
+      &quot;amazonec2-spot-price=${spot_price_bid}&quot;,
+      &quot;amazonec2-security-group=${security_group_name}&quot;
+    ]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;All variables can be configured, most of them will have default values. Only the name of the runner, token and GitLab URL needs to be configured. The configuration contains a shared cache in S3 which will expire at the end of the next day (after creation) by default. File will be deleted via S3 lifecyle managment once expired. The number of expiration days can be changed to your needs. You can find all the available variables in the &lt;code class=&quot;highlighter-rouge&quot;&gt;variables.tf&lt;/code&gt; file of the module. Next we add the module to our Terraform file and define a minimal set of variables.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module &quot;gitlab-runner&quot; {
+  source = &quot;npalm/gitlab-runner/aws&quot;
+
+  aws_region     = &quot;&amp;lt;region-to-use&amp;gt;&quot;
+  environment    = &quot;ci-runners&quot;
+  ssh_public_key = &quot;&amp;lt;contains-public-key&quot;
+
+  vpc_id                  = &quot;${module.vpc.vpc_id}&quot;
+  subnet_id_gitlab_runner = &quot;${element(module.vpc.private_subnets, 0)}&quot;
+  subnet_id_runners       = &quot;${element(module.vpc.private_subnets, 0)}&quot;
+
+  # Values below are created during the registration process of the runner.
+  runner_name       = &quot;&amp;lt;name-of-the-runner&quot;
+  runner_gitlab_url = &quot;&amp;lt;gitlab-url&amp;gt;&quot;
+  runner_token      = &quot;&amp;lt;token-of-the-runner&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The complete exmple is in &lt;a href=&quot;https://github.com/npalm/tf-aws-gitlab-runner/tree/master/example&quot;&gt;GitHub&lt;/a&gt;. Time to execute the scripts to create the actual infrastructure. Be aware that you need to configure AWS keys and have Terraform installed. The steps below should guide you through the setup.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/tf-aws-gitlab-runner.git
+cd tf-aws-gitlab-runner/example
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The example directory contains the example as described above, only the properties for your newly registered runner in GitLab needs to be configured. Please register a runner in GitLab (see docker command above) and update the &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform.tfvars&lt;/code&gt; file. That is all, now execute the Terraform code.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# genere SSH key pair
+./init.sh
+
+# initialize terraform
+terraform init
+
+# apply, or plan first
+terraform apply
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;asciinema-player src=&quot;/assets/2017-12-09_runners-on-the-spot/asciinema/terraform.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;After a few minutes the runner should be running, you should see in your AWS console the runner active.
+&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2017-12-09_runners-on-the-spot/img/ec2.png&quot; alt=&quot;Running EC2 instances&quot; /&gt;
+&lt;/a&gt;
+&lt;br /&gt;
+In GitLab the runner should be active as well. Check the runner pages which should now indicates the latest moment of contact.
+&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2017-12-09_runners-on-the-spot/img/runner.png&quot; alt=&quot;GitLab Runner details&quot; /&gt;
+&lt;/a&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;The modules also enable CloudWatch logging, all &lt;code class=&quot;highlighter-rouge&quot;&gt;systemd&lt;/code&gt; logging is streamed. Go to CloudWatch to inspect the logging. The installation processed is logged as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2017-12-09_runners-on-the-spot/img/cloudwatch.png&quot; alt=&quot;CloudWatch logging&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;verify&quot;&gt;Verify&lt;/h2&gt;
+
+&lt;p&gt;Finally we can verify that the runner is working by executing a build. The &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitlab-ci.yml&lt;/code&gt; below is an example to verify the runner is working properly. The build contains two stages. In the first stage an ascii art image is generated, stored in a file which is cached in S3. In the second stage the file is retrieved from the build cache.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+stages:
+  - build
+  - verify
+
+cache:
+  key: &quot;$CI_BUILD_REF&quot;
+  untracked: true
+
+image: npalm/cowsay
+
+build:
+  stage: build
+
+  script:
+    - cowsay -f ghostbusters building &quot;$CI_BUILD_NAME&quot; @ stage &quot;$CI_BUILD_STAGE&quot; &amp;gt; ghosts.txt
+
+  tags:
+     - docker.m3
+
+verify:
+  stage: verify
+
+  script:
+    - cat ghosts.txt
+
+  tags:
+    - docker.m3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Add the file above to a GitLab repo that has the created runner attached. Once you commit the file a build should triggered. The logging of the verification step should contain the ascii art image.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2017-12-09_runners-on-the-spot/img/ghost.png&quot; alt=&quot;Build log&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;warning&quot;&gt;Warning&lt;/h2&gt;
+&lt;p&gt;Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black Friday prices of spot instances went up to over 2 dollar occasionally.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="gitlab" /><category term="docker" /><category term="aws" /><category term="terraform" /><summary type="html">Introduction</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/10/19/graphql-geecon/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-10-19T00:00:00+00:00</published><updated>2017-10-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/19/graphql-geecon</id><content type="html" xml:base="https://040code.github.io//2017/10/19/graphql-geecon/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;https://2017.geecon.cz&quot;&gt;GeeCON&lt;/a&gt; conference on October the 19th in Prague.&lt;/p&gt;
 
 &lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
 &lt;p&gt;Below the slides that I for the talk, the slides are available as well on &lt;a href=&quot;https://npalm.github.io/graphql-slides-20171019/&quot;&gt;GitHub&lt;/a&gt;. You can easy navigate through the slides with the spacebar.&lt;/p&gt;
@@ -58,7 +246,7 @@ docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Alternatively, you can build and run via gradle. Once started, browse to &lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; to play around with the GraphQL web interface.&lt;/p&gt;
 
-&lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the GeeCON conference on October the 19th in Prague.</summary></entry><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
+&lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the GeeCON conference on October the 19th in Prague.</summary></entry><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
 
 &lt;h2 id=&quot;the-context&quot;&gt;The context&lt;/h2&gt;
 
@@ -288,7 +476,7 @@ terraform apply
 &lt;p&gt;Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.&lt;/p&gt;
 
 &lt;h3 id=&quot;clean-up&quot;&gt;Clean up&lt;/h3&gt;
-&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/08/fsf-fontend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-08T00:00:00+00:00</published><updated>2017-09-08T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/08/fsf-fontend</id><content type="html" xml:base="https://040code.github.io//2017/09/08/fsf-fontend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
+&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/08/fsf-fontend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-08T00:00:00+00:00</published><updated>2017-09-08T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/08/fsf-fontend</id><content type="html" xml:base="https://040code.github.io//2017/09/08/fsf-fontend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
 
 &lt;p&gt;This week we (Jeroen and Niek) enjoyining &lt;a href=&quot;https://2017.fullstackfest.com/&quot;&gt;Full Stack Fest 2017 Barcelona&lt;/a&gt;,
 a week-long full stack development conference with a focus on solving current problems with new &amp;amp; inspiring perspectives.&lt;/p&gt;
@@ -1135,7 +1323,7 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
     eu-west-1 = [&quot;eu-west-1a&quot;, &quot;eu-west-1c&quot;]
   }
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/05/20/nextbuild-graphql/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-05-20T23:50:00+00:00</published><updated>2017-05-20T23:50:00+00:00</updated><id>https://040code.github.io//2017/05/20/nextbuild-graphql</id><content type="html" xml:base="https://040code.github.io//2017/05/20/nextbuild-graphql/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;http://nextbuild.nl/&quot;&gt;Nextbuild&lt;/a&gt; conference on May the 20th in Eindhoven.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/05/20/nextbuild-graphql/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-05-20T23:50:00+00:00</published><updated>2017-05-20T23:50:00+00:00</updated><id>https://040code.github.io//2017/05/20/nextbuild-graphql</id><content type="html" xml:base="https://040code.github.io//2017/05/20/nextbuild-graphql/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;http://nextbuild.nl/&quot;&gt;Nextbuild&lt;/a&gt; conference on May the 20th in Eindhoven.&lt;/p&gt;
 
 &lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
 &lt;p&gt;Below the slides that I for the talk, the slides are available as well on &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170520/&quot;&gt;GitHub&lt;/a&gt;. You can easy navigate through the slides with the spacebar.&lt;/p&gt;
@@ -1202,75 +1390,4 @@ docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080
 &lt;p&gt;I have updated the Spring Boot implmentation, upgrade all libraries and removed the annotations for graphql resolving. The annoation are replaced &lt;a href=&quot;https://github.com/graphql-java/graphql-java-tools&quot;&gt;java-graphql-tools&lt;/a&gt;. Which looks a better way to ingrate graphql in a Java service. You will see the implementation will have a lot of similarities with the javascript one.&lt;/p&gt;
 
 &lt;h3 id=&quot;developersnl-meetup-rotterdam-june-28-2017&quot;&gt;Developers.nl meetup Rotterdam (June 28, 2017)&lt;/h3&gt;
-&lt;p&gt;On June, the 28th I have presented the GraphQL talk at the &lt;a href=&quot;https://www.meetup.com/Developers-nl-Meetup/events/240419508/&quot;&gt;developers.nl Meetup&lt;/a&gt; in Rotterdom. I have used a slightly minimal version for the slides, which can be found &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170628/&quot;&gt;here&lt;/a&gt;. Comparing the to the presentaton on the nextbuild I have also walked through the code examples mentioned above.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the Nextbuild conference on May the 20th in Eindhoven.</summary></entry><entry><title type="html">Docker Multi Stage Builds</title><link href="https://040code.github.io//2017/05/07/docker-multi-stage-builds/" rel="alternate" type="text/html" title="Docker Multi Stage Builds" /><published>2017-05-07T00:00:00+00:00</published><updated>2017-05-07T00:00:00+00:00</updated><id>https://040code.github.io//2017/05/07/docker-multi-stage-builds</id><content type="html" xml:base="https://040code.github.io//2017/05/07/docker-multi-stage-builds/">&lt;h1 id=&quot;the-problem&quot;&gt;The problem&lt;/h1&gt;
-&lt;p&gt;Building an application requires typically multiple steps. First compiling the application, next testing it and finally shipping the artifact in a Docker image for execution. All these steps can be combined in one &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;, but typically you end up with a Docker image that contains all kinds of tools that are not necessary for running the application.&lt;/p&gt;
-
-&lt;p&gt;We could try to get rid of all unneeded files in the image after build, but a more useful approach is to separate Docker images for building and running the application. However, this approach requires two separate Dockerfiles that needs to be maintained.&lt;/p&gt;
-
-&lt;p&gt;Let’s have a look on a &lt;a href=&quot;https://github.com/040code/blog_docker-mulit-stage-build.git&quot;&gt;example&lt;/a&gt; for a simple Java micro service. The micro services require the JDK and Gradle to build. The JDK needs to be installed before the build and Gradle will be download by the build itself. We can build the micro service in the following way.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/040code/blog_docker-mulit-stage-build.git
-cd notes-service
-docker run -it --rm -v $(pwd):/build -w /build openjdk:8u121-jdk-alpine ./gradlew build
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Now the artifact is available, we can create a Docker runtime image. The application only needs the Java Runtime (JRE) to run. We create a &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; based JRE alpine image and add our application.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-00)
-FROM openjdk:8u121-jre-alpine
-COPY build/libs/notes-service.jar /app/notes-service.jar
-
-EXPOSE 8080
-CMD java -jar /app/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Next, we build the production image as follows:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:00 .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Now we have created a clean Docker images that only containes the needed libraries to run the application. But would it not be nice if we can do this more straightforward? For example, in one Docker build.&lt;/p&gt;
-
-&lt;h1 id=&quot;moving-on-to-a-multi-stage-build&quot;&gt;Moving on to a multi stage build&lt;/h1&gt;
-&lt;p&gt;Docker 17.05.x brings a new feature; it is now possible to define a &lt;a href=&quot;https://docs.docker.com/engine/userguide/eng-image/multistage-build/&quot;&gt;multi stage builds&lt;/a&gt; in one Dockerfile. The Dockerfile can contain multiple FROM lines and each stage starts with a new FROM line and a fresh context. You can copy artifacts from stage to stage.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/img/docker-multi-stages-build.png&quot; alt=&quot;docker-multi-stages-build&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Now it is time to have a second look on the same example. Instead of passing the build arguments and mounting our sources, we will build our software using a single Dockerfile.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-01)
-FROM openjdk:8u121-jdk-alpine AS build
-
-WORKDIR /build-env
-ADD . /build-env
-RUN ./gradlew build
-
-CMD java -jar /build-env/build/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;And build it:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:01 .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Nothing new here, we are now able to build our software in a container and ship an image, but the image contains all kinds of build stuff that we do not want in a runtime image. So, the next step is to solve this problem by getting rid of all the unwanted build tools.&lt;/p&gt;
-
-&lt;p&gt;We update the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; and make a few modifications.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# file: Dockerfile (git checkout step-02)
-FROM openjdk:8u121-jdk-alpine AS build                                               # (1)
-
-WORKDIR /build-env
-ADD . /build-env
-RUN ./gradlew build
-
-FROM openjdk:8u121-jre-alpine                                                        # (2)
-COPY --from=build /build-env/build/libs/notes-service.jar /app/notes-service.jar     # (3)
-
-EXPOSE 8080
-CMD java -jar /app/notes-service.jar
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt; above we marked the first stage (1) as &lt;em&gt;build&lt;/em&gt; to refer later, if not specifying a name you can refer to the stage as 0. Next (2), we add the second stage which specifies the base image that we need to run our application. Finally (3), we copy the results from the build stage to the image for executing.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker build -t notes-service:02 .
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;And now we can run via the following docker run command.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker run -it --rm -p 8080 notes-service:2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Inspection of the tree images build will show that version 0 and 2 are equal in size, version 1 that contains all the build files and the JDK is almost three times bigger.&lt;/p&gt;
-
-&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;Docker’s new multi layer build feature can be quite useful when build pipeline without parallel builds will suite your needs. In that case, you can reduce your build to a single image. For projects that requires a more complex multi stage build, including parallel builds, this new Docker feature will not provide an added value.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="docker" /><summary type="html">The problem Building an application requires typically multiple steps. First compiling the application, next testing it and finally shipping the artifact in a Docker image for execution. All these steps can be combined in one Dockerfile, but typically you end up with a Docker image that contains all kinds of tools that are not necessary for running the application.</summary></entry></feed>
+&lt;p&gt;On June, the 28th I have presented the GraphQL talk at the &lt;a href=&quot;https://www.meetup.com/Developers-nl-Meetup/events/240419508/&quot;&gt;developers.nl Meetup&lt;/a&gt; in Rotterdom. I have used a slightly minimal version for the slides, which can be found &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170628/&quot;&gt;here&lt;/a&gt;. Comparing the to the presentaton on the nextbuild I have also walked through the code examples mentioned above.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the Nextbuild conference on May the 20th in Eindhoven.</summary></entry></feed>

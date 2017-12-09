@@ -1,0 +1,3298 @@
+{
+  "version": 1,
+  "width": 166,
+  "height": 25,
+  "duration": 161.566453,
+  "command": null,
+  "title": null,
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/zsh"
+  },
+  "stdout": [
+    [
+      0.298143,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                                                     \r \r\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/tf-aws-gitlab-runner2/example\u0007\u001b]1;..nner2/example\u0007"
+    ],
+    [
+      0.030573,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mexample\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      0.000126,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      2.7e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      0.983288,
+      "."
+    ],
+    [
+      0.24811,
+      "\b./"
+    ],
+    [
+      0.263157,
+      "i"
+    ],
+    [
+      0.183751,
+      "n"
+    ],
+    [
+      0.137064,
+      "i"
+    ],
+    [
+      0.232067,
+      "t"
+    ],
+    [
+      0.27179,
+      "."
+    ],
+    [
+      0.15141,
+      "s"
+    ],
+    [
+      0.168746,
+      "h"
+    ],
+    [
+      0.183681,
+      "\u001b[?1l\u001b>"
+    ],
+    [
+      2.5e-05,
+      "\u001b[?2004l\r\r\n"
+    ],
+    [
+      0.00133,
+      "\u001b]2;./init.sh\u0007\u001b]1;./init.sh\u0007"
+    ],
+    [
+      0.030779,
+      "Generating public/private rsa key pair.\r\n"
+    ],
+    [
+      0.078242,
+      "Your identification has been saved in generated/id_rsa.\r\n"
+    ],
+    [
+      0.000296,
+      "Your public key has been saved in generated/id_rsa.pub.\r\nThe key fingerprint is:\r\nSHA256:x576ikxFrGZKJCHTfYvtjcdzhNMRMZL2nz0qeBqgXTc demo\r\nThe key's randomart image is:\r\n+---[RSA 2048]----+\r\n|o...    ..+o     |\r\n| o... ..o...     |\r\n|  . .+ oo+ .     |\r\n|   o. ooo.+      |\r\n|    ..=+SoE. o   |\r\n|   . *o+=+.oo o  |\r\n|    o o..+o  . . |\r\n|     o ..oo .    |\r\n|      o +=..     |\r\n+----[SHA256]-----+\r\n"
+    ],
+    [
+      0.002381,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                                                     \r \r"
+    ],
+    [
+      4.8e-05,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/tf-aws-gitlab-runner2/example\u0007\u001b]1;..nner2/example\u0007"
+    ],
+    [
+      0.029457,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mexample\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      5.7e-05,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      1.5e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      0.713626,
+      "t"
+    ],
+    [
+      0.159222,
+      "\bte"
+    ],
+    [
+      0.192426,
+      "r"
+    ],
+    [
+      0.247448,
+      "r"
+    ],
+    [
+      0.224004,
+      "a"
+    ],
+    [
+      0.328427,
+      "f"
+    ],
+    [
+      0.160411,
+      "o"
+    ],
+    [
+      0.463906,
+      "r"
+    ],
+    [
+      0.167841,
+      "m"
+    ],
+    [
+      0.128597,
+      " "
+    ],
+    [
+      0.359424,
+      "i"
+    ],
+    [
+      0.136188,
+      "n"
+    ],
+    [
+      0.12821,
+      "i"
+    ],
+    [
+      0.143667,
+      "t"
+    ],
+    [
+      0.127341,
+      "\u001b[?1l\u001b>"
+    ],
+    [
+      2.4e-05,
+      "\u001b[?2004l\r\r\n"
+    ],
+    [
+      0.00102,
+      "\u001b]2;terraform init\u0007\u001b]1;terraform\u0007"
+    ],
+    [
+      0.072115,
+      "\u001b[0m\u001b[1mInitializing modules...\u001b[0m\r\n"
+    ],
+    [
+      0.00036,
+      "- module.vpc\r\n"
+    ],
+    [
+      0.00237,
+      "  Getting source \"git::https://github.com/npalm/tf-aws-vpc.git?ref=1.0.0\"\r\n"
+    ],
+    [
+      3.002268,
+      "- module.runner\r\n"
+    ],
+    [
+      6.1e-05,
+      "  Getting source \"../\"\r\n"
+    ],
+    [
+      0.012214,
+      "\r\n"
+    ],
+    [
+      3.5e-05,
+      "\u001b[0m\u001b[1mInitializing provider plugins...\u001b[0m\r\n"
+    ],
+    [
+      0.000107,
+      "- Checking for available provider plugins on https://releases.hashicorp.com...\r\n"
+    ],
+    [
+      0.343638,
+      "- Downloading plugin for provider \"template\" (1.0.0)...\r\n"
+    ],
+    [
+      2.49139,
+      "- Downloading plugin for provider \"aws\" (1.3.1)...\r\n"
+    ],
+    [
+      13.943872,
+      "\r\n"
+    ],
+    [
+      9.4e-05,
+      "\u001b[0m\u001b[1m\u001b[32mTerraform has been successfully initialized!\u001b[0m\u001b[32m\u001b[0m\r\n\u001b[0m\u001b[32m\r\n"
+    ],
+    [
+      8.5e-05,
+      "You may now begin working with Terraform. Try running \"terraform plan\" to see\r\n"
+    ],
+    [
+      0.000112,
+      "any changes that are required for your infrastructure. All Terraform commands\r\n"
+    ],
+    [
+      2e-05,
+      "should now work.\r\n\r\n"
+    ],
+    [
+      0.000111,
+      "If you ever set or change modules or backend configuration for Terraform,\r\n"
+    ],
+    [
+      0.000101,
+      "rerun this command to reinitialize your working directory. If you forget, other\r\n"
+    ],
+    [
+      0.000102,
+      "commands will detect it and remind you to do so if necessary.\u001b[0m\r\n"
+    ],
+    [
+      0.003753,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                                                     \r \r"
+    ],
+    [
+      0.000122,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/tf-aws-gitlab-runner2/example\u0007"
+    ],
+    [
+      2.5e-05,
+      "\u001b]1;..nner2/example\u0007"
+    ],
+    [
+      0.023843,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mexample\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      4.3e-05,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      4.8e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      0.87196,
+      "t"
+    ],
+    [
+      0.135767,
+      "\bte"
+    ],
+    [
+      0.240379,
+      "r"
+    ],
+    [
+      0.167185,
+      "r"
+    ],
+    [
+      0.191759,
+      "a"
+    ],
+    [
+      0.111856,
+      "f"
+    ],
+    [
+      0.536303,
+      "o"
+    ],
+    [
+      0.16002,
+      "r"
+    ],
+    [
+      0.200592,
+      "m"
+    ],
+    [
+      0.151299,
+      " "
+    ],
+    [
+      0.176879,
+      "a"
+    ],
+    [
+      0.311789,
+      "p"
+    ],
+    [
+      0.896226,
+      "p"
+    ],
+    [
+      0.247914,
+      "l"
+    ],
+    [
+      0.199056,
+      "y"
+    ],
+    [
+      0.16865,
+      "\u001b[?1l\u001b>"
+    ],
+    [
+      2.5e-05,
+      "\u001b[?2004l\r\r\n"
+    ],
+    [
+      0.000964,
+      "\u001b]2;terraform apply\u0007\u001b]1;terraform\u0007"
+    ],
+    [
+      0.512587,
+      "\u001b[0m\u001b[1mdata.template_file.instance_role_trust_policy: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      4.1e-05,
+      "\u001b[0m\u001b[1mdata.template_file.instance_profile: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.000119,
+      "\u001b[0m\u001b[1mdata.template_file.logging: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      2.033987,
+      "\u001b[0m\u001b[1mdata.aws_caller_identity.current: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.000102,
+      "\u001b[0m\u001b[1mdata.aws_iam_policy_document.policy: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      4.826009,
+      "\r\n"
+    ],
+    [
+      3.6e-05,
+      "An execution plan has been generated and is shown below.\r\n"
+    ],
+    [
+      5.9e-05,
+      "Resource actions are indicated with the following symbols:\r\n"
+    ],
+    [
+      2e-05,
+      "  \u001b[32m+\u001b[0m create\r\n"
+    ],
+    [
+      7.7e-05,
+      " \u001b[36m<=\u001b[0m read (data resources)\r\n\u001b[0m\r\n"
+    ],
+    [
+      6.2e-05,
+      "Terraform will perform the following actions:\r\n"
+    ],
+    [
+      1.5e-05,
+      "\r\n"
+    ],
+    [
+      0.000421,
+      "\u001b[36m \u001b[36m<=\u001b[0m \u001b[36mmodule.runner.data.aws_iam_policy_document.bucket-policy-doc\r\n"
+    ],
+    [
+      0.000104,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      9.2e-05,
+      "      json:                                                                <computed>\r\n"
+    ],
+    [
+      9.2e-05,
+      "      statement.#:                                                         \"1\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      statement.0.actions.#:                                               \"4\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "      statement.0.actions.1400860598:                                      \"s3:PutObjectAcl\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      statement.0.actions.2071725391:                                      \"s3:GetObject\"\r\n"
+    ],
+    [
+      0.000171,
+      "      statement.0.actions.2517836488:                                      \"s3:GetObjectAcl\"\r\n"
+    ],
+    [
+      0.000138,
+      "      statement.0.actions.315547055:                                       \"s3:PutObject\"\r\n"
+    ],
+    [
+      0.000145,
+      "      statement.0.effect:                                                  \"Allow\"\r\n"
+    ],
+    [
+      0.000115,
+      "      statement.0.principals.#:                                            \"1\"\r\n"
+    ],
+    [
+      0.000138,
+      "      statement.0.principals.~3303760437.identifiers.#:                    <computed>\r\n"
+    ],
+    [
+      8.4e-05,
+      "      statement.0.principals.~3303760437.type:                             \"AWS\"\r\n"
+    ],
+    [
+      0.000155,
+      "      statement.0.resources.#:                                             <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      8.7e-05,
+      "\u001b[0m\u001b[36m \u001b[36m<=\u001b[0m \u001b[36mmodule.runner.data.template_file.gitlab_runner\r\n"
+    ],
+    [
+      0.000745,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000222,
+      "      rendered:                                                            <computed>\r\n"
+    ],
+    [
+      0.000676,
+      "      template:                                                            \"mkdir -p /etc/gitlab-runner\\ncat > /etc/gitlab-runner/config.toml <<- EOF\\n\\n${runners_config}\\n\\nEOF\\n\\ncurl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh | bash\\nyum install gitlab-runner-${gitlab_runner_version} -y\\ncurl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine && \\\\\\n  chmod +x /tmp/docker-machine && \\\\\\n  cp /tmp/docker-machine /usr/local/bin/docker-machine && \\\\\\n  ln -s /usr/local/bin/docker-machine /usr/bin/docker-machine\\n\\n\\nservice gitlab-runner restart\\nchkconfig gitlab-runner on\\n\"\r\n"
+    ],
+    [
+      5.1e-05,
+      "      vars.%:                                                              <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.9e-05,
+      "\u001b[0m\u001b[36m \u001b[36m<=\u001b[0m \u001b[36mmodule.runner.data.template_file.runners\r\n"
+    ],
+    [
+      7.8e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      9.6e-05,
+      "      rendered:                                                            <computed>\r\n"
+    ],
+    [
+      0.001216,
+      "      template:                                                            \"concurrent = ${runners_concurrent}\\ncheck_interval = 0\\n\\n[[runners]]\\n  name = \\\"${runners_name}\\\"\\n  url = \\\"${gitlab_url}\\\"\\n  token = \\\"${runners_token}\\\"\\n  executor = \\\"docker+machine\\\"\\n  limit = ${runners_limit}\\n  [runners.docker]\\n    tls_verify = false\\n    image = \\\"docker:17.11.0-ce\\\"\\n    privileged = ${runners_privilled}\\n    disable_cache = false\\n    volumes = [\\\"/cache\\\"]\\n    shm_size = 0\\n  [runners.cache]\\n    Type = \\\"s3\\\"\\n    ServerAddress = \\\"s3-${aws_region}.amazonaws.com\\\"\\n    AccessKey = \\\"${bucket_user_access_key}\\\"\\n    SecretKey = \\\"${bucket_user_secret_key}\\\"\\n    BucketName = \\\"${bucket_name}\\\"\\n    Insecure = false\\n  [runners.machine]\\n    IdleCount = ${runners_idle_count}\\n    IdleTime = ${runners_idle_time}\\n    MachineDriver = \\\"amazonec2\\\"\\n    MachineName = \\\"runner-%s\\\"\\n    MachineOptions = [\\\"amazonec2-access-key=${runners_access_key}\\\", \\\"amazonec2-secret-key=${runners_secret_key}\\\", \\\"amaz"
+    ],
+    [
+      5.4e-05,
+      "onec2-instance-type=${runners_instance_type}\\\", \\\"amazonec2-region=${aws_region}\\\", \\\"amazonec2-vpc-id=${runners_vpc_id}\\\", \\\"amazonec2-subnet-id=${runners_subnet_id}\\\", \\\"amazonec2-private-address-only=true\\\", \\\"amazonec2-request-spot-instance=true\\\", \\\"amazonec2-spot-price=${runners_spot_price_bid}\\\", \\\"amazonec2-security-group=${runners_security_group_name}\\\", \\\"amazonec2-tags=environment,${environment}\\\"]\\n    OffPeakTimezone = \\\"\\\"\\n    OffPeakIdleCount = 0\\n    OffPeakIdleTime = 0\\n\"\r\n"
+    ],
+    [
+      1.1e-05,
+      "      vars.%:                                                              <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      9.7e-05,
+      "\u001b[0m\u001b[36m \u001b[36m<=\u001b[0m \u001b[36mmodule.runner.data.template_file.user_data\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      6.8e-05,
+      "      rendered:                                                            <computed>\r\n"
+    ],
+    [
+      0.000298,
+      "      template:                                                            \"#!/bin/bash -ex\\nexec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1\\n\\n\\n# Add current hostname to hosts file\\ntee /etc/hosts <<EOL\\n127.0.0.1   localhost localhost.localdomain `hostname`\\nEOL\\n\\nyum -y update\\n\\n${logging}\\n\\n${gitlab_runner}\\n\"\r\n"
+    ],
+    [
+      8e-05,
+      "      vars.%:                                                              <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      0.000106,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_autoscaling_group.gitlab_runner_instance\r\n"
+    ],
+    [
+      0.000106,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.1e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      availability_zones.#:                                                <computed>\r\n"
+    ],
+    [
+      0.000107,
+      "      default_cooldown:                                                    <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      desired_capacity:                                                    \"1\"\r\n"
+    ],
+    [
+      9.2e-05,
+      "      force_delete:                                                        \"false\"\r\n"
+    ],
+    [
+      4.7e-05,
+      "      health_check_grace_period:                                           \"0\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      health_check_type:                                                   <computed>\r\n"
+    ],
+    [
+      0.00014,
+      "      launch_configuration:                                                \"${aws_launch_configuration.gitlab_runner_instance.name}\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "      load_balancers.#:                                                    <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      max_size:                                                            \"1\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      metrics_granularity:                                                 \"1Minute\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "      min_size:                                                            \"1\"\r\n"
+    ],
+    [
+      0.000104,
+      "      name:                                                                \"ci-as-group\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "      protect_from_scale_in:                                               \"false\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "      tag.#:                                                               \"2\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "      tag.2093282623.key:                                                  \"Environment\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      tag.2093282623.propagate_at_launch:                                  \"true\"\r\n"
+    ],
+    [
+      4.7e-05,
+      "      tag.2093282623.value:                                                \"ci\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      tag.3888051703.key:                                                  \"Name\"\r\n"
+    ],
+    [
+      5.9e-05,
+      "      tag.3888051703.propagate_at_launch:                                  \"true\"\r\n"
+    ],
+    [
+      0.000109,
+      "      tag.3888051703.value:                                                \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "      target_group_arns.#:                                                 <computed>\r\n"
+    ],
+    [
+      9.7e-05,
+      "      vpc_zone_identifier.#:                                               <computed>\r\n"
+    ],
+    [
+      9.1e-05,
+      "      wait_for_capacity_timeout:                                           \"10m\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      4.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_cloudwatch_log_group.environment\r\n"
+    ],
+    [
+      0.000113,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      7e-05,
+      "      name:                                                                \"ci\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      retention_in_days:                                                   \"0\"\r\n"
+    ],
+    [
+      9.1e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      8e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      0.000101,
+      "      tags.Name:                                                           \"ci-runners\"\r\n"
+    ],
+    [
+      1.9e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      0.00012,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_access_key.cache_user\r\n"
+    ],
+    [
+      6.4e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      encrypted_secret:                                                    <computed>\r\n"
+    ],
+    [
+      9.1e-05,
+      "      key_fingerprint:                                                     <computed>\r\n"
+    ],
+    [
+      0.000115,
+      "      secret:                                                              <computed>\r\n"
+    ],
+    [
+      7e-05,
+      "      ses_smtp_password:                                                   <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      status:                                                              <computed>\r\n"
+    ],
+    [
+      7.9e-05,
+      "      user:                                                                \"cache_user\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      0.000107,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_access_key.docker_machine_user\r\n"
+    ],
+    [
+      8.5e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      6.4e-05,
+      "      encrypted_secret:                                                    <computed>\r\n"
+    ],
+    [
+      9.6e-05,
+      "      key_fingerprint:                                                     <computed>\r\n"
+    ],
+    [
+      6.7e-05,
+      "      secret:                                                              <computed>\r\n"
+    ],
+    [
+      5.4e-05,
+      "      ses_smtp_password:                                                   <computed>\r\n"
+    ],
+    [
+      9e-05,
+      "      status:                                                              <computed>\r\n"
+    ],
+    [
+      0.000141,
+      "      user:                                                                \"ci-docker-machine\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      8e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_instance_profile.instance\r\n"
+    ],
+    [
+      8.6e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.7e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      8.6e-05,
+      "      create_date:                                                         <computed>\r\n"
+    ],
+    [
+      9.4e-05,
+      "      name:                                                                \"ci-instance-profile\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "      path:                                                                \"/\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "      role:                                                                \"ci-instance-role\"\r\n"
+    ],
+    [
+      0.000739,
+      "      roles.#:                                                             <computed>\r\n"
+    ],
+    [
+      9.4e-05,
+      "      unique_id:                                                           <computed>\r\n"
+    ],
+    [
+      2.2e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      6.5e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_policy.policy\r\n"
+    ],
+    [
+      0.000103,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      6.9e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      6.3e-05,
+      "      name:                                                                \"ci-policy\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "      path:                                                                \"/\"\r\n"
+    ],
+    [
+      0.00025,
+      "      policy:                                                              \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": \\\"ec2:*\\\",\\n      \\\"Resource\\\": \\\"*\\\"\\n    }\\n  ]\\n}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      1.4e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_policy_attachment.policy\r\n"
+    ],
+    [
+      7.4e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      6.4e-05,
+      "      name:                                                                \"ci-policy\"\r\n"
+    ],
+    [
+      0.000133,
+      "      policy_arn:                                                          \"${aws_iam_policy.policy.arn}\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "      users.#:                                                             \"1\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "      users.3928736059:                                                    \"ci-docker-machine\"\r\n"
+    ],
+    [
+      1.3e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      7.2e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_role.instance\r\n"
+    ],
+    [
+      7.3e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      5.1e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      0.000262,
+      "      assume_role_policy:                                                  \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Principal\\\": {\\n        \\\"Service\\\": \\\"ec2.amazonaws.com\\\"\\n      },\\n      \\\"Action\\\": \\\"sts:AssumeRole\\\"\\n    }\\n  ]\\n}\\n\"\r\n"
+    ],
+    [
+      6e-05,
+      "      create_date:                                                         <computed>\r\n"
+    ],
+    [
+      6.5e-05,
+      "      force_detach_policies:                                               \"false\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      name:                                                                \"ci-instance-role\"\r\n"
+    ],
+    [
+      6.9e-05,
+      "      path:                                                                \"/\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      unique_id:                                                           <computed>\r\n"
+    ],
+    [
+      6.9e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      3.4e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_role_policy.instance\r\n"
+    ],
+    [
+      7.6e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.6e-05,
+      "      name:                                                                \"ci-instance-role\"\r\n"
+    ],
+    [
+      0.000382,
+      "      policy:                                                              \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"allowLoggingToCloudWatch\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": [\\n        \\\"logs:CreateLogGroup\\\",\\n        \\\"logs:CreateLogStream\\\",\\n        \\\"logs:PutLogEvents\\\",\\n        \\\"logs:DescribeLogStreams\\\"\\n      ],\\n      \\\"Resource\\\": [\\n        \\\"arn:aws:logs:*:*:*\\\"\\n      ]\\n    }\\n  ]\\n}\\n\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "      role:                                                                \"ci-instance-role\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_user.cache_user\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.1e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      8.8e-05,
+      "      force_destroy:                                                       \"false\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      name:                                                                \"cache_user\"\r\n"
+    ],
+    [
+      5.3e-05,
+      "      path:                                                                \"/\"\r\n"
+    ],
+    [
+      8.8e-05,
+      "      unique_id:                                                           <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.2e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_iam_user.docker_machine_user\r\n"
+    ],
+    [
+      9.7e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000109,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      0.00014,
+      "      force_destroy:                                                       \"false\"\r\n"
+    ],
+    [
+      0.000111,
+      "      name:                                                                \"ci-docker-machine\"\r\n"
+    ],
+    [
+      7e-05,
+      "      path:                                                                \"/\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "      unique_id:                                                           <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.6e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_key_pair.key\r\n"
+    ],
+    [
+      8.5e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      9.5e-05,
+      "      fingerprint:                                                         <computed>\r\n"
+    ],
+    [
+      8.2e-05,
+      "      key_name:                                                            \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      0.000378,
+      "      public_key:                                                          \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeJTd8C4+ueCI5JBb9X9fG0zpsZWsMnocRgWJh/YP4aWieWjM6eKSuMeKTrxKses+kEngWsCBSntAjFSBu11Amh6/4/mBP1FAW2bDJ/6NUF6NsHfqnuYr7xOENqLEAe4xugYdgc2G2nzzk6FTC6NvISUr8Z1UYIoomDfAa+sU6AqoPM4B82BQvHBAFt5YpUwM7B7fpTx7v8fuYSHRugtHhLHKqLOoYsVrNU3s3diH8J6e8vApXdy9KFUp/x9LqFdKM7B2jksoeplO/0aMWZVjxqWgeEegrhjDUFnM8EoyNDiiPcCKWxC2rhgPBQ1NoygSoKPzww+qoe/CNPSn/DNxZ demo\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_launch_configuration.gitlab_runner_instance\r\n"
+    ],
+    [
+      6.6e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.7e-05,
+      "      associate_public_ip_address:                                         \"false\"\r\n"
+    ],
+    [
+      0.000146,
+      "      ebs_block_device.#:                                                  <computed>\r\n"
+    ],
+    [
+      0.000101,
+      "      ebs_optimized:                                                       <computed>\r\n"
+    ],
+    [
+      6.1e-05,
+      "      enable_monitoring:                                                   \"true\"\r\n"
+    ],
+    [
+      9.6e-05,
+      "      iam_instance_profile:                                                \"ci-instance-profile\"\r\n"
+    ],
+    [
+      0.000101,
+      "      image_id:                                                            \"ami-acd005d5\"\r\n"
+    ],
+    [
+      7e-05,
+      "      instance_type:                                                       \"t2.micro\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      key_name:                                                            \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      9.1e-05,
+      "      name:                                                                <computed>\r\n"
+    ],
+    [
+      9.2e-05,
+      "      root_block_device.#:                                                 <computed>\r\n"
+    ],
+    [
+      6.4e-05,
+      "      security_groups.#:                                                   <computed>\r\n"
+    ],
+    [
+      9.9e-05,
+      "      user_data:                                                           \"656bca31b5f7cea3181e684bfea743272dcaefca\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      9.2e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_s3_bucket.build_cache\r\n"
+    ],
+    [
+      0.00012,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      6.2e-05,
+      "      acceleration_status:                                                 <computed>\r\n"
+    ],
+    [
+      9.4e-05,
+      "      acl:                                                                 \"private\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "      arn:                                                                 <computed>\r\n"
+    ],
+    [
+      0.000102,
+      "      bucket:                                                              \"736819507440-gitlab-runner-cache\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      bucket_domain_name:                                                  <computed>\r\n"
+    ],
+    [
+      8.1e-05,
+      "      force_destroy:                                                       \"true\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "      hosted_zone_id:                                                      <computed>\r\n"
+    ],
+    [
+      6.5e-05,
+      "      lifecycle_rule.#:                                                    \"1\"\r\n"
+    ],
+    [
+      8.6e-05,
+      "      lifecycle_rule.0.enabled:                                            \"true\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "      lifecycle_rule.0.expiration.#:                                       \"1\"\r\n"
+    ],
+    [
+      8e-05,
+      "      lifecycle_rule.0.expiration.1918342522.date:                         \"\"\r\n"
+    ],
+    [
+      7e-05,
+      "      lifecycle_rule.0.expiration.1918342522.days:                         \"1\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      lifecycle_rule.0.expiration.1918342522.expired_object_delete_marker: \"\"\r\n"
+    ],
+    [
+      9.3e-05,
+      "      lifecycle_rule.0.id:                                                 \"clear\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      lifecycle_rule.0.prefix:                                             \"runner/\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      region:                                                              <computed>\r\n"
+    ],
+    [
+      8.8e-05,
+      "      request_payer:                                                       <computed>\r\n"
+    ],
+    [
+      7.9e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      tags.Name:                                                           \"Bucket for runner cache\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      versioning.#:                                                        \"1\"\r\n"
+    ],
+    [
+      8.6e-05,
+      "      versioning.0.enabled:                                                \"false\"\r\n"
+    ],
+    [
+      9e-05,
+      "      versioning.0.mfa_delete:                                             \"false\"\r\n"
+    ],
+    [
+      7e-05,
+      "      website_domain:                                                      <computed>\r\n"
+    ],
+    [
+      9.4e-05,
+      "      website_endpoint:                                                    <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_s3_bucket_policy.bucket-policy\r\n"
+    ],
+    [
+      0.0001,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      9.4e-05,
+      "      bucket:                                                              \"${aws_s3_bucket.build_cache.id}\"\r\n"
+    ],
+    [
+      0.000161,
+      "      policy:                                                              \"${data.aws_iam_policy_document.bucket-policy-doc.json}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_security_group.docker_machine\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.2e-05,
+      "      description:                                                         \"Managed by Terraform\"\r\n"
+    ],
+    [
+      8.8e-05,
+      "      egress.#:                                                            <computed>\r\n"
+    ],
+    [
+      0.000188,
+      "      ingress.#:                                                           <computed>\r\n"
+    ],
+    [
+      9.3e-05,
+      "      name:                                                                <computed>\r\n"
+    ],
+    [
+      8.8e-05,
+      "      name_prefix:                                                         \"ci-docker-machine\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      owner_id:                                                            <computed>\r\n"
+    ],
+    [
+      8.5e-05,
+      "      revoke_rules_on_delete:                                              \"false\"\r\n"
+    ],
+    [
+      6e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      tags.Name:                                                           \"ci-gitlab-sg\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      vpc_id:                                                              \"${var.vpc_id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.8e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_security_group.runner\r\n"
+    ],
+    [
+      7.7e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.8e-05,
+      "      description:                                                         \"Managed by Terraform\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "      egress.#:                                                            \"1\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "      egress.482069346.cidr_blocks.#:                                      \"1\"\r\n"
+    ],
+    [
+      9e-05,
+      "      egress.482069346.cidr_blocks.0:                                      \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      5.5e-05,
+      "      egress.482069346.description:                                        \"\"\r\n"
+    ],
+    [
+      7e-05,
+      "      egress.482069346.from_port:                                          \"0\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      egress.482069346.ipv6_cidr_blocks.#:                                 \"0\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "      egress.482069346.prefix_list_ids.#:                                  \"0\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      egress.482069346.protocol:                                           \"-1\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      egress.482069346.security_groups.#:                                  \"0\"\r\n"
+    ],
+    [
+      8.8e-05,
+      "      egress.482069346.self:                                               \"false\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "      egress.482069346.to_port:                                            \"0\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      ingress.#:                                                           \"1\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      ingress.2541437006.cidr_blocks.#:                                    \"1\"\r\n"
+    ],
+    [
+      0.00011,
+      "      ingress.2541437006.cidr_blocks.0:                                    \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      ingress.2541437006.description:                                      \"\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "      ingress.2541437006.from_port:                                        \"22\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "      ingress.2541437006.ipv6_cidr_blocks.#:                               \"0\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      ingress.2541437006.protocol:                                         \"tcp\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      ingress.2541437006.security_groups.#:                                \"0\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "      ingress.2541437006.self:                                             \"false\"\r\n"
+    ],
+    [
+      6e-05,
+      "      ingress.2541437006.to_port:                                          \"22\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "      name:                                                                <computed>\r\n"
+    ],
+    [
+      0.000106,
+      "      name_prefix:                                                         \"ci-security-group\"\r\n"
+    ],
+    [
+      9.4e-05,
+      "      owner_id:                                                            <computed>\r\n"
+    ],
+    [
+      6.4e-05,
+      "      revoke_rules_on_delete:                                              \"false\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      tags.Name:                                                           \"ci-runner-sg\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "      vpc_id:                                                              \"${var.vpc_id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      9.3e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_security_group_rule.docker\r\n"
+    ],
+    [
+      6.9e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.7e-05,
+      "      cidr_blocks.#:                                                       \"1\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "      cidr_blocks.0:                                                       \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      from_port:                                                           \"2376\"\r\n"
+    ],
+    [
+      0.000118,
+      "      protocol:                                                            \"tcp\"\r\n"
+    ],
+    [
+      0.000177,
+      "      security_group_id:                                                   \"${aws_security_group.docker_machine.id}\"\r\n"
+    ],
+    [
+      0.000112,
+      "      self:                                                                \"false\"\r\n"
+    ],
+    [
+      0.000103,
+      "      source_security_group_id:                                            <computed>\r\n"
+    ],
+    [
+      0.000107,
+      "      to_port:                                                             \"2376\"\r\n"
+    ],
+    [
+      0.000115,
+      "      type:                                                                \"ingress\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      8.7e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_security_group_rule.out_all\r\n"
+    ],
+    [
+      0.000151,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.5e-05,
+      "      cidr_blocks.#:                                                       \"1\"\r\n"
+    ],
+    [
+      0.00013,
+      "      cidr_blocks.0:                                                       \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      9.4e-05,
+      "      from_port:                                                           \"0\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "      protocol:                                                            \"-1\"\r\n"
+    ],
+    [
+      0.000116,
+      "      security_group_id:                                                   \"${aws_security_group.docker_machine.id}\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "      self:                                                                \"false\"\r\n"
+    ],
+    [
+      0.000114,
+      "      source_security_group_id:                                            <computed>\r\n"
+    ],
+    [
+      0.001629,
+      "      to_port:                                                             \"65535\"\r\n      type:                                                                \"egress\"\r\n\u001b[0m\r\n\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.runner.aws_security_group_rule.ssh\r\n\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000157,
+      "      cidr_blocks.#:                                                       \"1\"\r\n"
+    ],
+    [
+      0.000121,
+      "      cidr_blocks.0:                                                       \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      0.000136,
+      "      from_port:                                                           \"22\"\r\n"
+    ],
+    [
+      9.4e-05,
+      "      protocol:                                                            \"tcp\"\r\n"
+    ],
+    [
+      0.000134,
+      "      security_group_id:                                                   \"${aws_security_group.docker_machine.id}\"\r\n"
+    ],
+    [
+      5.1e-05,
+      "      self:                                                                \"false\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      source_security_group_id:                                            <computed>\r\n"
+    ],
+    [
+      5.9e-05,
+      "      to_port:                                                             \"22\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "      type:                                                                \"ingress\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.2e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_eip.nat\r\n"
+    ],
+    [
+      7.7e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.6e-05,
+      "      allocation_id:                                                       <computed>\r\n"
+    ],
+    [
+      5.8e-05,
+      "      association_id:                                                      <computed>\r\n"
+    ],
+    [
+      6.3e-05,
+      "      domain:                                                              <computed>\r\n"
+    ],
+    [
+      6.3e-05,
+      "      instance:                                                            <computed>\r\n"
+    ],
+    [
+      8.6e-05,
+      "      network_interface:                                                   <computed>\r\n"
+    ],
+    [
+      8.2e-05,
+      "      private_ip:                                                          <computed>\r\n"
+    ],
+    [
+      0.006634,
+      "      public_ip:                                                           <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      vpc:                                                                 \"true\"\r\n\u001b[0m\r\n\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_internet_gateway.internet_gateway\r\n\u001b[0m      id:                                                                  <computed>\r\n      tags.%:                                                              \"2\"\r\n      tags.Environment:                                                    \"ci\"\r\n      tags.Name:                                                           \"ci-internet-gateway\"\r\n      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n\u001b[0m\r\n\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_nat_gateway.nat\r\n\u001b[0m      id:                                                                  <computed>\r\n      allocation_id:                                                       \"${aws_eip.nat.id}\"\r\n      network_interface_id:                                                <computed>\r\n      private_ip:                                                        "
+    ],
+    [
+      3.2e-05,
+      "  <computed>\r\n      public_ip:                                                           <computed>\r\n"
+    ],
+    [
+      0.000121,
+      "      subnet_id:                                                           \"${aws_subnet.public_subnet.0.id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_route53_zone.local\r\n"
+    ],
+    [
+      9.8e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000105,
+      "      comment:                                                             \"ci - route53 - local hosted zone\"\r\n"
+    ],
+    [
+      0.0001,
+      "      force_destroy:                                                       \"false\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "      name:                                                                \"ci.local\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "      name_servers.#:                                                      <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      9e-05,
+      "      tags.Name:                                                           \"ci-route53-private-hosted-zone\"\r\n"
+    ],
+    [
+      0.000217,
+      "      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n      vpc_region:                                                          <computed>\r\n      zone_id:                                                             <computed>\r\n"
+    ],
+    [
+      1.9e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      5.7e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_route_table.private_routetable\r\n"
+    ],
+    [
+      6.2e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000134,
+      "      propagating_vgws.#:                                                  <computed>\r\n"
+    ],
+    [
+      5.4e-05,
+      "      route.#:                                                             \"1\"\r\n"
+    ],
+    [
+      8e-05,
+      "      route.~2242469439.cidr_block:                                        \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      0.000103,
+      "      route.~2242469439.egress_only_gateway_id:                            \"\"\r\n"
+    ],
+    [
+      9.3e-05,
+      "      route.~2242469439.gateway_id:                                        \"\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "      route.~2242469439.instance_id:                                       \"\"\r\n"
+    ],
+    [
+      0.000135,
+      "      route.~2242469439.ipv6_cidr_block:                                   \"\"\r\n"
+    ],
+    [
+      0.000106,
+      "      route.~2242469439.nat_gateway_id:                                    \"${aws_nat_gateway.nat.id}\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      route.~2242469439.network_interface_id:                              \"\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "      route.~2242469439.vpc_peering_connection_id:                         \"\"\r\n"
+    ],
+    [
+      0.000101,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      0.000115,
+      "      tags.Name:                                                           \"ci-private-routetable\"\r\n"
+    ],
+    [
+      9.6e-05,
+      "      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      6.1e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_route_table.public_routetable\r\n"
+    ],
+    [
+      9.5e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      7.9e-05,
+      "      propagating_vgws.#:                                                  <computed>\r\n"
+    ],
+    [
+      8.1e-05,
+      "      route.#:                                                             \"1\"\r\n"
+    ],
+    [
+      0.000115,
+      "      route.~1734352590.cidr_block:                                        \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      4.8e-05,
+      "      route.~1734352590.egress_only_gateway_id:                            \"\"\r\n"
+    ],
+    [
+      0.000179,
+      "      route.~1734352590.gateway_id:                                        \"${aws_internet_gateway.internet_gateway.id}\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      route.~1734352590.instance_id:                                       \"\"\r\n"
+    ],
+    [
+      0.000276,
+      "      route.~1734352590.ipv6_cidr_block:                                   \"\"\r\n"
+    ],
+    [
+      5.4e-05,
+      "      route.~1734352590.nat_gateway_id:                                    \"\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "      route.~1734352590.network_interface_id:                              \"\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      route.~1734352590.vpc_peering_connection_id:                         \"\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      0.000151,
+      "      tags.Name:                                                           \"ci-public-routetable\"\r\n"
+    ],
+    [
+      0.000113,
+      "      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.7e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_route_table_association.private_routing_table\r\n"
+    ],
+    [
+      7.8e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000123,
+      "      route_table_id:                                                      \"${aws_route_table.private_routetable.id}\"\r\n"
+    ],
+    [
+      0.000115,
+      "      subnet_id:                                                           \"${element(aws_subnet.private_subnet.*.id, count.index)}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      9.5e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_route_table_association.public_routing_table\r\n"
+    ],
+    [
+      7.3e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000131,
+      "      route_table_id:                                                      \"${aws_route_table.public_routetable.id}\"\r\n"
+    ],
+    [
+      0.000118,
+      "      subnet_id:                                                           \"${element(aws_subnet.public_subnet.*.id, count.index)}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      6.1e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_subnet.private_subnet\r\n"
+    ],
+    [
+      8.8e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.2e-05,
+      "      assign_ipv6_address_on_creation:                                     \"false\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "      availability_zone:                                                   \"eu-west-1a\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "      cidr_block:                                                          \"10.0.1.0/24\"\r\n"
+    ],
+    [
+      9.6e-05,
+      "      ipv6_cidr_block:                                                     <computed>\r\n"
+    ],
+    [
+      7.8e-05,
+      "      ipv6_cidr_block_association_id:                                      <computed>\r\n"
+    ],
+    [
+      7.9e-05,
+      "      map_public_ip_on_launch:                                             \"false\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      9.1e-05,
+      "      tags.Name:                                                           \"ci-eu-west-1a-private\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n"
+    ],
+    [
+      1.3e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      6.3e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_subnet.public_subnet\r\n"
+    ],
+    [
+      7.7e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      8.4e-05,
+      "      assign_ipv6_address_on_creation:                                     \"false\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      availability_zone:                                                   \"eu-west-1a\"\r\n"
+    ],
+    [
+      0.000108,
+      "      cidr_block:                                                          \"10.0.0.0/24\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      ipv6_cidr_block:                                                     <computed>\r\n"
+    ],
+    [
+      7.8e-05,
+      "      ipv6_cidr_block_association_id:                                      <computed>\r\n"
+    ],
+    [
+      9.2e-05,
+      "      map_public_ip_on_launch:                                             \"false\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      0.000101,
+      "      tags.Name:                                                           \"ci-eu-west-1a-public\"\r\n"
+    ],
+    [
+      9.1e-05,
+      "      vpc_id:                                                              \"${aws_vpc.vpc.id}\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.3e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32mmodule.vpc.aws_vpc.vpc\r\n"
+    ],
+    [
+      8.9e-05,
+      "\u001b[0m      id:                                                                  <computed>\r\n"
+    ],
+    [
+      0.000103,
+      "      assign_generated_ipv6_cidr_block:                                    \"false\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      cidr_block:                                                          \"10.0.0.0/16\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "      default_network_acl_id:                                              <computed>\r\n"
+    ],
+    [
+      8.3e-05,
+      "      default_route_table_id:                                              <computed>\r\n"
+    ],
+    [
+      9.5e-05,
+      "      default_security_group_id:                                           <computed>\r\n"
+    ],
+    [
+      8.4e-05,
+      "      dhcp_options_id:                                                     <computed>\r\n"
+    ],
+    [
+      7.9e-05,
+      "      enable_classiclink:                                                  <computed>\r\n"
+    ],
+    [
+      6.6e-05,
+      "      enable_classiclink_dns_support:                                      <computed>\r\n"
+    ],
+    [
+      7.2e-05,
+      "      enable_dns_hostnames:                                                \"true\"\r\n"
+    ],
+    [
+      0.000102,
+      "      enable_dns_support:                                                  \"true\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "      instance_tenancy:                                                    <computed>\r\n"
+    ],
+    [
+      9.3e-05,
+      "      ipv6_association_id:                                                 <computed>\r\n"
+    ],
+    [
+      0.000113,
+      "      ipv6_cidr_block:                                                     <computed>\r\n"
+    ],
+    [
+      6.3e-05,
+      "      main_route_table_id:                                                 <computed>\r\n"
+    ],
+    [
+      9.3e-05,
+      "      tags.%:                                                              \"2\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      tags.Environment:                                                    \"ci\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "      tags.Name:                                                           \"ci-vpc\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      3.1e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      4.8e-05,
+      "\u001b[0m\u001b[1mPlan:\u001b[0m 31 to add, 0 to change, 0 to destroy.\u001b[0m\r\n\r\n"
+    ],
+    [
+      4.9e-05,
+      "\u001b[0m\u001b[1mDo you want to perform these actions?\u001b[0m\r\n"
+    ],
+    [
+      5.2e-05,
+      "  Terraform will perform the actions described above.\r\n"
+    ],
+    [
+      5.1e-05,
+      "  Only 'yes' will be accepted to approve.\r\n\r\n"
+    ],
+    [
+      0.100119,
+      "  \u001b[1mEnter a value:\u001b[0m \u001b[0m"
+    ],
+    [
+      2.036335,
+      "y"
+    ],
+    [
+      0.76792,
+      "e"
+    ],
+    [
+      0.215697,
+      "s"
+    ],
+    [
+      0.104145,
+      "\r\n"
+    ],
+    [
+      0.00017,
+      "\r\n"
+    ],
+    [
+      1.448549,
+      "\u001b[0m\u001b[1mmodule.runner.aws_cloudwatch_log_group.environment: Creating...\u001b[0m\r\n  arn:               \"\" => \"<computed>\"\r\n  name:              \"\" => \"ci\"\r\n"
+    ],
+    [
+      5.8e-05,
+      "  retention_in_days: \"\" => \"0\"\r\n  tags.%:            \"\" => \"2\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "  tags.Environment:  \"\" => \"ci\"\r\n"
+    ],
+    [
+      0.000322,
+      "  tags.Name:         \"\" => \"ci-runners\"\u001b[0m\r\n\u001b[0m\u001b[1mmodule.runner.aws_iam_user.cache_user: Creating...\u001b[0m\r\n  arn:           \"\" => \"<computed>\"\r\n  force_destroy: \"\" => \"false\"\r\n  name:          \"\" => \"cache_user\"\r\n"
+    ],
+    [
+      3.7e-05,
+      "  path:          \"\" => \"/\"\r\n"
+    ],
+    [
+      0.000226,
+      "  unique_id:     \"\" => \"<computed>\"\u001b[0m\r\n\u001b[0m\u001b[1mmodule.runner.aws_iam_user.docker_machine_user: Creating...\u001b[0m\r\n  arn:           \"\" => \"<computed>\"\r\n  force_destroy: \"\" => \"false\"\r\n"
+    ],
+    [
+      8.3e-05,
+      "  name:          \"\" => \"ci-docker-machine\"\r\n"
+    ],
+    [
+      2.7e-05,
+      "  path:          \"\" => \"/\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "  unique_id:     \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      0.000111,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_role.instance: Creating...\u001b[0m\r\n"
+    ],
+    [
+      2.7e-05,
+      "  arn:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000318,
+      "  assume_role_policy:    \"\" => \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Principal\\\": {\\n        \\\"Service\\\": \\\"ec2.amazonaws.com\\\"\\n      },\\n      \\\"Action\\\": \\\"sts:AssumeRole\\\"\\n    }\\n  ]\\n}\\n\"\r\n"
+    ],
+    [
+      2.2e-05,
+      "  create_date:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8e-05,
+      "  force_detach_policies: \"\" => \"false\"\r\n"
+    ],
+    [
+      8.6e-05,
+      "  name:                  \"\" => \"ci-instance-role\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  path:                  \"\" => \"/\"\r\n"
+    ],
+    [
+      2e-05,
+      "  unique_id:             \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      7.1e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_policy.policy: Creating...\u001b[0m\r\n"
+    ],
+    [
+      4.4e-05,
+      "  arn:    \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      2.3e-05,
+      "  name:   \"\" => \"ci-policy\"\r\n  path:   \"\" => \"/\"\r\n"
+    ],
+    [
+      0.000235,
+      "  policy: \"\" => \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": \\\"ec2:*\\\",\\n      \\\"Resource\\\": \\\"*\\\"\\n    }\\n  ]\\n}\"\u001b[0m\r\n"
+    ],
+    [
+      5.8e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_key_pair.key: Creating...\u001b[0m\r\n"
+    ],
+    [
+      6.6e-05,
+      "  fingerprint: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      3.4e-05,
+      "  key_name:    \"\" => \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      0.000512,
+      "  public_key:  \"\" => \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDeJTd8C4+ueCI5JBb9X9fG0zpsZWsMnocRgWJh/YP4aWieWjM6eKSuMeKTrxKses+kEngWsCBSntAjFSBu11Amh6/4/mBP1FAW2bDJ/6NUF6NsHfqnuYr7xOENqLEAe4xugYdgc2G2nzzk6FTC6NvISUr8Z1UYIoomDfAa+sU6AqoPM4B82BQvHBAFt5YpUwM7B7fpTx7v8fuYSHRugtHhLHKqLOoYsVrNU3s3diH8J6e8vApXdy9KFUp/x9LqFdKM7B2jksoeplO/0aMWZVjxqWgeEegrhjDUFnM8EoyNDiiPcCKWxC2rhgPBQ1NoygSoKPzww+qoe/CNPSn/DNxZ demo\"\u001b[0m\r\n"
+    ],
+    [
+      6.2e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_s3_bucket.build_cache: Creating...\u001b[0m\r\n"
+    ],
+    [
+      7.8e-05,
+      "  acceleration_status:                                                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.8e-05,
+      "  acl:                                                                 \"\" => \"private\"\r\n"
+    ],
+    [
+      0.0001,
+      "  arn:                                                                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000108,
+      "  bucket:                                                              \"\" => \"736819507440-gitlab-runner-cache\"\r\n"
+    ],
+    [
+      0.000116,
+      "  bucket_domain_name:                                                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      4.6e-05,
+      "  force_destroy:                                                       \"\" => \"true\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  hosted_zone_id:                                                      \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "  lifecycle_rule.#:                                                    \"\" => \"1\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "  lifecycle_rule.0.enabled:                                            \"\" => \"true\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "  lifecycle_rule.0.expiration.#:                                       \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000112,
+      "  lifecycle_rule.0.expiration.1918342522.date:                         \"\" => \"\"\r\n"
+    ],
+    [
+      5.1e-05,
+      "  lifecycle_rule.0.expiration.1918342522.days:                         \"\" => \"1\"\r\n"
+    ],
+    [
+      5.8e-05,
+      "  lifecycle_rule.0.expiration.1918342522.expired_object_delete_marker: \"\" => \"\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "  lifecycle_rule.0.id:                                                 \"\" => \"clear\"\r\n"
+    ],
+    [
+      0.000117,
+      "  lifecycle_rule.0.prefix:                                             \"\" => \"runner/\"\r\n"
+    ],
+    [
+      5.3e-05,
+      "  region:                                                              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "  request_payer:                                                       \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "  tags.%:                                                              \"\" => \"2\"\r\n"
+    ],
+    [
+      9.6e-05,
+      "  tags.Environment:                                                    \"\" => \"ci\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "  tags.Name:                                                           \"\" => \"Bucket for runner cache\"\r\n"
+    ],
+    [
+      8e-05,
+      "  versioning.#:                                                        \"\" => \"1\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "  versioning.0.enabled:                                                \"\" => \"false\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  versioning.0.mfa_delete:                                             \"\" => \"false\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "  website_domain:                                                      \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  website_endpoint:                                                    \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      0.455763,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_user.cache_user: Creation complete after 0s (ID: cache_user)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.004714,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_user.docker_machine_user: Creation complete after 1s (ID: ci-docker-machine)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.001828,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_access_key.cache_user: Creating...\u001b[0m\r\n"
+    ],
+    [
+      4.5e-05,
+      "  encrypted_secret:  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      3.5e-05,
+      "  key_fingerprint:   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000114,
+      "  secret:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.5e-05,
+      "  ses_smtp_password: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000108,
+      "  status:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.9e-05,
+      "  user:              \"\" => \"cache_user\"\u001b[0m\r\n"
+    ],
+    [
+      0.000131,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_access_key.docker_machine_user: Creating...\u001b[0m\r\n"
+    ],
+    [
+      7.3e-05,
+      "  encrypted_secret:  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.0001,
+      "  key_fingerprint:   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      1.6e-05,
+      "  secret:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.3e-05,
+      "  ses_smtp_password: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      2.8e-05,
+      "  status:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.1e-05,
+      "  user:              \"\" => \"ci-docker-machine\"\u001b[0m\r\n"
+    ],
+    [
+      0.010665,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_policy.policy: Creation complete after 1s (ID: arn:aws:iam::736819507440:policy/ci-policy)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.003108,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_policy_attachment.policy: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.6e-05,
+      "  name:             \"\" => \"ci-policy\"\r\n"
+    ],
+    [
+      0.000173,
+      "  policy_arn:       \"\" => \"arn:aws:iam::736819507440:policy/ci-policy\"\r\n"
+    ],
+    [
+      3.3e-05,
+      "  users.#:          \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000126,
+      "  users.3928736059: \"\" => \"ci-docker-machine\"\u001b[0m\r\n"
+    ],
+    [
+      0.400913,
+      "\u001b[0m\u001b[1mmodule.runner.aws_cloudwatch_log_group.environment: Creation complete after 1s (ID: ci)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.008405,
+      "\u001b[0m\u001b[1mmodule.runner.aws_key_pair.key: Creation complete after 1s (ID: ci-gitlab-runner)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.039404,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_role.instance: Creation complete after 1s (ID: ci-instance-role)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.002268,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_role_policy.instance: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.2e-05,
+      "  name:   \"\" => \"ci-instance-role\"\r\n"
+    ],
+    [
+      0.000495,
+      "  policy: \"\" => \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"allowLoggingToCloudWatch\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": [\\n        \\\"logs:CreateLogGroup\\\",\\n        \\\"logs:CreateLogStream\\\",\\n        \\\"logs:PutLogEvents\\\",\\n        \\\"logs:DescribeLogStreams\\\"\\n      ],\\n      \\\"Resource\\\": [\\n        \\\"arn:aws:logs:*:*:*\\\"\\n      ]\\n    }\\n  ]\\n}\\n\"\r\n"
+    ],
+    [
+      2.3e-05,
+      "  role:   \"\" => \"ci-instance-role\"\u001b[0m\r\n"
+    ],
+    [
+      0.000103,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_instance_profile.instance: Creating...\u001b[0m\r\n  arn:         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      3.9e-05,
+      "  create_date: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "  name:        \"\" => \"ci-instance-profile\"\r\n"
+    ],
+    [
+      4.2e-05,
+      "  path:        \"\" => \"/\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "  role:        \"\" => \"ci-instance-role\"\r\n"
+    ],
+    [
+      2.4e-05,
+      "  roles.#:     \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      3.9e-05,
+      "  unique_id:   \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      0.008858,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_access_key.cache_user: Creation complete after 0s (ID: AKIAJR525YVKZKBEKP5Q)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.455397,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_role_policy.instance: Creation complete after 0s (ID: ci-instance-role:ci-instance-role)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.017689,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_eip.nat: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.6e-05,
+      "  allocation_id:     \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      1.8e-05,
+      "  association_id:    \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  domain:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "  instance:          \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "  network_interface: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "  private_ip:        \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.1e-05,
+      "  public_ip:         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000104,
+      "  vpc:               \"\" => \"true\"\u001b[0m\r\n"
+    ],
+    [
+      6.7e-05,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_vpc.vpc: Creating...\u001b[0m\r\n"
+    ],
+    [
+      7.8e-05,
+      "  assign_generated_ipv6_cidr_block: \"\" => \"false\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "  cidr_block:                       \"\" => \"10.0.0.0/16\"\r\n"
+    ],
+    [
+      2.6e-05,
+      "  default_network_acl_id:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.3e-05,
+      "  default_route_table_id:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.1e-05,
+      "  default_security_group_id:        \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "  dhcp_options_id:                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "  enable_classiclink:               \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "  enable_classiclink_dns_support:   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  enable_dns_hostnames:             \"\" => \"true\"\r\n"
+    ],
+    [
+      6.9e-05,
+      "  enable_dns_support:               \"\" => \"true\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "  instance_tenancy:                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.8e-05,
+      "  ipv6_association_id:              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000102,
+      "  ipv6_cidr_block:                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "  main_route_table_id:              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.1e-05,
+      "  tags.%:                           \"\" => \"2\"\r\n"
+    ],
+    [
+      5.1e-05,
+      "  tags.Environment:                 \"\" => \"ci\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "  tags.Name:                        \"\" => \"ci-vpc\"\u001b[0m\r\n"
+    ],
+    [
+      0.003227,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_access_key.docker_machine_user: Creation complete after 0s (ID: AKIAJS47DIIWWCI3JECA)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.414251,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_policy_attachment.policy: Creation complete after 1s (ID: ci-policy)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.022224,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_eip.nat: Creation complete after 1s (ID: eipalloc-9f19eaa2)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.415467,
+      "\u001b[0m\u001b[1mmodule.runner.aws_iam_instance_profile.instance: Creation complete after 1s (ID: ci-instance-profile)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.895676,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_vpc.vpc: Creation complete after 3s (ID: vpc-78cac21f)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.007514,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_internet_gateway.internet_gateway: Creating...\u001b[0m\r\n  tags.%:           \"0\" => \"2\"\r\n"
+    ],
+    [
+      4.5e-05,
+      "  tags.Environment: \"\" => \"ci\"\r\n"
+    ],
+    [
+      0.000269,
+      "  tags.Name:        \"\" => \"ci-internet-gateway\"\r\n  vpc_id:           \"\" => \"vpc-78cac21f\"\u001b[0m\r\n\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.00015,
+      "  comment:          \"\" => \"ci - route53 - local hosted zone\"\r\n"
+    ],
+    [
+      0.000374,
+      "  force_destroy:    \"\" => \"false\"\r\n  name:             \"\" => \"ci.local\"\r\n  name_servers.#:   \"\" => \"<computed>\"\r\n  tags.%:           \"\" => \"2\"\r\n  tags.Environment: \"\" => \"ci\"\r\n"
+    ],
+    [
+      9.4e-05,
+      "  tags.Name:        \"\" => \"ci-route53-private-hosted-zone\"\r\n"
+    ],
+    [
+      0.000127,
+      "  vpc_id:           \"\" => \"vpc-78cac21f\"\r\n  vpc_region:       \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.9e-05,
+      "  zone_id:          \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      8.3e-05,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_subnet.public_subnet: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.000123,
+      "  assign_ipv6_address_on_creation: \"\" => \"false\"\r\n"
+    ],
+    [
+      0.000132,
+      "  availability_zone:               \"\" => \"eu-west-1a\"\r\n"
+    ],
+    [
+      2.2e-05,
+      "  cidr_block:                      \"\" => \"10.0.0.0/24\"\r\n"
+    ],
+    [
+      0.000117,
+      "  ipv6_cidr_block:                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000111,
+      "  ipv6_cidr_block_association_id:  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  map_public_ip_on_launch:         \"\" => \"false\"\r\n"
+    ],
+    [
+      0.000101,
+      "  tags.%:                          \"\" => \"2\"\r\n"
+    ],
+    [
+      5.5e-05,
+      "  tags.Environment:                \"\" => \"ci\"\r\n"
+    ],
+    [
+      4.6e-05,
+      "  tags.Name:                       \"\" => \"ci-eu-west-1a-public\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "  vpc_id:                          \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      9.5e-05,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_subnet.private_subnet: Creating...\u001b[0m\r\n"
+    ],
+    [
+      2.5e-05,
+      "  assign_ipv6_address_on_creation: \"\" => \"false\"\r\n"
+    ],
+    [
+      6e-05,
+      "  availability_zone:               \"\" => \"eu-west-1a\"\r\n"
+    ],
+    [
+      7.7e-05,
+      "  cidr_block:                      \"\" => \"10.0.1.0/24\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "  ipv6_cidr_block:                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.9e-05,
+      "  ipv6_cidr_block_association_id:  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  map_public_ip_on_launch:         \"\" => \"false\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "  tags.%:                          \"\" => \"2\"\r\n"
+    ],
+    [
+      0.000106,
+      "  tags.Environment:                \"\" => \"ci\"\r\n"
+    ],
+    [
+      9.9e-05,
+      "  tags.Name:                       \"\" => \"ci-eu-west-1a-private\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "  vpc_id:                          \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      6.4e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group.docker_machine: Creating...\u001b[0m\r\n"
+    ],
+    [
+      9.4e-05,
+      "  description:            \"\" => \"Managed by Terraform\"\r\n"
+    ],
+    [
+      9.8e-05,
+      "  egress.#:               \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.3e-05,
+      "  ingress.#:              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.9e-05,
+      "  name:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  name_prefix:            \"\" => \"ci-docker-machine\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "  owner_id:               \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      4.4e-05,
+      "  revoke_rules_on_delete: \"\" => \"false\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "  tags.%:                 \"\" => \"2\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "  tags.Environment:       \"\" => \"ci\"\r\n"
+    ],
+    [
+      4.5e-05,
+      "  tags.Name:              \"\" => \"ci-gitlab-sg\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "  vpc_id:                 \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group.runner: Creating...\u001b[0m\r\n"
+    ],
+    [
+      8.5e-05,
+      "  description:                           \"\" => \"Managed by Terraform\"\r\n"
+    ],
+    [
+      3.6e-05,
+      "  egress.#:                              \"\" => \"1\"\r\n"
+    ],
+    [
+      9e-05,
+      "  egress.482069346.cidr_blocks.#:        \"\" => \"1\"\r\n"
+    ],
+    [
+      6.8e-05,
+      "  egress.482069346.cidr_blocks.0:        \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      4.4e-05,
+      "  egress.482069346.description:          \"\" => \"\"\r\n"
+    ],
+    [
+      5.8e-05,
+      "  egress.482069346.from_port:            \"\" => \"0\"\r\n"
+    ],
+    [
+      6.8e-05,
+      "  egress.482069346.ipv6_cidr_blocks.#:   \"\" => \"0\"\r\n"
+    ],
+    [
+      1.9e-05,
+      "  egress.482069346.prefix_list_ids.#:    \"\" => \"0\"\r\n"
+    ],
+    [
+      6e-05,
+      "  egress.482069346.protocol:             \"\" => \"-1\"\r\n"
+    ],
+    [
+      0.000103,
+      "  egress.482069346.security_groups.#:    \"\" => \"0\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "  egress.482069346.self:                 \"\" => \"false\"\r\n"
+    ],
+    [
+      2e-05,
+      "  egress.482069346.to_port:              \"\" => \"0\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "  ingress.#:                             \"\" => \"1\"\r\n"
+    ],
+    [
+      5.4e-05,
+      "  ingress.2541437006.cidr_blocks.#:      \"\" => \"1\"\r\n"
+    ],
+    [
+      4.9e-05,
+      "  ingress.2541437006.cidr_blocks.0:      \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "  ingress.2541437006.description:        \"\" => \"\"\r\n"
+    ],
+    [
+      5.4e-05,
+      "  ingress.2541437006.from_port:          \"\" => \"22\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  ingress.2541437006.ipv6_cidr_blocks.#: \"\" => \"0\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "  ingress.2541437006.protocol:           \"\" => \"tcp\"\r\n"
+    ],
+    [
+      3.2e-05,
+      "  ingress.2541437006.security_groups.#:  \"\" => \"0\"\r\n"
+    ],
+    [
+      4.8e-05,
+      "  ingress.2541437006.self:               \"\" => \"false\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "  ingress.2541437006.to_port:            \"\" => \"22\"\r\n"
+    ],
+    [
+      3.9e-05,
+      "  name:                                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "  name_prefix:                           \"\" => \"ci-security-group\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  owner_id:                              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      2.4e-05,
+      "  revoke_rules_on_delete:                \"\" => \"false\"\r\n"
+    ],
+    [
+      6.7e-05,
+      "  tags.%:                                \"\" => \"2\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "  tags.Environment:                      \"\" => \"ci\"\r\n"
+    ],
+    [
+      5.3e-05,
+      "  tags.Name:                             \"\" => \"ci-runner-sg\"\r\n"
+    ],
+    [
+      6.7e-05,
+      "  vpc_id:                                \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      0.855854,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_internet_gateway.internet_gateway: Creation complete after 1s (ID: igw-2c24e64b)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.00901,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table.public_routetable: Creating...\u001b[0m\r\n  propagating_vgws.#:                         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      3.7e-05,
+      "  route.#:                                    \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000391,
+      "  route.1954215009.cidr_block:                \"\" => \"0.0.0.0/0\"\r\n  route.1954215009.egress_only_gateway_id:    \"\" => \"\"\r\n  route.1954215009.gateway_id:                \"\" => \"igw-2c24e64b\"\r\n  route.1954215009.instance_id:               \"\" => \"\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "  route.1954215009.ipv6_cidr_block:           \"\" => \"\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "  route.1954215009.nat_gateway_id:            \"\" => \"\"\r\n"
+    ],
+    [
+      0.000134,
+      "  route.1954215009.network_interface_id:      \"\" => \"\"\r\n"
+    ],
+    [
+      0.000139,
+      "  route.1954215009.vpc_peering_connection_id: \"\" => \"\"\r\n"
+    ],
+    [
+      0.000114,
+      "  tags.%:                                     \"\" => \"2\"\r\n"
+    ],
+    [
+      0.000102,
+      "  tags.Environment:                           \"\" => \"ci\"\r\n"
+    ],
+    [
+      0.00011,
+      "  tags.Name:                                  \"\" => \"ci-public-routetable\"\r\n"
+    ],
+    [
+      0.000123,
+      "  vpc_id:                                     \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      0.132478,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_subnet.public_subnet: Creation complete after 1s (ID: subnet-ea8bb88d)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.005199,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.9e-05,
+      "  allocation_id:        \"\" => \"eipalloc-9f19eaa2\"\r\n  network_interface_id: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000122,
+      "  private_ip:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.9e-05,
+      "  public_ip:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000136,
+      "  subnet_id:            \"\" => \"subnet-ea8bb88d\"\u001b[0m\r\n"
+    ],
+    [
+      0.003998,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_subnet.private_subnet: Creation complete after 1s (ID: subnet-fe8ebd99)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.76159,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table.public_routetable: Creation complete after 1s (ID: rtb-b5c788d3)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.006916,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table_association.public_routing_table: Creating...\u001b[0m\r\n"
+    ],
+    [
+      4.6e-05,
+      "  route_table_id: \"\" => \"rtb-b5c788d3\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "  subnet_id:      \"\" => \"subnet-ea8bb88d\"\u001b[0m\r\n"
+    ],
+    [
+      0.193246,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table_association.public_routing_table: Creation complete after 0s (ID: rtbassoc-6e91a017)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.042125,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group.docker_machine: Creation complete after 2s (ID: sg-a9bfd5d2)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.005697,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group.runner: Creation complete after 2s (ID: sg-d5bed4ae)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.002447,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.ssh: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.6e-05,
+      "  cidr_blocks.#:            \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000173,
+      "  cidr_blocks.0:            \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      0.000189,
+      "  from_port:                \"\" => \"22\"\r\n  protocol:                 \"\" => \"tcp\"\r\n"
+    ],
+    [
+      0.000111,
+      "  security_group_id:        \"\" => \"sg-a9bfd5d2\"\r\n"
+    ],
+    [
+      6e-05,
+      "  self:                     \"\" => \"false\"\r\n"
+    ],
+    [
+      0.000127,
+      "  source_security_group_id: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      1.6e-05,
+      "  to_port:                  \"\" => \"22\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "  type:                     \"\" => \"ingress\"\u001b[0m\r\n"
+    ],
+    [
+      8.2e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.docker: Creating...\u001b[0m\r\n"
+    ],
+    [
+      6.5e-05,
+      "  cidr_blocks.#:            \"\" => \"1\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  cidr_blocks.0:            \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      1.9e-05,
+      "  from_port:                \"\" => \"2376\"\r\n"
+    ],
+    [
+      6.8e-05,
+      "  protocol:                 \"\" => \"tcp\"\r\n"
+    ],
+    [
+      8e-05,
+      "  security_group_id:        \"\" => \"sg-a9bfd5d2\"\r\n"
+    ],
+    [
+      4.8e-05,
+      "  self:                     \"\" => \"false\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "  source_security_group_id: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.1e-05,
+      "  to_port:                  \"\" => \"2376\"\r\n"
+    ],
+    [
+      5e-05,
+      "  type:                     \"\" => \"ingress\"\u001b[0m\r\n"
+    ],
+    [
+      9.4e-05,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.out_all: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.4e-05,
+      "  cidr_blocks.#:            \"\" => \"1\"\r\n"
+    ],
+    [
+      5.3e-05,
+      "  cidr_blocks.0:            \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      1.3e-05,
+      "  from_port:                \"\" => \"0\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "  protocol:                 \"\" => \"-1\"\r\n"
+    ],
+    [
+      2.2e-05,
+      "  security_group_id:        \"\" => \"sg-a9bfd5d2\"\r\n"
+    ],
+    [
+      2.8e-05,
+      "  self:                     \"\" => \"false\"\r\n"
+    ],
+    [
+      6e-05,
+      "  source_security_group_id: \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.7e-05,
+      "  to_port:                  \"\" => \"65535\"\r\n"
+    ],
+    [
+      4.9e-05,
+      "  type:                     \"\" => \"egress\"\u001b[0m\r\n"
+    ],
+    [
+      0.502618,
+      "\u001b[0m\u001b[1mmodule.runner.aws_s3_bucket.build_cache: Creation complete after 7s (ID: 736819507440-gitlab-runner-cache)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.007373,
+      "\u001b[0m\u001b[1mmodule.runner.data.aws_iam_policy_document.bucket-policy-doc: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.000674,
+      "\u001b[0m\u001b[1mmodule.runner.data.template_file.runners: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.005768,
+      "\u001b[0m\u001b[1mmodule.runner.aws_s3_bucket_policy.bucket-policy: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.000113,
+      "  bucket: \"\" => \"736819507440-gitlab-runner-cache\"\r\n"
+    ],
+    [
+      0.000566,
+      "  policy: \"\" => \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": [\\n        \\\"s3:PutObjectAcl\\\",\\n        \\\"s3:PutObject\\\",\\n        \\\"s3:GetObjectAcl\\\",\\n        \\\"s3:GetObject\\\"\\n      ],\\n      \\\"Resource\\\": \\\"arn:aws:s3:::736819507440-gitlab-runner-cache/*\\\",\\n      \\\"Principal\\\": {\\n        \\\"AWS\\\": \\\"arn:aws:iam::736819507440:user/cache_user\\\"\\n      }\\n    }\\n  ]\\n}\"\u001b[0m\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m\u001b[1mmodule.runner.data.template_file.gitlab_runner: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.002812,
+      "\u001b[0m\u001b[1mmodule.runner.data.template_file.user_data: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.005109,
+      "\u001b[0m\u001b[1mmodule.runner.aws_launch_configuration.gitlab_runner_instance: Creating...\u001b[0m\r\n"
+    ],
+    [
+      4.1e-05,
+      "  associate_public_ip_address: \"\" => \"false\"\r\n"
+    ],
+    [
+      2.2e-05,
+      "  ebs_block_device.#:          \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000105,
+      "  ebs_optimized:               \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "  enable_monitoring:           \"\" => \"true\"\r\n"
+    ],
+    [
+      0.000105,
+      "  iam_instance_profile:        \"\" => \"ci-instance-profile\"\r\n"
+    ],
+    [
+      0.00011,
+      "  image_id:                    \"\" => \"ami-acd005d5\"\r\n"
+    ],
+    [
+      6.7e-05,
+      "  instance_type:               \"\" => \"t2.micro\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  key_name:                    \"\" => \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      4e-05,
+      "  name:                        \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      4.4e-05,
+      "  root_block_device.#:         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      1.5e-05,
+      "  security_groups.#:           \"\" => \"1\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "  security_groups.550399762:   \"\" => \"sg-d5bed4ae\"\r\n"
+    ],
+    [
+      6.8e-05,
+      "  user_data:                   \"\" => \"ef6615797ecbd84d12d0238876427d272083e5d8\"\u001b[0m\r\n"
+    ],
+    [
+      0.543303,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.ssh: Creation complete after 1s (ID: sgrule-3374303399)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.631716,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.docker: Creation complete after 2s (ID: sgrule-1931398212)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.602959,
+      "\u001b[0m\u001b[1mmodule.runner.aws_security_group_rule.out_all: Creation complete after 3s (ID: sgrule-4197548448)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      4.451386,
+      "\u001b[0m\u001b[1mmodule.runner.aws_launch_configuration.gitlab_runner_instance: Creation complete after 6s (ID: terraform-20171205181047949700000003)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.007689,
+      "\u001b[0m\u001b[1mmodule.runner.aws_autoscaling_group.gitlab_runner_instance: Creating...\u001b[0m\r\n"
+    ],
+    [
+      2.6e-05,
+      "  arn:                                \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  default_cooldown:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "  desired_capacity:                   \"\" => \"1\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  force_delete:                       \"\" => \"false\"\r\n"
+    ],
+    [
+      5.4e-05,
+      "  health_check_grace_period:          \"\" => \"0\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "  health_check_type:                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000135,
+      "  launch_configuration:               \"\" => \"terraform-20171205181047949700000003\"\r\n"
+    ],
+    [
+      9.1e-05,
+      "  load_balancers.#:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "  max_size:                           \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000509,
+      "  metrics_granularity:                \"\" => \"1Minute\"\r\n"
+    ],
+    [
+      0.000184,
+      "  min_size:                           \"\" => \"1\"\r\n"
+    ],
+    [
+      4.2e-05,
+      "  name:                               \"\" => \"ci-as-group\"\r\n"
+    ],
+    [
+      3.9e-05,
+      "  protect_from_scale_in:              \"\" => \"false\"\r\n"
+    ],
+    [
+      6.5e-05,
+      "  tag.#:                              \"\" => \"2\"\r\n"
+    ],
+    [
+      7e-05,
+      "  tag.2093282623.key:                 \"\" => \"Environment\"\r\n"
+    ],
+    [
+      5.5e-05,
+      "  tag.2093282623.propagate_at_launch: \"\" => \"true\"\r\n"
+    ],
+    [
+      4.1e-05,
+      "  tag.2093282623.value:               \"\" => \"ci\"\r\n"
+    ],
+    [
+      6.1e-05,
+      "  tag.3888051703.key:                 \"\" => \"Name\"\r\n"
+    ],
+    [
+      4.5e-05,
+      "  tag.3888051703.propagate_at_launch: \"\" => \"true\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "  tag.3888051703.value:               \"\" => \"ci-gitlab-runner\"\r\n"
+    ],
+    [
+      7e-05,
+      "  target_group_arns.#:                \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  vpc_zone_identifier.#:              \"\" => \"1\"\r\n"
+    ],
+    [
+      4.2e-05,
+      "  vpc_zone_identifier.1441540656:     \"\" => \"subnet-fe8ebd99\"\r\n"
+    ],
+    [
+      2.7e-05,
+      "  wait_for_capacity_timeout:          \"\" => \"10m\"\u001b[0m\r\n"
+    ],
+    [
+      1.207876,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Still creating... (10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.008516,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.225745,
+      "\u001b[0m\u001b[1mmodule.runner.aws_s3_bucket_policy.bucket-policy: Creation complete after 8s (ID: 736819507440-gitlab-runner-cache)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      7.55692,
+      "\u001b[0m\u001b[1mmodule.runner.aws_autoscaling_group.gitlab_runner_instance: Still creating... (10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.209181,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Still creating... (20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.008267,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      7.782863,
+      "\u001b[0m\u001b[1mmodule.runner.aws_autoscaling_group.gitlab_runner_instance: Still creating... (20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.208675,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Still creating... (30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.008613,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      7.783882,
+      "\u001b[0m\u001b[1mmodule.runner.aws_autoscaling_group.gitlab_runner_instance: Still creating... (30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.208659,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Still creating... (40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.007536,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.905649,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route53_zone.local: Creation complete after 42s (ID: ZCI70Y7C4GJMP)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      4.62848,
+      "\u001b[0m\u001b[1mmodule.runner.aws_autoscaling_group.gitlab_runner_instance: Creation complete after 38s (ID: ci-as-group)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      4.466875,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (50s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.001035,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (1m0s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000069,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (1m10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000163,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (1m20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      9.999897,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (1m30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      9.999986,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Still creating... (1m40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      7.435647,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_nat_gateway.nat: Creation complete after 1m48s (ID: nat-0e711e74291663287)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.009399,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table.private_routetable: Creating...\u001b[0m\r\n"
+    ],
+    [
+      4.1e-05,
+      "  propagating_vgws.#:                         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  route.#:                                    \"\" => \"1\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  route.3455675011.cidr_block:                \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  route.3455675011.egress_only_gateway_id:    \"\" => \"\"\r\n"
+    ],
+    [
+      9.9e-05,
+      "  route.3455675011.gateway_id:                \"\" => \"\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "  route.3455675011.instance_id:               \"\" => \"\"\r\n"
+    ],
+    [
+      8e-05,
+      "  route.3455675011.ipv6_cidr_block:           \"\" => \"\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "  route.3455675011.nat_gateway_id:            \"\" => \"nat-0e711e74291663287\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  route.3455675011.network_interface_id:      \"\" => \"\"\r\n"
+    ],
+    [
+      7e-05,
+      "  route.3455675011.vpc_peering_connection_id: \"\" => \"\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "  tags.%:                                     \"\" => \"2\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "  tags.Environment:                           \"\" => \"ci\"\r\n"
+    ],
+    [
+      0.000124,
+      "  tags.Name:                                  \"\" => \"ci-private-routetable\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "  vpc_id:                                     \"\" => \"vpc-78cac21f\"\u001b[0m\r\n"
+    ],
+    [
+      0.959691,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table.private_routetable: Creation complete after 1s (ID: rtb-2fc38c49)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.007804,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table_association.private_routing_table: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.8e-05,
+      "  route_table_id: \"\" => \"rtb-2fc38c49\"\r\n"
+    ],
+    [
+      2.6e-05,
+      "  subnet_id:      \"\" => \"subnet-fe8ebd99\"\u001b[0m\r\n"
+    ],
+    [
+      0.699345,
+      "\u001b[0m\u001b[1mmodule.vpc.aws_route_table_association.private_routing_table: Creation complete after 0s (ID: rtbassoc-5a92a323)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.010862,
+      "\u001b[0m\u001b[1m\u001b[32m\r\n"
+    ],
+    [
+      3.1e-05,
+      "Apply complete! Resources: 31 added, 0 changed, 0 destroyed.\u001b[0m\r\n"
+    ],
+    [
+      0.010354,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                                                     \r \r"
+    ],
+    [
+      4.3e-05,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/tf-aws-gitlab-runner2/example\u0007"
+    ],
+    [
+      1.7e-05,
+      "\u001b]1;..nner2/example\u0007"
+    ],
+    [
+      0.02516,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mexample\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      6.7e-05,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      1.6e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      3.444445,
+      "\u001b[?2004l\r\r\n"
+    ]
+  ]
+}

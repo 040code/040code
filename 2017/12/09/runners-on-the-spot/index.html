@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Runners on the Spot - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2017/12/09/runners-on-the-spot/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/asciinema-player.css" />
+    <script src="/js/asciinema-player.js"></script>
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2017-12-09_runners-on-the-spot/img/blob_glow.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Runners on the Spot</h1>
+                    
+                    <h2 class="subheading">Auto scaling GitLab runners on AWS with Terraform</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      on 2017-12-09</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/gitlab/">GitLab</a><a class="badge " href="/blog/tag/docker/">Docker</a><a class="badge " href="/blog/tag/aws/">Amazon</a><a class="badge " href="/blog/tag/terraform/">Terraform</a>
+
+
+				<h2 id="introduction">Introduction</h2>
+
+<p><a href="https://about.gitlab.com/features/gitlab-ci-cd/">GitLab CI</a> is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via <a href="https://docs.gitlab.com/runner/">GitLab Runners</a>, which are agents registered to your GitLab account. An agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: <a href="https://about.gitlab.com/2017/11/23/autoscale-ci-runners/">Autoscale GitLab CI runners and save 90% on EC2 costs</a>.</p>
+
+<p>The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with <a href="https://www.terraform.io/">Hashicorp Terraform</a>. The GitLab Runner module discussed in the post is available in the <a href="https://registry.terraform.io/modules/npalm/gitlab-runner/aws/0.1.0">Terraform Registery</a>.</p>
+
+<p><a href="#">
+    <img src="/assets/2017-12-09_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner" />
+</a></p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab uses an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner, is to register a new runner. Because GitLab currently does not provide a fully automated way, we will do this by hand.</p>
+
+<p>Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we use a docker container to register a runner. The command will ask a few details.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -it --rm gitlab/gitlab-runner register
+</code></pre></div></div>
+
+<asciinema-player src="/assets/2017-12-09_runners-on-the-spot/asciinema/register.json" cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
+</asciinema-player>
+
+<p>Provide the requested details and consult the GitLab manual for more details. Once done you should see a new runner registered at your project or globally. Open the runner settings in edit mode and record the token. This token is needed later for connecting the agent.</p>
+
+<h2 id="creating-infrastructure-for-the-runners">Creating infrastructure for the runners</h2>
+<p>Now the runner is configured in GitLab, we can start creating the infrastructure on AWs. For setting up the network layers we use <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html">Amazon networking scenario 2</a>, to build a VPC with a public and private subnets. For more details see the <a href="/2017/06/18/terraform-aws-vpc/">post</a> about creating a VPC in terraform. You can also simply use the <a href="https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/1.7.0">official terraform module</a>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "1.5.1"
+
+  name = "vpc-${var.environment}"
+  cidr = "10.0.0.0/16"
+
+  azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+  enable_nat_gateway = true
+
+  tags = {
+    Environment = "${var.environment}"
+  }
+}
+</code></pre></div></div>
+
+<p>Next, we create a <code class="highlighter-rouge">t2.micro</code> instance using an auto scaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a <code class="highlighter-rouge">config.toml</code> file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.</p>
+
+<p>Next we create a <code class="highlighter-rouge">t2.micro</code> instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab Runners is done via the <code class="highlighter-rouge">config.toml</code> file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file. In the Terraform module you will find that the configuration file is loaded via a data template.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>concurrent = ${runner_concurrent}
+check_interval = 0
+
+[[runners]]
+  name = "${runners_name}"
+  url = "${gitlab_url}"
+  token = "${runners_token}"
+  executor = "docker+machine"
+  limit = ${runners_limit}
+  [runners.docker]
+    tls_verify = false
+    image = "docker:17.11.0-ce"
+    privileged = ${runners_privilled}
+    disable_cache = false
+    volumes = ["/cache"]
+    shm_size = 0
+  [runners.cache]
+    Type = "s3"
+    ServerAddress = "s3-${aws_region}.amazonaws.com"
+    AccessKey = "${bucket_user_access_key}"
+    SecretKey = "${bucket_user_secret_key}"
+    BucketName = "${bucket_name}"
+    Insecure = false
+  [runners.machine]
+    IdleCount = ${runners_idle_count}
+    IdleTime = ${runners_idle_time}
+    MachineDriver = "amazonec2"
+    MachineName = "runner-%s"
+    MachineOptions = [
+      "amazonec2-access-key=${access_key}",
+      "amazonec2-secret-key=${secret_key}",
+      "amazonec2-instance-type=${instance_type}",
+      "amazonec2-region=${aws_region}",
+      "amazonec2-vpc-id=${vpc_id}",
+      "amazonec2-subnet-id=${subnet_id}",
+      "amazonec2-private-address-only=true",
+      "amazonec2-request-spot-instance=true",
+      "amazonec2-spot-price=${spot_price_bid}",
+      "amazonec2-security-group=${security_group_name}"
+    ]
+</code></pre></div></div>
+
+<p>All variables can be configured, most of them will have default values. Only the name of the runner, token and GitLab URL needs to be configured. The configuration contains a shared cache in S3 which will expire at the end of the next day (after creation) by default. File will be deleted via S3 lifecyle managment once expired. The number of expiration days can be changed to your needs. You can find all the available variables in the <code class="highlighter-rouge">variables.tf</code> file of the module. Next we add the module to our Terraform file and define a minimal set of variables.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module "gitlab-runner" {
+  source = "npalm/gitlab-runner/aws"
+
+  aws_region     = "&lt;region-to-use&gt;"
+  environment    = "ci-runners"
+  ssh_public_key = "&lt;contains-public-key"
+
+  vpc_id                  = "${module.vpc.vpc_id}"
+  subnet_id_gitlab_runner = "${element(module.vpc.private_subnets, 0)}"
+  subnet_id_runners       = "${element(module.vpc.private_subnets, 0)}"
+
+  # Values below are created during the registration process of the runner.
+  runner_name       = "&lt;name-of-the-runner"
+  runner_gitlab_url = "&lt;gitlab-url&gt;"
+  runner_token      = "&lt;token-of-the-runner"
+}
+</code></pre></div></div>
+
+<p>The complete exmple is in <a href="https://github.com/npalm/tf-aws-gitlab-runner/tree/master/example">GitHub</a>. Time to execute the scripts to create the actual infrastructure. Be aware that you need to configure AWS keys and have Terraform installed. The steps below should guide you through the setup.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/tf-aws-gitlab-runner.git
+cd tf-aws-gitlab-runner/example
+</code></pre></div></div>
+<p>The example directory contains the example as described above, only the properties for your newly registered runner in GitLab needs to be configured. Please register a runner in GitLab (see docker command above) and update the <code class="highlighter-rouge">terraform.tfvars</code> file. That is all, now execute the Terraform code.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># genere SSH key pair
+./init.sh
+
+# initialize terraform
+terraform init
+
+# apply, or plan first
+terraform apply
+</code></pre></div></div>
+
+<asciinema-player src="/assets/2017-12-09_runners-on-the-spot/asciinema/terraform.json" cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
+</asciinema-player>
+
+<p>After a few minutes the runner should be running, you should see in your AWS console the runner active.
+<a href="#">
+    <img src="/assets/2017-12-09_runners-on-the-spot/img/ec2.png" alt="Running EC2 instances" />
+</a>
+<br />
+In GitLab the runner should be active as well. Check the runner pages which should now indicates the latest moment of contact.
+<a href="#">
+    <img src="/assets/2017-12-09_runners-on-the-spot/img/runner.png" alt="GitLab Runner details" />
+</a>
+<br /></p>
+
+<p>The modules also enable CloudWatch logging, all <code class="highlighter-rouge">systemd</code> logging is streamed. Go to CloudWatch to inspect the logging. The installation processed is logged as well.</p>
+
+<p><a href="#">
+    <img src="/assets/2017-12-09_runners-on-the-spot/img/cloudwatch.png" alt="CloudWatch logging" />
+</a></p>
+
+<h2 id="verify">Verify</h2>
+
+<p>Finally we can verify that the runner is working by executing a build. The <code class="highlighter-rouge">.gitlab-ci.yml</code> below is an example to verify the runner is working properly. The build contains two stages. In the first stage an ascii art image is generated, stored in a file which is cached in S3. In the second stage the file is retrieved from the build cache.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+stages:
+  - build
+  - verify
+
+cache:
+  key: "$CI_BUILD_REF"
+  untracked: true
+
+image: npalm/cowsay
+
+build:
+  stage: build
+
+  script:
+    - cowsay -f ghostbusters building "$CI_BUILD_NAME" @ stage "$CI_BUILD_STAGE" &gt; ghosts.txt
+
+  tags:
+     - docker.m3
+
+verify:
+  stage: verify
+
+  script:
+    - cat ghosts.txt
+
+  tags:
+    - docker.m3
+</code></pre></div></div>
+
+<p>Add the file above to a GitLab repo that has the created runner attached. Once you commit the file a build should triggered. The logging of the verification step should contain the ascii art image.</p>
+
+<p><a href="#">
+    <img src="/assets/2017-12-09_runners-on-the-spot/img/ghost.png" alt="Build log" />
+</a></p>
+
+<h2 id="warning">Warning</h2>
+<p>Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black Friday prices of spot instances went up to over 2 dollar occasionally.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/10/19/graphql-geecon/" data-toggle="tooltip" data-placement="top" title="GraphQL">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
