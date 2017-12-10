@@ -22,7 +22,7 @@ The GitLab blog article nicely explains how to create your infrastructure in a m
 ## Prerequisites
 Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab uses an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner, is to register a new runner. Because GitLab currently does not provide a fully automated way, we will do this by hand.
 
-Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we use a docker container to register a runner. The command will ask a few details.
+Open you GitLab Project and lookup the token to register a runner. Beware there are project tokens and a GitLab global token. Next, we use a docker container to register a runner. The command will ask a few details.
 ```
 docker run -it --rm gitlab/gitlab-runner register
 ```
