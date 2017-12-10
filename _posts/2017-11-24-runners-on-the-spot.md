@@ -13,16 +13,16 @@ enable_asciinema: 1
 
 [GitLab CI](https://about.gitlab.com/features/gitlab-ci-cd/) is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via [GitLab Runners](https://docs.gitlab.com/runner/), which are agents registered to your GitLab account. An agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: [Autoscale GitLab CI runners and save 90% on EC2 costs](https://about.gitlab.com/2017/11/23/autoscale-ci-runners/).
 
-The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all the things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The GitLab Runner module discussed in the post is available in the [Terraform Registery](https://registry.terraform.io/modules/npalm/gitlab-runner/aws/0.1.0).
+The GitLab blog article nicely explains how to create your infrastructure in a manual way. However, we rather automate all things. Thus, we will automate the set up described in the blog article. In this post I will discuss how to create the infrastructure needed to run the build on AWS spot instances with [Hashicorp Terraform](https://www.terraform.io/). The GitLab Runner module discussed in the post is available in the [Terraform Registery](https://registry.terraform.io/modules/npalm/gitlab-runner/aws/0.1.0).
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/gitlab-runner.png" alt="GitLab Runner">
 </a>
 
 ## Prerequisites
-Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab uses an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner, is to register a new runner. Because GitLab currently does not provide a fully automated way, we will do this by hand.
+Before we start, we need to briefly discuss the GitLab runners. To execute the builds, GitLab uses an agent to orchestrate the build with a docker machine. A docker machine creates instances with docker engine to run docker containers. The first step for setting up a runner is to register a new runner. Because GitLab currently does not provide a fully automated way for this, we will do this manually.
 
-Open you GitLab Project and lookup the token to register a runner. Beware there are project local tokens and global token. Next, we use a docker container to register a runner. The command will ask a few details.
+Open you GitLab project and lookup the token to register a runner. Be aware that there are project tokens and a GitLab global token. Next, we use a docker container to register a runner. The command will ask a few details.
 ```
 docker run -it --rm gitlab/gitlab-runner register
 ```
@@ -32,10 +32,10 @@ docker run -it --rm gitlab/gitlab-runner register
 </asciinema-player>
 
 
-Provide the requested details and consult the GitLab manual for more details. Once done you should see a new runner registered at your project or globally. Open the runner settings in edit mode and record the token. This token is needed later for connecting the agent.
+Provide the requested details and consult the GitLab manual for more details. Once done, you should see a new runner registered at your project or globally. Open the runner settings in edit mode and record the token. This token is needed later for connecting the agent.
 
 ## Creating infrastructure for the runners
-Now the runner is configured in GitLab, we can start creating the infrastructure on AWs. For setting up the network layers we use [Amazon networking scenario 2](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html), to build a VPC with a public and private subnets. For more details see the [post]({{ site.baseurl }}/2017/06/18/terraform-aws-vpc/) about creating a VPC in terraform. You can also simply use the [official terraform module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/1.7.0).
+Now the runner is configured in GitLab, we can start creating the infrastructure on AWS. For setting up the network layers, we use [Amazon networking scenario 2](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html) to build a VPC with a public and private subnets. For more details see this [post]({{ site.baseurl }}/2017/06/18/terraform-aws-vpc/) about creating a VPC in terraform. You can also simply use the [official terraform module](https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/1.7.0).
 
 
 ```
@@ -59,9 +59,7 @@ module "vpc" {
 }
 ```
 
-Next, we create a `t2.micro` instance using an auto scaling group in the private network. On this instance we install and configure the gitlab runner. Configuration of GitLab Runners is done via a `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterised version of this config file.
-
-Next we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab Runners is done via the `config.toml` file. The content of the file is extracted in a template in terraform. Below the parameterized version of this config file. In the Terraform module you will find that the configuration file is loaded via a data template.
+Next, we create a `t2.micro` instance using an autoscaling group in the private network. On this instance we install and configure the GitLab runner. Configuration of GitLab runners is done via the `config.toml` file. Below the parameterized version of this configuration file. In the Terraform module you will find that the configuration file is loaded via a data template.
 
 ```
 concurrent = ${runner_concurrent}
@@ -106,7 +104,7 @@ check_interval = 0
     ]
 ```
 
-All variables can be configured, most of them will have default values. Only the name of the runner, token and GitLab URL needs to be configured. The configuration contains a shared cache in S3 which will expire at the end of the next day (after creation) by default. File will be deleted via S3 lifecyle managment once expired. The number of expiration days can be changed to your needs. You can find all the available variables in the `variables.tf` file of the module. Next we add the module to our Terraform file and define a minimal set of variables.
+All variables can be configured and most of them have default values. Only the name of the runner, the token and the GitLab URL need to be configured. The configuration contains a shared cache in S3 which will expire at the end of the next day (after creation) by default. Files will be deleted via S3 lifecycle management once expired, but the number of expiration days can be changed to your needs. You can find all the available variables in the `variables.tf` file of the module. Next we add the module to our Terraform file and define a minimal set of variables.
 
 ```
 module "gitlab-runner" {
@@ -127,13 +125,13 @@ module "gitlab-runner" {
 }
 ```
 
-The complete exmple is in [GitHub](https://github.com/npalm/tf-aws-gitlab-runner/tree/master/example). Time to execute the scripts to create the actual infrastructure. Be aware that you need to configure AWS keys and have Terraform installed. The steps below should guide you through the setup.
+The complete example is in [GitHub](https://github.com/npalm/terraform-aws-gitlab-runner/tree/master/example). Now it is time to execute the scripts to create the actual infrastructure. Be aware that you need to configure AWS keys and have Terraform installed. The steps below should guide you through the setup.
 
 ```
-git clone https://github.com/npalm/tf-aws-gitlab-runner.git
+git clone https://github.com/npalm/terraform-aws-gitlab-runner.git
 cd tf-aws-gitlab-runner/example
 ```
-The example directory contains the example as described above, only the properties for your newly registered runner in GitLab needs to be configured. Please register a runner in GitLab (see docker command above) and update the `terraform.tfvars` file. That is all, now execute the Terraform code.
+The example directory contains the example as described above, so the properties for your newly registered runner in GitLab need to be configured. Please register a runner in GitLab (see docker command above) and update the `terraform.tfvars` file. That is all, now execute the Terraform code.
 ```
 # genere SSH key pair
 ./init.sh
@@ -150,18 +148,18 @@ terraform apply
 </asciinema-player>
 
 
-After a few minutes the runner should be running, you should see in your AWS console the runner active.
+After a few minutes the runner should be running and you should see it in your AWS console.
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/ec2.png" alt="Running EC2 instances">
 </a>
 <br>
-In GitLab the runner should be active as well. Check the runner pages which should now indicates the latest moment of contact.
+The runner should be active as well in GitLab. Check the runner pages which should now indicate the latest moment of contact.
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/runner.png" alt="GitLab Runner details">
 </a>
 <br>
 
-The modules also enable CloudWatch logging, all `systemd` logging is streamed. Go to CloudWatch to inspect the logging. The installation processed is logged as well.
+The modules also enable CloudWatch logging, all `systemd` logging is streamed. Go to CloudWatch to inspect the logging and you will see that the installation process was logged as well.
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/cloudwatch.png" alt="CloudWatch logging">
@@ -169,7 +167,7 @@ The modules also enable CloudWatch logging, all `systemd` logging is streamed. G
 
 ## Verify
 
-Finally we can verify that the runner is working by executing a build. The `.gitlab-ci.yml` below is an example to verify the runner is working properly. The build contains two stages. In the first stage an ascii art image is generated, stored in a file which is cached in S3. In the second stage the file is retrieved from the build cache.
+Finally we can verify that the runner is working properly by executing a build. The `.gitlab-ci.yml` below is an example to verify the runner is working properly. The build contains two stages. In the first stage an ascii art image is generated, stored in a file which is cached in S3. In the second stage the file is retrieved from the build cache.
 
 ```
 
@@ -202,7 +200,7 @@ verify:
     - docker.m3
 ```
 
-Add the file above to a GitLab repo that has the created runner attached. Once you commit the file a build should triggered. The logging of the verification step should contain the ascii art image.
+Add the file above to the GitLab repository that has the created runner attached. Once you commit the file a build should triggered. The logging of the verification step should contain the ascii art image.
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2017-12-09_runners-on-the-spot/img/ghost.png" alt="Build log">
