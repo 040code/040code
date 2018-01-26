@@ -9,7 +9,7 @@ tags:       [aws, terraform, docker, microhack]
 enable_asciinema: 1
 ---
 
-Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in `us-east-1`, see also the [list](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) of supported regions. Later in December Fargate also become available in [Terraform])(https://www.terraform.io/) so time to see how it works.
+Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in `us-east-1`, see also the [list](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) of supported regions. Later in December Fargate also become available in [Terraform](https://www.terraform.io/) so time to see how it works.
 
 In this post I will show you how to deploy containers to Fargate using Terraform. As example container I will use the blog itself. The complete example in available on [GitHub](https://github.com/npalm/blog_terraform_aws_fargate).`. First I show how you can deploy a container using Terraform to Fargate. In the example below I try to show how this compare to a manual deployment using the AWS console. Finally I will discuss how this compare to ECS with EC2 instances and how we can rewrite our infrastructure code so we can deploy also to EC2 instances.
 
@@ -272,7 +272,7 @@ That is all, we have now our blog running as serverless container in AWS Fargate
 ## Mixing ECS and Fargate
 Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need features that not available in Fargate such as a volume mount? How difficult would that be te move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.
 
-First we refactor the above code to some [generic ecs service modules](https://github.com/npalm/terraform-aws-ecs-service) to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, avsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ecs service module.
+First we refactor the above code to some [generic ecs service modules](https://github.com/npalm/terraform-aws-ecs-service) to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, avsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.
 
 ```
 locals {
@@ -324,7 +324,7 @@ module "blog-fg" {
 }
 ```
 
-We still have our container not running in ECS on EC2 instances. For that we have first to create EC2 instances that will be attached to the same ECS cluster. For more detals about create the EC2 instances see the [ecs instance repo](https://github.com/npalm/terraform-aws-ecs-instances) on GitHub.
+We still have our container not running in ECS on EC2 instances. For that we have first to create EC2 instances that will be attached to the same ECS cluster. For more details about create the EC2 instances see the [ecs instance repo](https://github.com/npalm/terraform-aws-ecs-instances) on GitHub.
 
 ```
 locals {
@@ -370,7 +370,7 @@ That is all, all sample code is available at [GitHub](https://github.com/npalm/b
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
 
-In the output you will find the two enpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second on on EC2.
+In the output you will find the two endpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second on on EC2.
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2018-01-25_fargate/img/ecs-fargate-2.png" alt="Fargate">
