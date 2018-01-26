@@ -4,7 +4,7 @@ title:      "Fargate with Terraform"
 subtitle:   "Deploying serverless containers"
 date:       2018-01-25
 authors:     [niek]
-header-img: "assets/2017-12-09_runners-on-the-spot/img/blob_glow.jpg"
+header-img: "assets/2018-01-25_fargate/img/strijps-containers.jpg"
 tags:       [docker, aws, terraform]
 enable_asciinema: 1
 ---
