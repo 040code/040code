@@ -11,13 +11,16 @@ enable_asciinema: 1
 
 Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in `us-east-1`, see also the [list](https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/) of supported regions. Later in December Fargate also become available in [Terraform](https://www.terraform.io/) so time to see how it works.
 
-In this post I will show you how to deploy containers to Fargate using Terraform. As example container I will use the blog itself. The complete example in available on [GitHub](https://github.com/npalm/blog_terraform_aws_fargate).`. First I show how you can deploy a container using Terraform to Fargate. In the example below I try to show how this compare to a manual deployment using the AWS console. Finally I will discuss how this compare to ECS with EC2 instances and how we can rewrite our infrastructure code so we can deploy also to EC2 instances.
+In this post I will show how to deploy containers to Fargate using Terraform. As example docker image I will use the blog itself. The complete example in available on [GitHub](https://github.com/npalm/blog_terraform_aws_fargate). First I show how you can deploy a container using Terraform to Fargate. In case you would like to experiment with AWS console instead of Terraform you should be able to execute the same steps direct in AWS. Only the VPC part could be a bit tricky, but even that part can be skipped and replaced with the default VPC. In that case you don't have private subnets available.
+
+Finally I will discuss how a deployment with Fargate in ECS compares to a deployment with EC2 in ECS. And show what steps have to be taken to move the deployment from Fargate to EC2 instances.
+
 
 ## Prerequisites
 Before you start you need to have programmatically access to an AWS account and Terraform (0.11+) installed. The tool [tfenv](http://brewformulas.org/Tfenv) let you manage multiple terraform version on your system.
 
 ## Deploy serverless containers on Fargate
-Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging. We start with defining the VPC, we choose `us-east-1` since Fargate is only available in this region.
+Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging. We start with defining the VPC, we choose `us-east-1` since Fargate is only available in this region. In the blog post [Coding a VPC in Terraform](/2017/06/18/terraform-aws-vpc/) you find more details about how this VPC module is structured.
 
 ```
 provider "aws" {
@@ -36,10 +39,9 @@ module "vpc" {
   environment = "blog"
   aws_region  = "us-east-1"
 
-  // optional, defaults
   create_private_hosted_zone = "false"
 
-  // example to override default availability_zones
+  // us-east-1 is the only region that supports Fargate
   availability_zones = {
     us-east-1 = ["us-east-1a", "us-east-1b", "us-east-1c"]
   }
@@ -47,7 +49,7 @@ module "vpc" {
 
 ```
 
-Next we define the ECS cluster, and CloudWatch log group.
+Next we define the ECS cluster, and CloudWatch log group. Since we will deploy to Fargate we don't have to attache EC2 instances to our cluster.
 
 ```
 resource "aws_ecs_cluster" "cluster" {
@@ -58,13 +60,13 @@ resource "aws_cloudwatch_log_group" "log_group" {
   name = "blog"
 }
 ```
-Now the first part is defined we execute a `terrafrom apply` and inpect the results.
+Now the first part is defined we execute a `terraform apply` and inpect the results.
 
 <asciinema-player src="{{ site.baseurl }}/assets/2018-01-25_fargate/asciinema/fargate-terraform-1.json"
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
 
-The next step is to deploy our blog. In ECS you deploy a container with a task. And your container will be managed via a service. First we will create the task definition for our container. Fargate is using `awsvpc` as networking mode. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.
+The next step is to deploy the docker image with the blog. In ECS you deploy a docker container with a task. And your task will be managed by a service. First we create the task definition which contains the container deployment definition as well. Fargate is using [awsvpc as networking mode](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html), in this mode each task definiton gets is own private ip address. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.
 ```
 data "aws_iam_policy_document" "ecs_tasks_execution_role" {
   statement {
@@ -89,8 +91,7 @@ resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role" {
 
 ```
 
-Now we have the required role for task execution we create the task definition. Which consists of two parts. First we define a container definition via a `template_file` next we define the task definition. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.
-
+We have defined the execution rol for the task, next we define the task definion. This task definition consist of two parts. First we define a container definition via a `template_file`. In this container definition you see container port 80 is mapped to host posrt 80, the task will get its own private IP it safe to fix the port. And after that we define the task definition self. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.
 
 ```
 data "template_file" "blog" {
@@ -131,13 +132,13 @@ resource "aws_ecs_task_definition" "task" {
   execution_role_arn       = "${aws_iam_role.ecs_tasks_execution_role.arn}"
 }
 ```
-Time to verify the code is working by a `terraform apply`
+Time to verify the code is working by executing a `terraform apply`
 
 <asciinema-player src="{{ site.baseurl }}/assets/2018-01-25_fargate/asciinema/fargate-terraform-2.json"
   cols="166" rows="15" autoplay="true" loop="true" speed="1.0">
 </asciinema-player>
 
-We have still nothing running but you can already see the different part in de AWS console. We have now a VPC, CloudWatch log group, ECS cluster and task available. The next logical step in de AWS console would be to create the service, and find out at the latest step that you need to create a load balancer first. So in code we will define the load balancer first. The load balancer will route traffic via HTTP to the container.
+We have still nothing running but you can already see the different parts in de AWS console. We have now a VPC, CloudWatch log group, ECS cluster and task definition available. The next logical step in de AWS console would be to create the service, and find out at the latest step that you need to create a load balancer first. So in code we will define the load balancer first. The load balancer will route traffic via HTTP to the container.
 
 ```
 resource "aws_security_group" "alb_sg" {
@@ -179,7 +180,7 @@ resource "aws_alb_listener" "main" {
 
 ```
 
-We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify as target type `ip` and not `instance` since containers running in Fargate will get their own IP. Actually this not a Fargate but `awsvpc` behavior.
+We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify the target type `ip` and not `instance` since containers running in Fargate will get their own IP. Actually this not a Fargate but `awsvpc` behavior.
 
 ```
 resource "aws_alb_target_group" "main" {
@@ -194,7 +195,7 @@ output "blog_url" {
 }
 
 ```
-Again we verify our new code by a `terraform apply`.
+Again we verify our new code by executing a `terraform apply`.
 
 <asciinema-player src="{{ site.baseurl }}/assets/2018-01-25_fargate/asciinema/fargate-terraform-3.json"
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
@@ -269,7 +270,7 @@ That is all, we have now our blog running as serverless container in AWS Fargate
 </a>
 
 
-## Mixing ECS and Fargate
+## Mixing EC2 and Fargate on ECS
 Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need features that not available in Fargate such as a volume mount? How difficult would that be te move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.
 
 First we refactor the above code to some [generic ecs service modules](https://github.com/npalm/terraform-aws-ecs-service) to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, avsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.
