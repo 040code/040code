@@ -1,5 +1,5 @@
 ---
-}out:     post
+layout:     post
 title:      "MicroHack Fargate"
 subtitle:   "Deploying serverless containers with Terraform"
 date:       2018-01-25
