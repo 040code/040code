@@ -1,5 +1,5 @@
 ---
-layout:     post
+}out:     post
 title:      "MicroHack Fargate"
 subtitle:   "Deploying serverless containers with Terraform"
 date:       2018-01-25
@@ -66,7 +66,7 @@ Now the first part is defined we execute a `terraform apply` and inpect the resu
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
 
-The next step is to deploy the docker image with the blog. In ECS you deploy a docker container with a task. And your task will be managed by a service. First we create the task definition which contains the container deployment definition as well. Fargate is using [awsvpc as networking mode](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html), in this mode each task definiton gets is own private ip address. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.
+The next step is to deploy the docker image with the blog. In ECS you deploy a docker container with a task. And your task will be managed by a service. First we create the task definition which contains the container deployment definition as well. Fargate is using [awsvpc as networking mode](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html), in this mode each task definiton gets its own private ip address. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.
 ```
 data "aws_iam_policy_document" "ecs_tasks_execution_role" {
   statement {
@@ -91,7 +91,7 @@ resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role" {
 
 ```
 
-We have defined the execution rol for the task, next we define the task definion. This task definition consist of two parts. First we define a container definition via a `template_file`. In this container definition you see container port 80 is mapped to host posrt 80, the task will get its own private IP it safe to fix the port. And after that we define the task definition self. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.
+We have defined the execution rol for the task, next we define the task definion. This task definition consist of two parts. First we define a container definition via a `template_file`. In this container definition you see container port 80 is mapped to host port 80, the task will get its own private IP. And after that we define the task definition self. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.
 
 ```
 data "template_file" "blog" {
@@ -180,7 +180,7 @@ resource "aws_alb_listener" "main" {
 
 ```
 
-We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify the target type `ip` and not `instance` since containers running in Fargate will get their own IP. Actually this not a Fargate but `awsvpc` behavior.
+We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify the target type `ip` and not `instance` since containers running in Fargate will get their own IP. Actually this not Fargate but `awsvpc` behavior.
 
 ```
 resource "aws_alb_target_group" "main" {
@@ -271,9 +271,9 @@ That is all, we have now our blog running as serverless container in AWS Fargate
 
 
 ## Mixing EC2 and Fargate on ECS
-Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need features that not available in Fargate such as a volume mount? How difficult would that be te move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.
+Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need that are not available in in Fargate, such as a volume mount? How difficult would it be to move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.
 
-First we refactor the above code to some [generic ecs service modules](https://github.com/npalm/terraform-aws-ecs-service) to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, avsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.
+First we refactor the above code to some [generic ecs service modules](https://github.com/npalm/terraform-aws-ecs-service) to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, awsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.
 
 ```
 locals {
@@ -325,7 +325,7 @@ module "blog-fg" {
 }
 ```
 
-We still have our container not running in ECS on EC2 instances. For that we have first to create EC2 instances that will be attached to the same ECS cluster. For more details about create the EC2 instances see the [ecs instance repo](https://github.com/npalm/terraform-aws-ecs-instances) on GitHub.
+We still have our container not running in ECS on EC2 instances. For that we first have to create EC2 instances that will be attached to the same ECS cluster. For more details about create the EC2 instances see the [ecs instance repo](https://github.com/npalm/terraform-aws-ecs-instances) on GitHub.
 
 ```
 locals {
@@ -371,7 +371,7 @@ That is all, all sample code is available at [GitHub](https://github.com/npalm/b
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
 
-In the output you will find the two endpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second on on EC2.
+In the output you will find the two endpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second one on EC2.
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2018-01-25_fargate/img/ecs-fargate-2.png" alt="Fargate">
