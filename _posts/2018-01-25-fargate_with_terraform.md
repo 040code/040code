@@ -138,6 +138,10 @@ Time to verify the code is working by executing a `terraform apply`
   cols="166" rows="15" autoplay="true" loop="true" speed="1.0">
 </asciinema-player>
 
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-01-25_fargate/img/container-definition.png" alt="Fargate">
+</a>
+
 We have still nothing running but you can already see the different parts in de AWS console. We have now a VPC, CloudWatch log group, ECS cluster and task definition available. The next logical step in de AWS console would be to create the service, and find out at the latest step that you need to create a load balancer first. So in code we will define the load balancer first. The load balancer will route traffic via HTTP to the container.
 
 ```
@@ -200,6 +204,7 @@ Again we verify our new code by executing a `terraform apply`.
 <asciinema-player src="{{ site.baseurl }}/assets/2018-01-25_fargate/asciinema/fargate-terraform-3.json"
   cols="166" rows="15" autoplay="true" loop="true" speed="1.5">
 </asciinema-player>
+
 
 We are almost there, next we define the service. A task running in in network mode `awsvpc`, requires a service that defines a network configuration. In the networking configuration we define a security group to control access to our containers, and we define the subnets in which the containers are hosted.
 
