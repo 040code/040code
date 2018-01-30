@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "width": 133,
+  "height": 25,
+  "duration": 25.352702,
+  "command": null,
+  "title": null,
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/zsh"
+  },
+  "stdout": [
+    [
+      0.411757,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                    \r \r"
+    ],
+    [
+      7.1e-05,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/fargate-blog\u0007\u001b]1;../fargate-blog\u0007"
+    ],
+    [
+      0.035446,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mfargate-blog\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      0.000115,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      2.9e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      0.453381,
+      "t"
+    ],
+    [
+      0.134748,
+      "\bte"
+    ],
+    [
+      0.24781,
+      "r"
+    ],
+    [
+      0.159813,
+      "r"
+    ],
+    [
+      0.172012,
+      "aform"
+    ],
+    [
+      0.379756,
+      " "
+    ],
+    [
+      0.199728,
+      "a"
+    ],
+    [
+      0.136572,
+      "p"
+    ],
+    [
+      0.159862,
+      "p"
+    ],
+    [
+      0.20015,
+      "l"
+    ],
+    [
+      0.215199,
+      "y"
+    ],
+    [
+      0.240203,
+      "\u001b[?1l\u001b>"
+    ],
+    [
+      3.2e-05,
+      "\u001b[?2004l\r\r\n"
+    ],
+    [
+      0.001306,
+      "\u001b]2;terraform apply\u0007\u001b]1;terraform\u0007"
+    ],
+    [
+      0.571095,
+      "\u001b[0m\u001b[1mdata.template_file.blog: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      2.155565,
+      "\u001b[0m\u001b[1maws_ecs_cluster.cluster: Refreshing state... (ID: arn:aws:ecs:us-east-1:736819507440:cluster/blog-ecs-cluster)\u001b[0m\r\n"
+    ],
+    [
+      0.000114,
+      "\u001b[0m\u001b[1maws_cloudwatch_log_group.log_group: Refreshing state... (ID: blog)\u001b[0m\r\n"
+    ],
+    [
+      0.001075,
+      "\u001b[0m\u001b[1mdata.aws_iam_policy_document.ecs_tasks_execution_role: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      1.910482,
+      "\u001b[0m\u001b[1maws_eip.nat: Refreshing state... (ID: eipalloc-e5c5d6d2)\u001b[0m\r\n"
+    ],
+    [
+      0.00059,
+      "\u001b[0m\u001b[1maws_vpc.vpc: Refreshing state... (ID: vpc-170b196f)\u001b[0m\r\n"
+    ],
+    [
+      3.674196,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[1]: Refreshing state... (ID: subnet-65725301)\u001b[0m\r\n"
+    ],
+    [
+      5.1e-05,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[2]: Refreshing state... (ID: subnet-1798f238)\u001b[0m\r\n"
+    ],
+    [
+      0.000336,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[0]: Refreshing state... (ID: subnet-1b523c46)\u001b[0m\r\n"
+    ],
+    [
+      0.00119,
+      "\u001b[0m\u001b[1maws_subnet.private_subnet[0]: Refreshing state... (ID: subnet-a95c32f4)\u001b[0m\r\n\u001b[0m\u001b[1maws_subnet.private_subnet[2]: Refreshing state... (ID: subnet-498de766)\u001b[0m\r\n"
+    ],
+    [
+      0.000158,
+      "\u001b[0m\u001b[1maws_subnet.private_subnet[1]: Refreshing state... (ID: subnet-ef75548b)\u001b[0m\r\n"
+    ],
+    [
+      0.000207,
+      "\u001b[0m\u001b[1maws_internet_gateway.internet_gateway: Refreshing state... (ID: igw-2361635a)\u001b[0m\r\n"
+    ],
+    [
+      0.412978,
+      "\u001b[0m\u001b[1maws_nat_gateway.nat: Refreshing state... (ID: nat-058340566b17fa3f9)\u001b[0m\r\n"
+    ],
+    [
+      0.056328,
+      "\u001b[0m\u001b[1maws_route_table.public_routetable: Refreshing state... (ID: rtb-b73f1eca)\u001b[0m\r\n"
+    ],
+    [
+      0.401214,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[1]: Refreshing state... (ID: rtbassoc-71b4070d)\u001b[0m\r\n"
+    ],
+    [
+      0.000181,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[0]: Refreshing state... (ID: rtbassoc-70b4070c)\u001b[0m\r\n"
+    ],
+    [
+      0.000987,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[2]: Refreshing state... (ID: rtbassoc-fdcf7c81)\u001b[0m\r\n"
+    ],
+    [
+      0.006354,
+      "\u001b[0m\u001b[1maws_route_table.private_routetable: Refreshing state... (ID: rtb-5630112b)\u001b[0m\r\n"
+    ],
+    [
+      0.402743,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[2]: Refreshing state... (ID: rtbassoc-4bbe0d37)\u001b[0m\r\n"
+    ],
+    [
+      0.000225,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[1]: Refreshing state... (ID: rtbassoc-30b7044c)\u001b[0m\r\n"
+    ],
+    [
+      0.000239,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[0]: Refreshing state... (ID: rtbassoc-8abb08f6)\u001b[0m\r\n"
+    ],
+    [
+      3.572799,
+      "\r\n"
+    ],
+    [
+      3e-05,
+      "An execution plan has been generated and is shown below.\r\n"
+    ],
+    [
+      8.4e-05,
+      "Resource actions are indicated with the following symbols:\r\n  \u001b[32m+\u001b[0m create\r\n\u001b[0m\r\n"
+    ],
+    [
+      7.1e-05,
+      "Terraform will perform the following actions:\r\n\r\n"
+    ],
+    [
+      9e-05,
+      "\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_ecs_task_definition.task\r\n"
+    ],
+    [
+      6e-05,
+      "\u001b[0m      id:                                  <computed>\r\n"
+    ],
+    [
+      6.8e-05,
+      "      arn:                                 <computed>\r\n"
+    ],
+    [
+      0.000461,
+      "      container_definitions:               \"[{\\\"essential\\\":true,\\\"image\\\":\\\"npalm/040code.github.io:latest\\\",\\\"logConfiguration\\\":{\\\"logDriver\\\":\\\"awslogs\\\",\\\"options\\\":{\\\"awslogs-group\\\":\\\"blog\\\",\\\"awslogs-region\\\":\\\"us-east-1\\\",\\\"awslogs-stream-prefix\\\":\\\"040code\\\"}},\\\"name\\\":\\\"blog\\\",\\\"portMappings\\\":[{\\\"containerPort\\\":80,\\\"hostPort\\\":80,\\\"protocol\\\":\\\"tcp\\\"}]}]\"\r\n"
+    ],
+    [
+      3e-05,
+      "      cpu:                                 \"256\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "      execution_role_arn:                  \"${aws_iam_role.ecs_tasks_execution_role.arn}\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "      family:                              \"blog-blog\"\r\n"
+    ],
+    [
+      8e-05,
+      "      memory:                              \"512\"\r\n"
+    ],
+    [
+      8.7e-05,
+      "      network_mode:                        \"awsvpc\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "      requires_compatibilities.#:          \"1\"\r\n"
+    ],
+    [
+      4.9e-05,
+      "      requires_compatibilities.3072437307: \"FARGATE\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "      revision:                            <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      8.1e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_iam_role.ecs_tasks_execution_role\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m      id:                                  <computed>\r\n"
+    ],
+    [
+      6.7e-05,
+      "      arn:                                 <computed>\r\n"
+    ],
+    [
+      0.000263,
+      "      assume_role_policy:                  \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": \\\"sts:AssumeRole\\\",\\n      \\\"Principal\\\": {\\n        \\\"Service\\\": \\\"ecs-tasks.amazonaws.com\\\"\\n      }\\n    }\\n  ]\\n}\"\r\n"
+    ],
+    [
+      0.000131,
+      "      create_date:                         <computed>\r\n"
+    ],
+    [
+      9.1e-05,
+      "      force_detach_policies:               \"false\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      name:                                \"blog-ecs-task-execution-role\"\r\n"
+    ],
+    [
+      3.7e-05,
+      "      path:                                \"/\"\r\n"
+    ],
+    [
+      8e-05,
+      "      unique_id:                           <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      0.000132,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_iam_role_policy_attachment.ecs_tasks_execution_role\r\n"
+    ],
+    [
+      4.7e-05,
+      "\u001b[0m      id:                                  <computed>\r\n"
+    ],
+    [
+      0.000124,
+      "      policy_arn:                          \"arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy\"\r\n"
+    ],
+    [
+      0.000103,
+      "      role:                                \"blog-ecs-task-execution-role\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      1.9e-05,
+      "\u001b[0m\r\n"
+    ],
+    [
+      8.8e-05,
+      "\u001b[0m\u001b[1mPlan:\u001b[0m 3 to add, 0 to change, 0 to destroy.\u001b[0m\r\n\r\n"
+    ],
+    [
+      6.8e-05,
+      "\u001b[0m\u001b[1mDo you want to perform these actions?\u001b[0m\r\n"
+    ],
+    [
+      2.4e-05,
+      "  Terraform will perform the actions described above.\r\n"
+    ],
+    [
+      5.2e-05,
+      "  Only 'yes' will be accepted to approve.\r\n\r\n"
+    ],
+    [
+      0.102772,
+      "  \u001b[1mEnter a value:\u001b[0m \u001b[0m"
+    ],
+    [
+      1.259709,
+      "y"
+    ],
+    [
+      0.167795,
+      "e"
+    ],
+    [
+      0.249169,
+      "s"
+    ],
+    [
+      0.151183,
+      "\r\n"
+    ],
+    [
+      0.000164,
+      "\r\n"
+    ],
+    [
+      1.564559,
+      "\u001b[0m\u001b[1maws_iam_role.ecs_tasks_execution_role: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.9e-05,
+      "  arn:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000522,
+      "  assume_role_policy:    \"\" => \"{\\n  \\\"Version\\\": \\\"2012-10-17\\\",\\n  \\\"Statement\\\": [\\n    {\\n      \\\"Sid\\\": \\\"\\\",\\n      \\\"Effect\\\": \\\"Allow\\\",\\n      \\\"Action\\\": \\\"sts:AssumeRole\\\",\\n      \\\"Principal\\\": {\\n        \\\"Service\\\": \\\"ecs-tasks.amazonaws.com\\\"\\n      }\\n    }\\n  ]\\n}\"\r\n"
+    ],
+    [
+      3.7e-05,
+      "  create_date:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000132,
+      "  force_detach_policies: \"\" => \"false\"\r\n"
+    ],
+    [
+      8.8e-05,
+      "  name:                  \"\" => \"blog-ecs-task-execution-role\"\r\n"
+    ],
+    [
+      0.000108,
+      "  path:                  \"\" => \"/\"\r\n"
+    ],
+    [
+      0.000145,
+      "  unique_id:             \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      0.879603,
+      "\u001b[0m\u001b[1maws_iam_role.ecs_tasks_execution_role: Creation complete after 1s (ID: blog-ecs-task-execution-role)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.008974,
+      "\u001b[0m\u001b[1maws_iam_role_policy_attachment.ecs_tasks_execution_role: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.00045,
+      "  policy_arn: \"\" => \"arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy\"\r\n  role:       \"\" => \"blog-ecs-task-execution-role\"\u001b[0m\r\n"
+    ],
+    [
+      0.00101,
+      "\u001b[0m\u001b[1maws_ecs_task_definition.task: Creating...\u001b[0m\r\n"
+    ],
+    [
+      9.9e-05,
+      "  arn:                                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000722,
+      "  container_definitions:               \"\" => \"[{\\\"essential\\\":true,\\\"image\\\":\\\"npalm/040code.github.io:latest\\\",\\\"logConfiguration\\\":{\\\"logDriver\\\":\\\"awslogs\\\",\\\"options\\\":{\\\"awslogs-group\\\":\\\"blog\\\",\\\"awslogs-region\\\":\\\"us-east-1\\\",\\\"awslogs-stream-prefix\\\":\\\"040code\\\"}},\\\"name\\\":\\\"blog\\\",\\\"portMappings\\\":[{\\\"containerPort\\\":80,\\\"hostPort\\\":80,\\\"protocol\\\":\\\"tcp\\\"}]}]\"\r\n"
+    ],
+    [
+      3.1e-05,
+      "  cpu:                                 \"\" => \"256\"\r\n"
+    ],
+    [
+      0.000146,
+      "  execution_role_arn:                  \"\" => \"arn:aws:iam::736819507440:role/blog-ecs-task-execution-role\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "  family:                              \"\" => \"blog-blog\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "  memory:                              \"\" => \"512\"\r\n"
+    ],
+    [
+      0.000101,
+      "  network_mode:                        \"\" => \"awsvpc\"\r\n"
+    ],
+    [
+      0.0001,
+      "  requires_compatibilities.#:          \"\" => \"1\"\r\n"
+    ],
+    [
+      4.4e-05,
+      "  requires_compatibilities.3072437307: \"\" => \"FARGATE\"\r\n"
+    ],
+    [
+      0.00017,
+      "  revision:                            \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      1.328942,
+      "\u001b[0m\u001b[1maws_iam_role_policy_attachment.ecs_tasks_execution_role: Creation complete after 1s (ID: blog-ecs-task-execution-role-20180126130527595100000001)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.15361,
+      "\u001b[0m\u001b[1maws_ecs_task_definition.task: Creation complete after 2s (ID: blog-blog)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.009767,
+      "\u001b[0m\u001b[1m\u001b[32m\r\n"
+    ],
+    [
+      8.2e-05,
+      "Apply complete! Resources: 3 added, 0 changed, 0 destroyed.\u001b[0m\r\n"
+    ],
+    [
+      0.010489,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                    \r \r"
+    ],
+    [
+      7.5e-05,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/fargate-blog\u0007"
+    ],
+    [
+      1.5e-05,
+      "\u001b]1;../fargate-blog\u0007"
+    ],
+    [
+      0.028525,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mfargate-blog\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      0.000138,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      3.4e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      3.066089,
+      "\u001b[?2004l\r\r\n"
+    ]
+  ]
+}
