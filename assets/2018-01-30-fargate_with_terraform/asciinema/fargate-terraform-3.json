@@ -1,0 +1,914 @@
+{
+  "version": 1,
+  "width": 133,
+  "height": 25,
+  "duration": 209.093229,
+  "command": null,
+  "title": null,
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/zsh"
+  },
+  "stdout": [
+    [
+      0.483842,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                    \r \r"
+    ],
+    [
+      6.5e-05,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/fargate-blog\u0007\u001b]1;../fargate-blog\u0007"
+    ],
+    [
+      0.03551,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mfargate-blog\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      0.000174,
+      "\u001b[?1h\u001b=\u001b[?2004h"
+    ],
+    [
+      0.548886,
+      "t"
+    ],
+    [
+      0.17533,
+      "\bte"
+    ],
+    [
+      0.288026,
+      "r"
+    ],
+    [
+      0.183846,
+      "r"
+    ],
+    [
+      0.319439,
+      "a"
+    ],
+    [
+      0.234182,
+      "form"
+    ],
+    [
+      0.477228,
+      " "
+    ],
+    [
+      0.153155,
+      "a"
+    ],
+    [
+      0.127911,
+      "p"
+    ],
+    [
+      0.168094,
+      "p"
+    ],
+    [
+      0.175959,
+      "l"
+    ],
+    [
+      0.191991,
+      "y"
+    ],
+    [
+      0.263069,
+      "\u001b[?1l\u001b>"
+    ],
+    [
+      3.1e-05,
+      "\u001b[?2004l\r\r\n"
+    ],
+    [
+      0.001316,
+      "\u001b]2;terraform apply\u0007\u001b]1;terraform\u0007"
+    ],
+    [
+      0.587171,
+      "\u001b[0m\u001b[1mdata.template_file.blog: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      2.131852,
+      "\u001b[0m\u001b[1maws_ecs_cluster.cluster: Refreshing state... (ID: arn:aws:ecs:us-east-1:736819507440:cluster/blog-ecs-cluster)\u001b[0m\r\n"
+    ],
+    [
+      0.000173,
+      "\u001b[0m\u001b[1maws_cloudwatch_log_group.log_group: Refreshing state... (ID: blog)\u001b[0m\r\n"
+    ],
+    [
+      0.001088,
+      "\u001b[0m\u001b[1mdata.aws_iam_policy_document.ecs_tasks_execution_role: Refreshing state...\u001b[0m\r\n"
+    ],
+    [
+      0.00245,
+      "\u001b[0m\u001b[1maws_iam_role.ecs_tasks_execution_role: Refreshing state... (ID: blog-ecs-task-execution-role)\u001b[0m\r\n"
+    ],
+    [
+      0.41744,
+      "\u001b[0m\u001b[1maws_ecs_task_definition.task: Refreshing state... (ID: blog-blog)\u001b[0m\r\n"
+    ],
+    [
+      0.000804,
+      "\u001b[0m\u001b[1maws_iam_role_policy_attachment.ecs_tasks_execution_role: Refreshing state... (ID: blog-ecs-task-execution-role-20180126130527595100000001)\u001b[0m\r\n"
+    ],
+    [
+      1.431811,
+      "\u001b[0m\u001b[1maws_eip.nat: Refreshing state... (ID: eipalloc-e5c5d6d2)\u001b[0m\r\n"
+    ],
+    [
+      6.7e-05,
+      "\u001b[0m\u001b[1maws_vpc.vpc: Refreshing state... (ID: vpc-170b196f)\u001b[0m\r\n"
+    ],
+    [
+      3.653513,
+      "\u001b[0m\u001b[1maws_internet_gateway.internet_gateway: Refreshing state... (ID: igw-2361635a)\u001b[0m\r\n"
+    ],
+    [
+      0.00037,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[0]: Refreshing state... (ID: subnet-1b523c46)\u001b[0m\r\n"
+    ],
+    [
+      0.000176,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[2]: Refreshing state... (ID: subnet-1798f238)\u001b[0m\r\n"
+    ],
+    [
+      0.001492,
+      "\u001b[0m\u001b[1maws_subnet.public_subnet[1]: Refreshing state... (ID: subnet-65725301)\u001b[0m\r\n"
+    ],
+    [
+      0.001622,
+      "\u001b[0m\u001b[1maws_subnet.private_subnet[2]: Refreshing state... (ID: subnet-498de766)\u001b[0m\r\n"
+    ],
+    [
+      0.000179,
+      "\u001b[0m\u001b[1maws_subnet.private_subnet[0]: Refreshing state... (ID: subnet-a95c32f4)\u001b[0m\r\n"
+    ],
+    [
+      0.000172,
+      "\u001b[0m\u001b[1maws_subnet.private_subnet[1]: Refreshing state... (ID: subnet-ef75548b)\u001b[0m\r\n"
+    ],
+    [
+      0.406148,
+      "\u001b[0m\u001b[1maws_nat_gateway.nat: Refreshing state... (ID: nat-058340566b17fa3f9)\u001b[0m\r\n"
+    ],
+    [
+      0.500015,
+      "\u001b[0m\u001b[1maws_route_table.private_routetable: Refreshing state... (ID: rtb-5630112b)\u001b[0m\r\n"
+    ],
+    [
+      0.399072,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[1]: Refreshing state... (ID: rtbassoc-30b7044c)\u001b[0m\r\n"
+    ],
+    [
+      0.000466,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[2]: Refreshing state... (ID: rtbassoc-4bbe0d37)\u001b[0m\r\n"
+    ],
+    [
+      0.000214,
+      "\u001b[0m\u001b[1maws_route_table_association.private_routing_table[0]: Refreshing state... (ID: rtbassoc-8abb08f6)\u001b[0m\r\n"
+    ],
+    [
+      0.115747,
+      "\u001b[0m\u001b[1maws_route_table.public_routetable: Refreshing state... (ID: rtb-b73f1eca)\u001b[0m\r\n"
+    ],
+    [
+      0.4054,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[0]: Refreshing state... (ID: rtbassoc-70b4070c)\u001b[0m\r\n"
+    ],
+    [
+      0.000229,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[1]: Refreshing state... (ID: rtbassoc-71b4070d)\u001b[0m\r\n"
+    ],
+    [
+      0.000214,
+      "\u001b[0m\u001b[1maws_route_table_association.public_routing_table[2]: Refreshing state... (ID: rtbassoc-fdcf7c81)\u001b[0m\r\n"
+    ],
+    [
+      3.55373,
+      "\r\n"
+    ],
+    [
+      3.7e-05,
+      "An execution plan has been generated and is shown below.\r\n"
+    ],
+    [
+      3.3e-05,
+      "Resource actions are indicated with the following symbols:\r\n"
+    ],
+    [
+      2.3e-05,
+      "  \u001b[32m+\u001b[0m create\r\n\u001b[0m\r\n"
+    ],
+    [
+      0.0001,
+      "Terraform will perform the following actions:\r\n\r\n"
+    ],
+    [
+      2.9e-05,
+      "\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_alb.main\r\n"
+    ],
+    [
+      7.9e-05,
+      "\u001b[0m      id:                                    <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      access_logs.#:                         <computed>\r\n"
+    ],
+    [
+      4.9e-05,
+      "      arn:                                   <computed>\r\n"
+    ],
+    [
+      7.7e-05,
+      "      arn_suffix:                            <computed>\r\n"
+    ],
+    [
+      8.2e-05,
+      "      dns_name:                              <computed>\r\n"
+    ],
+    [
+      7.5e-05,
+      "      enable_deletion_protection:            \"false\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "      idle_timeout:                          \"60\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "      internal:                              \"false\"\r\n"
+    ],
+    [
+      7e-05,
+      "      ip_address_type:                       <computed>\r\n"
+    ],
+    [
+      6.3e-05,
+      "      load_balancer_type:                    \"application\"\r\n"
+    ],
+    [
+      4e-05,
+      "      name:                                  <computed>\r\n"
+    ],
+    [
+      6.2e-05,
+      "      security_groups.#:                     <computed>\r\n"
+    ],
+    [
+      6.7e-05,
+      "      subnets.#:                             \"3\"\r\n"
+    ],
+    [
+      0.000106,
+      "      subnets.2867524602:                    \"subnet-1b523c46\"\r\n"
+    ],
+    [
+      0.000132,
+      "      subnets.3091901722:                    \"subnet-65725301\"\r\n"
+    ],
+    [
+      3.1e-05,
+      "      subnets.3743542759:                    \"subnet-1798f238\"\r\n"
+    ],
+    [
+      7.3e-05,
+      "      vpc_id:                                <computed>\r\n"
+    ],
+    [
+      8.5e-05,
+      "      zone_id:                               <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      0.000129,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_alb_listener.main\r\n"
+    ],
+    [
+      7.5e-05,
+      "\u001b[0m      id:                                    <computed>\r\n"
+    ],
+    [
+      8.7e-05,
+      "      arn:                                   <computed>\r\n"
+    ],
+    [
+      8e-05,
+      "      default_action.#:                      \"1\"\r\n"
+    ],
+    [
+      0.000109,
+      "      default_action.0.target_group_arn:     \"${aws_alb_target_group.main.id}\"\r\n"
+    ],
+    [
+      7.5e-05,
+      "      default_action.0.type:                 \"forward\"\r\n"
+    ],
+    [
+      2.1e-05,
+      "      load_balancer_arn:                     \"${aws_alb.main.id}\"\r\n"
+    ],
+    [
+      9.6e-05,
+      "      port:                                  \"80\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "      protocol:                              \"HTTP\"\r\n"
+    ],
+    [
+      0.000104,
+      "      ssl_policy:                            <computed>\r\n\u001b[0m\r\n"
+    ],
+    [
+      8e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_alb_target_group.main\r\n"
+    ],
+    [
+      9.9e-05,
+      "\u001b[0m      id:                                    <computed>\r\n"
+    ],
+    [
+      6.1e-05,
+      "      arn:                                   <computed>\r\n"
+    ],
+    [
+      0.000117,
+      "      arn_suffix:                            <computed>\r\n"
+    ],
+    [
+      7.5e-05,
+      "      deregistration_delay:                  \"300\"\r\n"
+    ],
+    [
+      8.8e-05,
+      "      health_check.#:                        <computed>\r\n"
+    ],
+    [
+      6.2e-05,
+      "      name:                                  <computed>\r\n"
+    ],
+    [
+      6.2e-05,
+      "      port:                                  \"80\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      protocol:                              \"HTTP\"\r\n"
+    ],
+    [
+      0.000107,
+      "      stickiness.#:                          <computed>\r\n"
+    ],
+    [
+      6.9e-05,
+      "      target_type:                           \"ip\"\r\n"
+    ],
+    [
+      7.2e-05,
+      "      vpc_id:                                \"vpc-170b196f\"\r\n\u001b[0m\r\n"
+    ],
+    [
+      5.9e-05,
+      "\u001b[0m\u001b[32m  \u001b[32m+\u001b[0m \u001b[32maws_security_group.alb_sg\r\n"
+    ],
+    [
+      7.2e-05,
+      "\u001b[0m      id:                                    <computed>\r\n"
+    ],
+    [
+      0.000105,
+      "      description:                           \"Managed by Terraform\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "      egress.#:                              \"1\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      egress.482069346.cidr_blocks.#:        \"1\"\r\n"
+    ],
+    [
+      9e-05,
+      "      egress.482069346.cidr_blocks.0:        \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      7e-05,
+      "      egress.482069346.description:          \"\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "      egress.482069346.from_port:            \"0\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "      egress.482069346.ipv6_cidr_blocks.#:   \"0\"\r\n"
+    ],
+    [
+      8.4e-05,
+      "      egress.482069346.prefix_list_ids.#:    \"0\"\r\n"
+    ],
+    [
+      4.5e-05,
+      "      egress.482069346.protocol:             \"-1\"\r\n"
+    ],
+    [
+      0.000111,
+      "      egress.482069346.security_groups.#:    \"0\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "      egress.482069346.self:                 \"false\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "      egress.482069346.to_port:              \"0\"\r\n"
+    ],
+    [
+      8.2e-05,
+      "      ingress.#:                             \"1\"\r\n"
+    ],
+    [
+      5.8e-05,
+      "      ingress.2214680975.cidr_blocks.#:      \"1\"\r\n"
+    ],
+    [
+      0.000111,
+      "      ingress.2214680975.cidr_blocks.0:      \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      3.4e-05,
+      "      ingress.2214680975.description:        \"\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "      ingress.2214680975.from_port:          \"80\"\r\n"
+    ],
+    [
+      5.4e-05,
+      "      ingress.2214680975.ipv6_cidr_blocks.#: \"0\"\r\n"
+    ],
+    [
+      6.4e-05,
+      "      ingress.2214680975.protocol:           \"tcp\"\r\n"
+    ],
+    [
+      5e-05,
+      "      ingress.2214680975.security_groups.#:  \"0\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "      ingress.2214680975.self:               \"false\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "      ingress.2214680975.to_port:            \"80\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "      name:                                  \"blog-blog-alb-sg\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "      owner_id:                              <computed>\r\n"
+    ],
+    [
+      7.4e-05,
+      "      revoke_rules_on_delete:                \"false\"\r\n"
+    ],
+    [
+      0.000106,
+      "      vpc_id:                                \"vpc-170b196f\"\r\n\u001b[0m\r\n\u001b[0m\r\n"
+    ],
+    [
+      6.9e-05,
+      "\u001b[0m\u001b[1mPlan:\u001b[0m 4 to add, 0 to change, 0 to destroy.\u001b[0m\r\n\r\n"
+    ],
+    [
+      4.4e-05,
+      "\u001b[0m\u001b[1mDo you want to perform these actions?\u001b[0m\r\n"
+    ],
+    [
+      0.000141,
+      "  Terraform will perform the actions described above.\r\n"
+    ],
+    [
+      9.3e-05,
+      "  Only 'yes' will be accepted to approve.\r\n\r\n"
+    ],
+    [
+      0.100749,
+      "  \u001b[1mEnter a value:\u001b[0m \u001b[0m"
+    ],
+    [
+      0.752899,
+      "y"
+    ],
+    [
+      0.136015,
+      "e"
+    ],
+    [
+      0.215972,
+      "s"
+    ],
+    [
+      0.167899,
+      "\r\n"
+    ],
+    [
+      0.000167,
+      "\r\n"
+    ],
+    [
+      1.479619,
+      "\u001b[0m\u001b[1maws_security_group.alb_sg: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.000125,
+      "  description:                           \"\" => \"Managed by Terraform\"\r\n"
+    ],
+    [
+      0.000136,
+      "  egress.#:                              \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000126,
+      "  egress.482069346.cidr_blocks.#:        \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000102,
+      "  egress.482069346.cidr_blocks.0:        \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      0.000117,
+      "  egress.482069346.description:          \"\" => \"\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "  egress.482069346.from_port:            \"\" => \"0\"\r\n"
+    ],
+    [
+      0.000158,
+      "  egress.482069346.ipv6_cidr_blocks.#:   \"\" => \"0\"\r\n"
+    ],
+    [
+      0.000148,
+      "  egress.482069346.prefix_list_ids.#:    \"\" => \"0\"\r\n"
+    ],
+    [
+      0.000115,
+      "  egress.482069346.protocol:             \"\" => \"-1\"\r\n"
+    ],
+    [
+      0.000114,
+      "  egress.482069346.security_groups.#:    \"\" => \"0\"\r\n"
+    ],
+    [
+      9.9e-05,
+      "  egress.482069346.self:                 \"\" => \"false\"\r\n"
+    ],
+    [
+      0.000111,
+      "  egress.482069346.to_port:              \"\" => \"0\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  ingress.#:                             \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000149,
+      "  ingress.2214680975.cidr_blocks.#:      \"\" => \"1\"\r\n"
+    ],
+    [
+      0.00012,
+      "  ingress.2214680975.cidr_blocks.0:      \"\" => \"0.0.0.0/0\"\r\n"
+    ],
+    [
+      0.00013,
+      "  ingress.2214680975.description:        \"\" => \"\"\r\n"
+    ],
+    [
+      0.000114,
+      "  ingress.2214680975.from_port:          \"\" => \"80\"\r\n"
+    ],
+    [
+      8.9e-05,
+      "  ingress.2214680975.ipv6_cidr_blocks.#: \"\" => \"0\"\r\n"
+    ],
+    [
+      6.7e-05,
+      "  ingress.2214680975.protocol:           \"\" => \"tcp\"\r\n"
+    ],
+    [
+      8.5e-05,
+      "  ingress.2214680975.security_groups.#:  \"\" => \"0\"\r\n"
+    ],
+    [
+      0.000112,
+      "  ingress.2214680975.self:               \"\" => \"false\"\r\n"
+    ],
+    [
+      0.000128,
+      "  ingress.2214680975.to_port:            \"\" => \"80\"\r\n"
+    ],
+    [
+      6.7e-05,
+      "  name:                                  \"\" => \"blog-blog-alb-sg\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  owner_id:                              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      6.2e-05,
+      "  revoke_rules_on_delete:                \"\" => \"false\"\r\n"
+    ],
+    [
+      9.5e-05,
+      "  vpc_id:                                \"\" => \"vpc-170b196f\"\u001b[0m\r\n"
+    ],
+    [
+      6.6e-05,
+      "\u001b[0m\u001b[1maws_alb_target_group.main: Creating...\u001b[0m\r\n"
+    ],
+    [
+      3.3e-05,
+      "  arn:                  \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.4e-05,
+      "  arn_suffix:           \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      2.3e-05,
+      "  deregistration_delay: \"\" => \"300\"\r\n"
+    ],
+    [
+      4.3e-05,
+      "  health_check.#:       \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.6e-05,
+      "  name:                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      7.8e-05,
+      "  port:                 \"\" => \"80\"\r\n"
+    ],
+    [
+      8e-05,
+      "  protocol:             \"\" => \"HTTP\"\r\n"
+    ],
+    [
+      3.2e-05,
+      "  stickiness.#:         \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      8.1e-05,
+      "  target_type:          \"\" => \"ip\"\r\n"
+    ],
+    [
+      0.0001,
+      "  vpc_id:               \"\" => \"vpc-170b196f\"\u001b[0m\r\n"
+    ],
+    [
+      2.318916,
+      "\u001b[0m\u001b[1maws_alb_target_group.main: Creation complete after 2s (ID: arn:aws:elasticloadbalancing:us-east-1:...126130837791300000001/518d76775fb446f7)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      1.711009,
+      "\u001b[0m\u001b[1maws_security_group.alb_sg: Creation complete after 4s (ID: sg-78876d0f)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.008293,
+      "\u001b[0m\u001b[1maws_alb.main: Creating...\u001b[0m\r\n"
+    ],
+    [
+      5.4e-05,
+      "  access_logs.#:              \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.2e-05,
+      "  arn:                        \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000116,
+      "  arn_suffix:                 \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.00013,
+      "  dns_name:                   \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      9.2e-05,
+      "  enable_deletion_protection: \"\" => \"false\"\r\n"
+    ],
+    [
+      9.9e-05,
+      "  idle_timeout:               \"\" => \"60\"\r\n"
+    ],
+    [
+      9.7e-05,
+      "  internal:                   \"\" => \"false\"\r\n"
+    ],
+    [
+      9.8e-05,
+      "  ip_address_type:            \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      4.4e-05,
+      "  load_balancer_type:         \"\" => \"application\"\r\n"
+    ],
+    [
+      0.000135,
+      "  name:                       \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000105,
+      "  security_groups.#:          \"\" => \"1\"\r\n"
+    ],
+    [
+      0.0001,
+      "  security_groups.1114085883: \"\" => \"sg-78876d0f\"\r\n"
+    ],
+    [
+      2.6e-05,
+      "  subnets.#:                  \"\" => \"3\"\r\n"
+    ],
+    [
+      7.6e-05,
+      "  subnets.2867524602:         \"\" => \"subnet-1b523c46\"\r\n"
+    ],
+    [
+      0.000168,
+      "  subnets.3091901722:         \"\" => \"subnet-65725301\"\r\n"
+    ],
+    [
+      0.000113,
+      "  subnets.3743542759:         \"\" => \"subnet-1798f238\"\r\n"
+    ],
+    [
+      9.4e-05,
+      "  vpc_id:                     \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      0.000132,
+      "  zone_id:                    \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      9.999413,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000365,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      9.999938,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000191,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      9.999913,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (50s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000235,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m0s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000164,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000272,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.001077,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000796,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000802,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (1m50s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.001657,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (2m0s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000791,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (2m10s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.001079,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (2m20s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000121,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (2m30s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      10.000767,
+      "\u001b[0m\u001b[1maws_alb.main: Still creating... (2m40s elapsed)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      8.791756,
+      "\u001b[0m\u001b[1maws_alb.main: Creation complete after 2m49s (ID: arn:aws:elasticloadbalancing:us-east-1:...126130841832500000002/ac578e5ea682361a)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.006478,
+      "\u001b[0m\u001b[1maws_alb_listener.main: Creating...\u001b[0m\r\n"
+    ],
+    [
+      0.000107,
+      "  arn:                               \"\" => \"<computed>\"\r\n"
+    ],
+    [
+      5.2e-05,
+      "  default_action.#:                  \"\" => \"1\"\r\n"
+    ],
+    [
+      0.000299,
+      "  default_action.0.target_group_arn: \"\" => \"arn:aws:elasticloadbalancing:us-east-1:736819507440:targetgroup/tf-20180126130837791300000001/518d76775fb446f7\"\r\n"
+    ],
+    [
+      6.3e-05,
+      "  default_action.0.type:             \"\" => \"forward\"\r\n"
+    ],
+    [
+      0.000317,
+      "  load_balancer_arn:                 \"\" => \"arn:aws:elasticloadbalancing:us-east-1:736819507440:loadbalancer/app/tf-lb-20180126130841832500000002/ac578e5ea682361a\"\r\n"
+    ],
+    [
+      3.7e-05,
+      "  port:                              \"\" => \"80\"\r\n"
+    ],
+    [
+      7.9e-05,
+      "  protocol:                          \"\" => \"HTTP\"\r\n"
+    ],
+    [
+      6.6e-05,
+      "  ssl_policy:                        \"\" => \"<computed>\"\u001b[0m\r\n"
+    ],
+    [
+      0.802996,
+      "\u001b[0m\u001b[1maws_alb_listener.main: Creation complete after 0s (ID: arn:aws:elasticloadbalancing:us-east-1:...0002/ac578e5ea682361a/f2be1b0d9da6eb29)\u001b[0m\u001b[0m\r\n"
+    ],
+    [
+      0.010668,
+      "\u001b[0m\u001b[1m\u001b[32m\r\n"
+    ],
+    [
+      9.7e-05,
+      "Apply complete! Resources: 4 added, 0 changed, 0 destroyed.\u001b[0m\r\n"
+    ],
+    [
+      0.00014,
+      "\u001b[0m\u001b[1m\u001b[32m\r\nOutputs:\r\n\r\n"
+    ],
+    [
+      0.000149,
+      "blog_url = http://tf-lb-20180126130841832500000002-1138599315.us-east-1.elb.amazonaws.com\u001b[0m\r\n"
+    ],
+    [
+      0.009584,
+      "\u001b[1m\u001b[7m%\u001b[27m\u001b[1m\u001b[0m                                                                                                                                    \r \r"
+    ],
+    [
+      0.00013,
+      "\u001b]2;310230212@MACC02QX17YG8WP-2: ~/projects/play/fargate-blog\u0007"
+    ],
+    [
+      5.5e-05,
+      "\u001b]1;../fargate-blog\u0007"
+    ],
+    [
+      0.048708,
+      "\r\u001b[0m\u001b[27m\u001b[24m\u001b[J\u001b[01;32m➜  \u001b[36mfargate-blog\u001b[00m \u001b[01;34mgit:(\u001b[31mmaster\u001b[34m) \u001b[33m✗\u001b[00m \u001b[K"
+    ],
+    [
+      6.7e-05,
+      "\u001b[?1h\u001b="
+    ],
+    [
+      5.4e-05,
+      "\u001b[?2004h"
+    ],
+    [
+      15.023732,
+      "\u001b[?2004l\r\r\n"
+    ]
+  ]
+}
