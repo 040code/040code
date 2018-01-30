@@ -196,11 +196,11 @@ docker run -it -p 80 --add-host="dockerhost:$(DOCKERHOST)" --rm centos /bin/bash
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 <span class="nb">export </span><span class="nv">DOCKER_HOST</span><span class="o">=</span><span class="k">$(</span>curl <span class="nt">-s</span> 169.254.169.254/latest/meta-data/local-ipv4<span class="k">)</span>
 <span class="nb">export </span><span class="nv">CONTAINER_ID</span><span class="o">=</span><span class="k">$(</span><span class="nb">cat</span> /proc/self/cgroup | <span class="nb">grep</span> <span class="s2">"cpu:/"</span> | <span class="se">\</span>
-  sed <span class="s1">'s/\([0-9]\):cpu:\/docker\///g'</span><span class="k">)</span>
+  <span class="nb">sed</span> <span class="s1">'s/\([0-9]\):cpu:\/docker\///g'</span><span class="k">)</span>
 <span class="nb">export </span><span class="nv">NETWORK_BINDING</span><span class="o">=</span><span class="se">\</span>
   <span class="k">$(</span>curl <span class="s2">"http://</span><span class="k">${</span><span class="nv">DOCKER_HOST</span><span class="k">}</span><span class="s2">:5555/container/</span><span class="k">${</span><span class="nv">CONTAINER_ID</span><span class="k">}</span><span class="s2">/portbinding?port=8080&amp;protocol=tcp"</span><span class="k">)</span>
 <span class="nb">export </span><span class="nv">EXPOSED_PORT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span> <span class="k">${</span><span class="nv">NETWORK_BINDING</span><span class="k">}</span> | jq <span class="nt">-c</span> <span class="s1">'.[0].HostPort'</span> | <span class="se">\</span>
-  sed <span class="nt">-e</span> <span class="s1">'s/^"//'</span>  <span class="nt">-e</span> <span class="s1">'s/"$//'</span><span class="k">)</span>
+  <span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'s/^"//'</span>  <span class="nt">-e</span> <span class="s1">'s/"$//'</span><span class="k">)</span>
 
 <span class="nb">exec </span>java <span class="nt">-jar</span> /service.jar
 </code></pre></div></div>
@@ -295,7 +295,7 @@ docker run -it -p 80 --add-host="dockerhost:$(DOCKERHOST)" --rm centos /bin/bash
                     
                     
                 </ul> -->
-                <p class="copyright text-muted">Copyright &copy; 040 Code 2017</p>
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2018</p>
             </div>
         </div>
     </div>

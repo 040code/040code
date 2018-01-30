@@ -1,4 +1,362 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.6.2">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2017-12-10T18:57:44+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Runners on the Spot</title><link href="https://040code.github.io//2017/12/09/runners-on-the-spot/" rel="alternate" type="text/html" title="Runners on the Spot" /><published>2017-12-09T00:00:00+00:00</published><updated>2017-12-09T00:00:00+00:00</updated><id>https://040code.github.io//2017/12/09/runners-on-the-spot</id><content type="html" xml:base="https://040code.github.io//2017/12/09/runners-on-the-spot/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-01-30T19:45:15+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">MicroHack Fargate</title><link href="https://040code.github.io//2018/01/30/fargate_with_terraform/" rel="alternate" type="text/html" title="MicroHack Fargate" /><published>2018-01-30T00:00:00+00:00</published><updated>2018-01-30T00:00:00+00:00</updated><id>https://040code.github.io//2018/01/30/fargate_with_terraform</id><content type="html" xml:base="https://040code.github.io//2018/01/30/fargate_with_terraform/">&lt;p&gt;Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in &lt;code class=&quot;highlighter-rouge&quot;&gt;us-east-1&lt;/code&gt;, see also the &lt;a href=&quot;https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/&quot;&gt;list&lt;/a&gt; of supported regions. Later in December Fargate also become available in &lt;a href=&quot;https://www.terraform.io/&quot;&gt;Terraform&lt;/a&gt; so time to see how it works.&lt;/p&gt;
+
+&lt;p&gt;In this post I will show how to deploy containers to Fargate using Terraform. As example docker image I will use the blog itself. The complete example in available on &lt;a href=&quot;https://github.com/npalm/blog_terraform_aws_fargate&quot;&gt;GitHub&lt;/a&gt;. First I show how you can deploy a container using Terraform to Fargate. In case you would like to experiment with AWS console instead of Terraform you should be able to execute the same steps direct in AWS. Only the VPC part could be a bit tricky, but even that part can be skipped and replaced with the default VPC. In that case you don’t have private subnets available.&lt;/p&gt;
+
+&lt;p&gt;Finally I will discuss how a deployment with Fargate in ECS compares to a deployment with EC2 in ECS. And show what steps have to be taken to move the deployment from Fargate to EC2 instances.&lt;/p&gt;
+
+&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
+&lt;p&gt;Before you start you need to have programmatically access to an AWS account and Terraform (0.11+) installed. The tool &lt;a href=&quot;http://brewformulas.org/Tfenv&quot;&gt;tfenv&lt;/a&gt; let you manage multiple terraform version on your system.&lt;/p&gt;
+
+&lt;h2 id=&quot;deploy-serverless-containers-on-fargate&quot;&gt;Deploy serverless containers on Fargate&lt;/h2&gt;
+&lt;p&gt;Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging. The diagram below shows an abstract view of the deployment we are going to create, this view contains two in instead of the 3 availability zones we use.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate-diagram.png&quot; alt=&quot;Fargate&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We start with defining the VPC, we choose &lt;code class=&quot;highlighter-rouge&quot;&gt;us-east-1&lt;/code&gt; since Fargate is only available in this region. In the blog post &lt;a href=&quot;/2017/06/18/terraform-aws-vpc/&quot;&gt;Coding a VPC in Terraform&lt;/a&gt; you find more details about how this VPC module is structured.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;provider &quot;aws&quot; {
+  region  = &quot;us-east-1&quot;
+  version = &quot;1.7.1&quot;
+}
+
+provider &quot;template&quot; {
+  version = &quot;1.0&quot;
+}
+
+module &quot;vpc&quot; {
+  source  = &quot;npalm/vpc/aws&quot; // https://registry.terraform.io/modules/npalm/vpc/aws
+  version = &quot;1.1.0&quot;
+
+  environment = &quot;blog&quot;
+  aws_region  = &quot;us-east-1&quot;
+
+  create_private_hosted_zone = &quot;false&quot;
+
+  // us-east-1 is the only region that supports Fargate
+  availability_zones = {
+    us-east-1 = [&quot;us-east-1a&quot;, &quot;us-east-1b&quot;, &quot;us-east-1c&quot;]
+  }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next we define the ECS cluster, and CloudWatch log group. Since we will deploy to Fargate we don’t have to attache EC2 instances to our cluster.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_ecs_cluster&quot; &quot;cluster&quot; {
+  name = &quot;blog-ecs-cluster&quot;
+}
+
+resource &quot;aws_cloudwatch_log_group&quot; &quot;log_group&quot; {
+  name = &quot;blog&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Now the first part is defined we execute a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; and inpect the results.&lt;/p&gt;
+
+&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-1.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;The next step is to deploy the docker image with the blog. In ECS you deploy a docker container with a task. And your task will be managed by a service. First we create the task definition which contains the container deployment definition as well. Fargate is using &lt;a href=&quot;https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html&quot;&gt;awsvpc as networking mode&lt;/a&gt;, in this mode each task definiton gets its own private ip address. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;data &quot;aws_iam_policy_document&quot; &quot;ecs_tasks_execution_role&quot; {
+  statement {
+    actions = [&quot;sts:AssumeRole&quot;]
+
+    principals {
+      type        = &quot;Service&quot;
+      identifiers = [&quot;ecs-tasks.amazonaws.com&quot;]
+    }
+  }
+}
+
+resource &quot;aws_iam_role&quot; &quot;ecs_tasks_execution_role&quot; {
+  name               = &quot;blog-ecs-task-execution-role&quot;
+  assume_role_policy = &quot;${data.aws_iam_policy_document.ecs_tasks_execution_role.json}&quot;
+}
+
+resource &quot;aws_iam_role_policy_attachment&quot; &quot;ecs_tasks_execution_role&quot; {
+  role       = &quot;${aws_iam_role.ecs_tasks_execution_role.name}&quot;
+  policy_arn = &quot;arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy&quot;
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We have defined the execution rol for the task, next we define the task definion. This task definition consist of two parts. First we define a container definition via a &lt;code class=&quot;highlighter-rouge&quot;&gt;template_file&lt;/code&gt;. In this container definition you see container port 80 is mapped to host port 80, the task will get its own private IP. And after that we define the task definition self. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;data &quot;template_file&quot; &quot;blog&quot; {
+  template = &amp;lt;&amp;lt;EOF
+  [
+    {
+      &quot;essential&quot;: true,
+      &quot;image&quot;: &quot;npalm/040code.github.io:latest&quot;,
+      &quot;name&quot;: &quot;blog&quot;,
+      &quot;portMappings&quot;: [
+        {
+          &quot;hostPort&quot;: 80,
+          &quot;protocol&quot;: &quot;tcp&quot;,
+          &quot;containerPort&quot;: 80
+        }
+      ],
+      &quot;logConfiguration&quot;: {
+        &quot;logDriver&quot;: &quot;awslogs&quot;,
+        &quot;options&quot;: {
+          &quot;awslogs-group&quot;: &quot;blog&quot;,
+          &quot;awslogs-region&quot;: &quot;us-east-1&quot;,
+          &quot;awslogs-stream-prefix&quot;: &quot;040code&quot;
+        }
+      }
+    }
+  ]
+
+  EOF
+}
+
+resource &quot;aws_ecs_task_definition&quot; &quot;task&quot; {
+  family                   = &quot;blog-blog&quot;
+  container_definitions    = &quot;${data.template_file.blog.rendered}&quot;
+  network_mode             = &quot;awsvpc&quot;
+  cpu                      = &quot;256&quot;
+  memory                   = &quot;512&quot;
+  requires_compatibilities = [&quot;FARGATE&quot;]
+  execution_role_arn       = &quot;${aws_iam_role.ecs_tasks_execution_role.arn}&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Time to verify the code is working by executing a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;&lt;/p&gt;
+
+&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-2.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.0&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/container-definition.png&quot; alt=&quot;Fargate&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We have still nothing running but you can already see the different parts in de AWS console. We have now a VPC, CloudWatch log group, ECS cluster and task definition available. The next logical step in de AWS console would be to create the service, and find out at the latest step that you need to create a load balancer first. So in code we will define the load balancer first. The load balancer will route traffic via HTTP to the container.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_security_group&quot; &quot;alb_sg&quot; {
+  name   = &quot;blog-blog-alb-sg&quot;
+  vpc_id = &quot;${module.vpc.vpc_id}&quot;
+
+  ingress {
+    protocol    = &quot;tcp&quot;
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = [&quot;0.0.0.0/0&quot;]
+  }
+
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = &quot;-1&quot;
+
+    cidr_blocks = [&quot;0.0.0.0/0&quot;]
+  }
+}
+
+resource &quot;aws_alb&quot; &quot;main&quot; {
+  internal        = &quot;false&quot;
+  subnets         = [&quot;${module.vpc.public_subnets}&quot;]
+  security_groups = [&quot;${aws_security_group.alb_sg.id}&quot;]
+}
+
+resource &quot;aws_alb_listener&quot; &quot;main&quot; {
+  load_balancer_arn = &quot;${aws_alb.main.id}&quot;
+  port              = 80
+  protocol          = &quot;HTTP&quot;
+
+  default_action {
+    target_group_arn = &quot;${aws_alb_target_group.main.id}&quot;
+    type             = &quot;forward&quot;
+  }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify the target type &lt;code class=&quot;highlighter-rouge&quot;&gt;ip&lt;/code&gt; and not &lt;code class=&quot;highlighter-rouge&quot;&gt;instance&lt;/code&gt; since containers running in Fargate will get their own IP. Actually this not Fargate but &lt;code class=&quot;highlighter-rouge&quot;&gt;awsvpc&lt;/code&gt; behavior.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_alb_target_group&quot; &quot;main&quot; {
+  port        = &quot;80&quot;
+  protocol    = &quot;HTTP&quot;
+  vpc_id      = &quot;${module.vpc.vpc_id}&quot;
+  target_type = &quot;ip&quot;
+}
+
+output &quot;blog_url&quot; {
+  value = &quot;http://${aws_alb.main.dns_name}&quot;
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Again we verify our new code by executing a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;.&lt;/p&gt;
+
+&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-3.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;We are almost there, next we define the service. A task running in in network mode &lt;code class=&quot;highlighter-rouge&quot;&gt;awsvpc&lt;/code&gt;, requires a service that defines a network configuration. In the networking configuration we define a security group to control access to our containers, and we define the subnets in which the containers are hosted.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_security_group&quot; &quot;awsvpc_sg&quot; {
+  name   = &quot;blog-awsvpc-cluster-sg&quot;
+  vpc_id = &quot;${module.vpc.vpc_id}&quot;
+
+  ingress {
+    protocol  = &quot;tcp&quot;
+    from_port = 0
+    to_port   = 65535
+
+    cidr_blocks = [
+      &quot;${module.vpc.vpc_cidr}&quot;,
+    ]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = &quot;tcp&quot;
+    cidr_blocks = [&quot;0.0.0.0/0&quot;]
+  }
+
+  tags {
+    Name        = &quot;blog-ecs-cluster-sg&quot;
+    Environment = &quot;blog&quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The last resource to create is the service. In the service we connect the task, load balancer and security group together. By setting the launch type to &lt;code class=&quot;highlighter-rouge&quot;&gt;FARGATE&lt;/code&gt; we tell Amazon to deploy the container to Fargate.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+resource &quot;aws_ecs_service&quot; &quot;service&quot; {
+  name            = &quot;blog&quot;
+  cluster         = &quot;${aws_ecs_cluster.cluster.id}&quot;
+  task_definition = &quot;${aws_ecs_task_definition.task.arn}&quot;
+  desired_count   = 1
+
+  load_balancer = {
+    target_group_arn = &quot;${aws_alb_target_group.main.arn}&quot;
+    container_name   = &quot;blog&quot;
+    container_port   = 80
+  }
+
+  launch_type = &quot;FARGATE&quot;
+
+  network_configuration {
+    security_groups = [&quot;${aws_security_group.awsvpc_sg.id}&quot;]
+    subnets         = [&quot;${module.vpc.private_subnets}&quot;]
+  }
+
+  depends_on = [&quot;aws_alb_listener.main&quot;]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;That is the last part of coding, run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; and inspect the result.&lt;/p&gt;
+
+&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-4.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;That is all, we have now our blog running as serverless container in AWS Fargate.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate.png&quot; alt=&quot;Fargate&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;mixing-ec2-and-fargate-on-ecs&quot;&gt;Mixing EC2 and Fargate on ECS&lt;/h2&gt;
+&lt;p&gt;Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need that are not available in in Fargate, such as a volume mount? How difficult would it be to move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.&lt;/p&gt;
+
+&lt;p&gt;First we refactor the above code to some &lt;a href=&quot;https://github.com/npalm/terraform-aws-ecs-service&quot;&gt;generic ecs service modules&lt;/a&gt; to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, awsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;locals {
+  fg_container_name = &quot;blog&quot;
+  fg_container_port = &quot;80&quot;
+}
+
+data &quot;template_file&quot; &quot;blog&quot; {
+  template = &quot;${file(&quot;${path.root}/task-definition/blog.json&quot;)}&quot;
+
+  vars {
+    container_name   = &quot;${local.fg_container_name}&quot;
+    container_port   = &quot;${local.fg_container_port}&quot;
+    log_group_name   = &quot;${aws_cloudwatch_log_group.log_group.name}&quot;
+    log_group_region = &quot;${var.aws_region}&quot;
+    log_group_prefix = &quot;blog&quot;
+  }
+}
+
+module &quot;blog-fg&quot; {
+  source = &quot;npalm/ecs-service/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-service/aws
+
+  service_launch_type  = &quot;FARGATE&quot;
+  service_name          = &quot;${local.fg_container_name}&quot;
+
+  vpc_id       = &quot;${module.vpc.vpc_id}&quot;
+  vpc_cidr     = &quot;${module.vpc.vpc_cidr}&quot;
+  lb_subnetids = &quot;${module.vpc.public_subnets}&quot;
+  ecs_cluster_id = &quot;${aws_ecs_cluster.cluster.id}&quot;
+  lb_internal = false
+
+  task_definition = &quot;${data.template_file.blog.rendered}&quot;
+  task_cpu        = &quot;256&quot;
+  task_memory     = &quot;512&quot;
+
+  awsvpc_task_execution_role_arn = &quot;${aws_iam_role.ecs_tasks_execution_role.arn}&quot;
+  awsvpc_service_security_groups = [&quot;${aws_security_group.awsvpc_sg.id}&quot;]
+  awsvpc_service_subnetids       = &quot;${module.vpc.private_subnets}&quot;
+
+  lb_target_group = {
+    container_name = &quot;${local.fg_container_name}&quot;
+    container_port = &quot;${local.fg_container_port}&quot;
+  }
+
+  lb_listener = {
+    port     = 80
+    protocol = &quot;HTTP&quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We still have our container not running in ECS on EC2 instances. For that we first have to create EC2 instances that will be attached to the same ECS cluster. For more details about create the EC2 instances see the &lt;a href=&quot;https://github.com/npalm/terraform-aws-ecs-instances&quot;&gt;ecs instance repo&lt;/a&gt; on GitHub.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;locals {
+  key_name = &quot;blog&quot;
+  environment = &quot;dev&quot;
+}
+
+resource &quot;aws_key_pair&quot; &quot;key&quot; {
+  key_name   = &quot;${local.key_name}&quot;
+  public_key = &quot;${file(&quot;id_rsa&quot;)}&quot;
+}
+
+module &quot;ecs_instances&quot; {
+  source  = &quot;npalm/ecs-instances/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-instances/aws
+
+  ecs_cluster_name = &quot;${aws_ecs_cluster.cluster.name}&quot;
+  aws_region       = &quot;${local.aws_region}&quot;
+  environment      = &quot;${local.environment}&quot;
+  key_name         = &quot;${local.key_name}&quot;
+  vpc_id           = &quot;${module.vpc.vpc_id}&quot;
+  vpc_cidr         = &quot;${module.vpc.vpc_cidr}&quot;
+  subnets          = &quot;${module.vpc.private_subnets}&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we have our EC2 instances available we only have to copy the the blog module above and change the launch type to &lt;code class=&quot;highlighter-rouge&quot;&gt;EC2&lt;/code&gt;, and our container will be deployed to a dedicated EC2 instance.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+module &quot;blog-ec&quot; {
+  source = &quot;npalm/ecs-service/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-service/aws
+
+  service_launch_type  = &quot;FARGATE&quot;
+  service_name          = &quot;blog-ec2&quot;
+
+  ... SAME AS ABOVE ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That is all, all sample code is available at &lt;a href=&quot;https://github.com/npalm/blog_terraform_aws_fargate&quot;&gt;GitHub&lt;/a&gt; see subdir &lt;code class=&quot;highlighter-rouge&quot;&gt;fargate-ec2&lt;/code&gt;. Time to run a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; to see if it works.&lt;/p&gt;
+
+&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-ec2.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
+&lt;/asciinema-player&gt;
+
+&lt;p&gt;In the output you will find the two endpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second one on EC2.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate-2.png&quot; alt=&quot;Fargate&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><category term="docker" /><category term="microhack" /><summary type="html">Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in us-east-1, see also the list of supported regions. Later in December Fargate also become available in Terraform so time to see how it works.</summary></entry><entry><title type="html">Runners on the Spot</title><link href="https://040code.github.io//2017/12/09/runners-on-the-spot/" rel="alternate" type="text/html" title="Runners on the Spot" /><published>2017-12-09T00:00:00+00:00</published><updated>2017-12-09T00:00:00+00:00</updated><id>https://040code.github.io//2017/12/09/runners-on-the-spot</id><content type="html" xml:base="https://040code.github.io//2017/12/09/runners-on-the-spot/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://about.gitlab.com/features/gitlab-ci-cd/&quot;&gt;GitLab CI&lt;/a&gt; is a first class citizen in GitLab to enable continuous integration and delivery to your project. Builds are orchestrated via &lt;a href=&quot;https://docs.gitlab.com/runner/&quot;&gt;GitLab Runners&lt;/a&gt;, which are agents registered to your GitLab account. An agent runs builds using a local shell or a container. Runnings these builds requires a well-defined infrastructure, both with respect to the type of server and the server capacity. Would it not be great if you can scale the infrastructure based on your needs? Indeed, GitLabs runner supports out of the box auto scaling using docker machine, which is discussed in the GitLab blog article: &lt;a href=&quot;https://about.gitlab.com/2017/11/23/autoscale-ci-runners/&quot;&gt;Autoscale GitLab CI runners and save 90% on EC2 costs&lt;/a&gt;.&lt;/p&gt;
 
@@ -184,7 +542,7 @@ verify:
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;warning&quot;&gt;Warning&lt;/h2&gt;
-&lt;p&gt;Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black Friday prices of spot instances went up to over 2 dollar occasionally.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="gitlab" /><category term="docker" /><category term="aws" /><category term="terraform" /><summary type="html">Introduction</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/10/19/graphql-geecon/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-10-19T00:00:00+00:00</published><updated>2017-10-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/19/graphql-geecon</id><content type="html" xml:base="https://040code.github.io//2017/10/19/graphql-geecon/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;https://2017.geecon.cz&quot;&gt;GeeCON&lt;/a&gt; conference on October the 19th in Prague.&lt;/p&gt;
+&lt;p&gt;Be aware that prices of a spot instance can change over the time and instances can be terminated without a warning. Last black Friday prices of spot instances went up to over 2 dollar occasionally.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="gitlab" /><category term="docker" /><category term="aws" /><category term="terraform" /><summary type="html">Introduction</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/10/19/graphql-geecon/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-10-19T00:00:00+00:00</published><updated>2017-10-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/19/graphql-geecon</id><content type="html" xml:base="https://040code.github.io//2017/10/19/graphql-geecon/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;https://2017.geecon.cz&quot;&gt;GeeCON&lt;/a&gt; conference on October the 19th in Prague.&lt;/p&gt;
 
 &lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
 &lt;p&gt;Below the slides that I for the talk, the slides are available as well on &lt;a href=&quot;https://npalm.github.io/graphql-slides-20171019/&quot;&gt;GitHub&lt;/a&gt;. You can easy navigate through the slides with the spacebar.&lt;/p&gt;
@@ -244,7 +602,7 @@ docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;Alternatively, you can build and run via gradle. Once started, browse to &lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; to play around with the GraphQL web interface.&lt;/p&gt;
 
-&lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the GeeCON conference on October the 19th in Prague.</summary></entry><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
+&lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the GeeCON conference on October the 19th in Prague.</summary></entry><entry><title type="html">MicroHack Zappa.io</title><link href="https://040code.github.io//2017/10/01/micro-hack-zappa-io/" rel="alternate" type="text/html" title="MicroHack Zappa.io" /><published>2017-10-01T00:00:00+00:00</published><updated>2017-10-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/10/01/micro-hack-zappa-io</id><content type="html" xml:base="https://040code.github.io//2017/10/01/micro-hack-zappa-io/">&lt;h1 id=&quot;microhack---python-serverless-with-zappaio&quot;&gt;MicroHack - Python serverless with Zappa.io&lt;/h1&gt;
 
 &lt;h2 id=&quot;the-context&quot;&gt;The context&lt;/h2&gt;
 
@@ -474,7 +832,7 @@ terraform apply
 &lt;p&gt;Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.&lt;/p&gt;
 
 &lt;h3 id=&quot;clean-up&quot;&gt;Clean up&lt;/h3&gt;
-&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/08/fsf-fontend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-08T00:00:00+00:00</published><updated>2017-09-08T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/08/fsf-fontend</id><content type="html" xml:base="https://040code.github.io//2017/09/08/fsf-fontend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
+&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/08/fsf-fontend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-08T00:00:00+00:00</published><updated>2017-09-08T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/08/fsf-fontend</id><content type="html" xml:base="https://040code.github.io//2017/09/08/fsf-fontend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
 
 &lt;p&gt;This week we (Jeroen and Niek) enjoyining &lt;a href=&quot;https://2017.fullstackfest.com/&quot;&gt;Full Stack Fest 2017 Barcelona&lt;/a&gt;,
 a week-long full stack development conference with a focus on solving current problems with new &amp;amp; inspiring perspectives.&lt;/p&gt;
@@ -1321,71 +1679,4 @@ resource &quot;aws_route_table_association&quot; &quot;private_subnet_a&quot; {
     eu-west-1 = [&quot;eu-west-1a&quot;, &quot;eu-west-1c&quot;]
   }
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry><entry><title type="html">GraphQL</title><link href="https://040code.github.io//2017/05/20/nextbuild-graphql/" rel="alternate" type="text/html" title="GraphQL" /><published>2017-05-20T23:50:00+00:00</published><updated>2017-05-20T23:50:00+00:00</updated><id>https://040code.github.io//2017/05/20/nextbuild-graphql</id><content type="html" xml:base="https://040code.github.io//2017/05/20/nextbuild-graphql/">&lt;p&gt;A short post to share the slides and examples I used in my talk at the &lt;a href=&quot;http://nextbuild.nl/&quot;&gt;Nextbuild&lt;/a&gt; conference on May the 20th in Eindhoven.&lt;/p&gt;
-
-&lt;h2 id=&quot;slides&quot;&gt;Slides&lt;/h2&gt;
-&lt;p&gt;Below the slides that I for the talk, the slides are available as well on &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170520/&quot;&gt;GitHub&lt;/a&gt;. You can easy navigate through the slides with the spacebar.&lt;/p&gt;
-
-&lt;div style=&quot;position:relative; width:100%; height:0px; padding-bottom:56.25%;&quot;&gt;
-    &lt;iframe style=&quot;position:absolute; left:0; top:0; width:100%; height:100%&quot; src=&quot;https://npalm.github.io/graphql-slides-20170520/&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;To get started with GraphQL the best starting points are:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://graphql.org&quot;&gt;GraphQL.org&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/chentsulin/awesome-graphql&quot;&gt;Awesome GraphQL&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;examples&quot;&gt;Examples&lt;/h2&gt;
-&lt;p&gt;During the talk, I demonstrated GraphQL via &lt;a href=&quot;https://www.graph.cool/&quot;&gt;graphcool&lt;/a&gt;, which is cloud service for creating a flexible GraphGL backend. I modelled a basic model of a Talk and Person with relation speakers and visitors on graphcool. Furthermore, I modelled two basic sample implementations of a GraphQL backend in Java and JavaScript that are available via GitHub. Those implementation are more limited than the online one, but both serve the following minimal queries.&lt;/p&gt;
-
-&lt;p&gt;Query for the name and the title of the talks given by all persons:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-  persons {
-    name
-    talks {
-      title
-    }
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;And secondly, a query for all titles of talks with their speaker’s names.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-  talks {
-    title
-    speakers {
-      name
-    }
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;javascript-sample&quot;&gt;JavaScript sample&lt;/h3&gt;
-&lt;p&gt;The JavaScript &lt;a href=&quot;https://github.com/npalm/graphql-js-demo.git&quot;&gt;sample&lt;/a&gt; is based on &lt;a href=&quot;https://github.com/apollostack/apollo-starter-kit&quot;&gt;Apollo GraphQL tutorial kit&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-js-demo.git
-cd graphql-js-demo
-yarn &amp;amp;&amp;amp; yarn start
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Instead of yarn, you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;npm install &amp;amp;&amp;amp; npm start&lt;/code&gt;. Once started, browse to &lt;a href=&quot;http://localhost:8080/graphiql&quot;&gt;http://localhost:8080/graphiql&lt;/a&gt; and play around with the GraphQL web interface. Implementing the JavaScript version was straightforward due to the many examples and good tutorials around.&lt;/p&gt;
-
-&lt;h3 id=&quot;spring-boot-java-sample&quot;&gt;Spring Boot Java sample&lt;/h3&gt;
-&lt;p&gt;The Spring Boot Java &lt;a href=&quot;https://github.com/npalm/graphql-java-demo.git&quot;&gt;sample&lt;/a&gt; is based on the Spring Boot Starter available for GraphQL. This starter uses a basic GraphQL java library as well the Java annotation library for GraphQL.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/npalm/graphql-java-demo.git
-git checkout nextbuild
-cd graphql-java-demo
-docker build -t graphql-java-demo &amp;amp;&amp;amp; docker run -it --rm -p 8080:8080 graphql-java-demo
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Alternatively, you can build and run via gradle. Once started, browse to &lt;a href=&quot;http://localhost:8080/&quot;&gt;http://localhost:8080/&lt;/a&gt; to play around with the GraphQL web interface. The Java version implementation was not as easy as expected. The GraphQL Spring Boot starter dependencies requires the GrahpQL java annotation library, which seems to be broken after an update in the Java GraphQL base library. I am not sure if the annotation library is still supported. To get the GraphQL Spring Boot library working I have to add a mandatory mutation to the scheme. And downgrade the Java GraphQL, see &lt;code class=&quot;highlighter-rouge&quot;&gt;gradle/depedencies.gradle&lt;/code&gt; to get the annotation library to work.&lt;/p&gt;
-
-&lt;p&gt;Many languages already have support, so feel free to try out your favourite language. Currently the support on JavaScript looks like by far the best.&lt;/p&gt;
-
-&lt;h2 id=&quot;updates&quot;&gt;Updates&lt;/h2&gt;
-
-&lt;h3 id=&quot;refactored-java-implementation-june-20-2017&quot;&gt;Refactored Java implementation (June 20, 2017)&lt;/h3&gt;
-&lt;p&gt;I have updated the Spring Boot implmentation, upgrade all libraries and removed the annotations for graphql resolving. The annoation are replaced &lt;a href=&quot;https://github.com/graphql-java/graphql-java-tools&quot;&gt;java-graphql-tools&lt;/a&gt;. Which looks a better way to ingrate graphql in a Java service. You will see the implementation will have a lot of similarities with the javascript one.&lt;/p&gt;
-
-&lt;h3 id=&quot;developersnl-meetup-rotterdam-june-28-2017&quot;&gt;Developers.nl meetup Rotterdam (June 28, 2017)&lt;/h3&gt;
-&lt;p&gt;On June, the 28th I have presented the GraphQL talk at the &lt;a href=&quot;https://www.meetup.com/Developers-nl-Meetup/events/240419508/&quot;&gt;developers.nl Meetup&lt;/a&gt; in Rotterdom. I have used a slightly minimal version for the slides, which can be found &lt;a href=&quot;https://npalm.github.io/graphql-slides-20170628/&quot;&gt;here&lt;/a&gt;. Comparing the to the presentaton on the nextbuild I have also walked through the code examples mentioned above.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><summary type="html">A short post to share the slides and examples I used in my talk at the Nextbuild conference on May the 20th in Eindhoven.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><summary type="html">One of the common uses network setups in AWS is called Scenario 2: VPC with Public and Private Subnets. This is a that defines a Virtual Private Cloud (VPC), public subnets and private subnets. Setting up this infrastructure can be done via the AWS console or via cloud formation scripting. However, I prefer the tool Terraform in which you can manage your infrastructure as code with a declarative language that supports building, changing and versioning your cloud in a modular way.</summary></entry></feed>
