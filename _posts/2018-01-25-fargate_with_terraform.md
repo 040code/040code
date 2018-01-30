@@ -33,7 +33,7 @@ provider "template" {
 }
 
 module "vpc" {
-  source  = "npalm/vpc/aws"
+  source  = "npalm/vpc/aws" // https://registry.terraform.io/modules/npalm/vpc/aws
   version = "1.1.0"
 
   environment = "blog"
@@ -299,7 +299,7 @@ data "template_file" "blog" {
 }
 
 module "blog-fg" {
-  source = "npalm/ecs-service/aws"
+  source = "npalm/ecs-service/aws" // https://registry.terraform.io/modules/npalm/ecs-service/aws
 
   service_launch_type  = "FARGATE"
   service_name          = "${local.fg_container_name}"
@@ -344,7 +344,7 @@ resource "aws_key_pair" "key" {
 }
 
 module "ecs_instances" {
-  source  = "npalm/ecs-instances/aws"
+  source  = "npalm/ecs-instances/aws" // https://registry.terraform.io/modules/npalm/ecs-instances/aws
 
   ecs_cluster_name = "${aws_ecs_cluster.cluster.name}"
   aws_region       = "${local.aws_region}"
@@ -361,7 +361,7 @@ Now we have our EC2 instances available we only have to copy the the blog module
 ```
 
 module "blog-ec" {
-  source = "npalm/ecs-service/aws"
+  source = "npalm/ecs-service/aws" // https://registry.terraform.io/modules/npalm/ecs-service/aws
 
   service_launch_type  = "FARGATE"
   service_name          = "blog-ec2"
