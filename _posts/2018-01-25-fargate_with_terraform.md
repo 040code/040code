@@ -20,7 +20,13 @@ Finally I will discuss how a deployment with Fargate in ECS compares to a deploy
 Before you start you need to have programmatically access to an AWS account and Terraform (0.11+) installed. The tool [tfenv](http://brewformulas.org/Tfenv) let you manage multiple terraform version on your system.
 
 ## Deploy serverless containers on Fargate
-Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging. We start with defining the VPC, we choose `us-east-1` since Fargate is only available in this region. In the blog post [Coding a VPC in Terraform](/2017/06/18/terraform-aws-vpc/) you find more details about how this VPC module is structured.
+Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging.
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-01-25_fargate/img/ecs-fargate-diagram.png" alt="Fargate">
+</a>
+
+We start with defining the VPC, we choose `us-east-1` since Fargate is only available in this region. In the blog post [Coding a VPC in Terraform](/2017/06/18/terraform-aws-vpc/) you find more details about how this VPC module is structured.
 
 ```
 provider "aws" {
@@ -43,7 +49,7 @@ module "vpc" {
 
   // us-east-1 is the only region that supports Fargate
   availability_zones = {
-    us-east-1 = ["us-east-1a", "us-east-1b", "us-east-1c"]
+    us-east-1 = ["us-east-1a", "us-east-1b"]
   }
 }
 
