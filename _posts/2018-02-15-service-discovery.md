@@ -2,7 +2,7 @@
 layout:     post
 title:      "Service Discovery on AWS"
 subtitle:   "Enabling discovery for Spring Cloud on AWS ECS"
-date:       2018-02-02
+date:       2018-02-10
 authors:     [niek]
 header-img: "assets/2018-02-15-service-discovery/holstlaan-dommel.jpg"
 tags: [aws, spring, docker]
