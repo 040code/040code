@@ -85,4 +85,4 @@ eureka:
     non-secure-port: ${EXTERNAL_PORT}
 ```
 
-With this approach the discovery agent becomes obsolete and we can retrieve the information for discovery through standard Amazon features.
+With this approach the discovery agent becomes obsolete and we can retrieve the information for discovery through standard Amazon features. The example I have described in this post is just one way to implement service discovery in ECS, many alternatives are available.
