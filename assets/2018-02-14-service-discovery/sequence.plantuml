@@ -1,0 +1,46 @@
+@startuml
+hide footbox
+skinparam roundcorner 20
+skinparam handwritten true
+
+skinparam note {
+  BorderColor DeepSkyBlue
+  BackgroundColor DeepSkyBlue
+  FontName Impact
+}
+
+skinparam sequence {
+	ArrowColor DeepSkyBlue
+	ActorBorderColor DeepSkyBlue
+	LifeLineBorderColor blue
+
+	ParticipantBorderColor DodgerBlue
+	ParticipantBackgroundColor DodgerBlue
+	ParticipantFontName Impact
+	ParticipantFontSize 17
+  ParticipantPadding 40
+}
+
+participant "ECS Agent" as A
+
+[-> A: create task
+
+create "Spring Application"
+A -> "Spring Application" : create container
+
+participant "Eureka Discovery" as E
+participant "AWS (169.254.169.254)" as M
+
+|||
+
+"Spring Application" -> M : get ip
+"Spring Application" -> "Spring Application" : read meta data
+note left
+  Look up external IP
+  Look up exposed port
+end note
+|||
+"Spring Application" -> E : register
+
+
+@enduml

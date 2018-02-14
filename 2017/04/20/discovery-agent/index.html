@@ -141,7 +141,9 @@
         <a class="badge " href="/blog/tag/docker/">Docker</a><a class="badge " href="/blog/tag/aws/">Amazon</a><a class="badge " href="/blog/tag/spring/">Spring Framework</a>
 
 
-				<p>This post describes a solution for implementing the discovery of the unknown exposed port by a <a href="https://www.docker.com/">Docker</a> container. A specific situation where the problem occurs is when you deploy <a href="http://projects.spring.io/spring-cloud/">Spring Cloud</a> micro services as <a href="https://aws.amazon.com/ecs/">Amazon ECS</a> services to the cloud.</p>
+				<p><em>Update 2018-02-14, since Amazon has introduced a feature to extract meta data at runtime in a container the discovery agent described in this post becomes obsolete for the ECS case, see more <a href="/2018/02/14/service-discovery">this</a> post for more details.</em></p>
+
+<p>This post describes a solution for implementing the discovery of the unknown exposed port by a <a href="https://www.docker.com/">Docker</a> container. A specific situation where the problem occurs is when you deploy <a href="http://projects.spring.io/spring-cloud/">Spring Cloud</a> micro services as <a href="https://aws.amazon.com/ecs/">Amazon ECS</a> services to the cloud.</p>
 
 <h3 id="the-problem">The problem</h3>
 <p>Setting up a micro services architecture requires that there is a way services can find each other. Spring Cloud provides a services discovery service out of the box: Eureka. Services running in the micro services landscape are responsible to register themselves to the discovery service. Then, any service running in the micro services landscape can locate them based on their name. Deploying those services to a docker based cloud, such as AWS, does however create some difficulties.</p>
