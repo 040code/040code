@@ -8,6 +8,8 @@ header-img: "img/silly-walk-this-way-dommeltunnel.png"
 tags: [docker, aws, spring]
 ---
 
+*Update 2018-02-14, since Amazon has introduced a feature to extract meta data at runtime in a container the discovery agent described in this post becomes obsolete for the ECS case, see more [this](/2018/02/14/service-discovery) post for more details.*
+
 This post describes a solution for implementing the discovery of the unknown exposed port by a [Docker](https://www.docker.com/) container. A specific situation where the problem occurs is when you deploy [Spring Cloud](http://projects.spring.io/spring-cloud/) micro services as [Amazon ECS](https://aws.amazon.com/ecs/) services to the cloud.
 
 ### The problem
