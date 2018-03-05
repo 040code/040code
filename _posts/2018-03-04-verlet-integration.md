@@ -4,9 +4,8 @@ title:           "Verlet Integration"
 subtitle:        "Physics Simulation in Clojure"
 authors:         [maarten]
 header-img:      "img/ehv-noord.jpg"
-tags:            [clojure]
+tags:            [clojure, functional]
 published:       true
-enable_klipsejs: 1
 ---
 
 ## Introduction
