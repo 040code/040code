@@ -369,9 +369,9 @@ Therefore, I ran a new `cloc` command without the doc strings. It then counts
 159 lines of clojure, approximately half of which are dedicated to UI
 interaction and the other half to physics simulation. Not bad at all!
 
-I'm glad I decided to 'bite the bullet' and learn Emacs and Cider. I now code
-all my Clojure experiments in Emacs. Better still: I use Emacs for most of my
-writing and planning these days.
+I'm glad I decided to 'bite the bullet' and learn Emacs and Cider. I now use
+Emacs for all my Clojure(script) development. In addition, I use Emacs for most
+of my text editing these days including writing and planning.
 
 I'd like to thank Michiel Borkent a.k.a.
 [@borkdude](https://twitter.com/borkdude) for reviewing an earlier version of
