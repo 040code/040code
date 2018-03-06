@@ -206,7 +206,7 @@ already moving and reacting to gravity in the simulation.
 ### World constraints
 
 It's time for Points to meet the harsh reality of life. Walls are harder than
-Points and therefore should bounce off of them:
+Points and therefore Points should bounce off of them:
 
 ```clojure
 (defn hit-floor?       [y] (> y height))
@@ -322,9 +322,9 @@ exactly what `apply-stick-constraint` achieves:
 - This is done by using `offsetX` on P0x and P1x and using `offsetY` on P0y and
   P1y
 
-Conceptually a scaled triangle is added to move P0 and a similar scaled triangle
-is added to move P1. The scale of this triangle is determined by the `fraction`
-which in this case is 1. These triangles are depicted in red.
+Conceptually a scaled helper triangle is used to move P0 and an identical scaled
+helper triangle is used to move P1. The scale of this triangle is determined by
+the `fraction` which in this case is 1. These triangles are depicted in red.
 
 Each Stick in the world is updated before a new world frame is drawn. It is very
 well possible that the neatly placed P0 and P1 are moved to different
