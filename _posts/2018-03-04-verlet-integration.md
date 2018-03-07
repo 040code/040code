@@ -19,7 +19,7 @@ My motivations for working on this toy project were:
 - Experimenting with a very mutable domain in a language with immutability at
   its core
 - Having some fun by making a lot happen on screen without writing lots of code
-- Coding using emacs & [cider](https://github.com/clojure-emacs/cider) (The
+- Coding using emacs & [CIDER](https://github.com/clojure-emacs/cider) (The
   `C`lojure `I`nteractive `D`evelopment `E`nvironment that `R`ocks)
 
 The source code can be found [here](https://github.com/mmzsource/verlet).
@@ -168,7 +168,7 @@ gravity in the mix:
 ```
 
 Reading superficially, this code says: if the Point is pinned then return the
-same Point. Otherwise, calculate it's velocity (based on the current and
+same Point. Otherwise, calculate it's velocity (based on the current - and
 previous x & y coordinates), add some gravity in the y direction and return the
 newly calculated Point.
 
@@ -363,13 +363,12 @@ work in a very mutable domain with mostly pure functions, also thanks to the
 excellent Quil library.
 
 My current version of [cloc](https://github.com/AlDanial/cloc) tells me that
-core.clj is 230 lines long. It counts the function documentation as code.
-Normally the function documentation is counted as 'comment' and not as code.
+core.clj is 230 lines long, but it counts the function documentation as code.
 Therefore, I ran a new `cloc` command without the doc strings. It then counts
 159 lines of clojure, approximately half of which are dedicated to UI
 interaction and the other half to physics simulation. Not bad at all!
 
-I'm glad I decided to 'bite the bullet' and learn Emacs and Cider. I now use
+I'm glad I decided to 'bite the bullet' and learn Emacs and CIDER. I now use
 Emacs for all my Clojure(script) development. In addition, I use Emacs for most
 of my text editing these days including writing and planning.
 
@@ -388,5 +387,5 @@ Coding!
   paper](http://graphics.cs.cmu.edu/nsp/course/15-869/2006/papers/jakobsen.htm)
 - [My verlet integration code in clojure](https://github.com/mmzsource/verlet)
 - [Quil library](https://github.com/quil/quil)
-- [Emacs Cider plugin](https://github.com/clojure-emacs/cider)
+- [Emacs CIDER plugin](https://github.com/clojure-emacs/cider)
 - [Cloc - counting lines of code](https://github.com/AlDanial/cloc)
