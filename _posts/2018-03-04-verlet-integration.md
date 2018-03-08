@@ -34,7 +34,7 @@ This code uses the [Quil library](https://github.com/quil/quil) to render points
 and lines. In the `main-` function, the `sketch` macro from the Quil library is
 used to bind the physics domain to the UI.
 
-```clojure
+```Clojure
 (defn -main []
   (quil/sketch
     :host           -main
@@ -55,7 +55,7 @@ The sketch macro basically asks the developer to configure which 'handler
 functions' it should call when certain events occur. For instance:
 
 - a key is pressed -> call `key-pressed`
-- the mouse is pressed -> call `mouse-press`
+- the mouse is pressed -> call `mouse-pressed`
 - the state of your program has to be updated -> call `update-state`
 - it's time to draw the new state -> call `draw`
 - etc.
@@ -69,7 +69,7 @@ Because I configured Quil to run in functional mode `(quil-mw/fun-mode)`, Quil:
 
 The handler function signatures therefore look like this:
 
-```clojure
+```Clojure
 (defn draw          [state]       ...)
 (defn update-state  [state]       ...)
 (defn key-pressed   [state event] ...)
@@ -81,7 +81,7 @@ The handler function signatures therefore look like this:
 What does a snapshot of this world state look like? `key-pressed` gives some
 hints:
 
-```clojure
+```Clojure
 (defn key-pressed
   [state event]
   (let [raw-key   (:raw-key event)
@@ -99,7 +99,7 @@ hints:
 So on pressing a key, a certain world is loaded. Let's look into the 'sticks'
 world:
 
-```clojure
+```Clojure
 {:points {:p0 {:x  10 :y   1 :oldx   0 :oldy   0}
           :p1 {:x 100 :y 100 :oldx 100 :oldy 100}
           :p2 {:x   0 :y 500 :oldx   0 :oldy 525}
@@ -128,7 +128,7 @@ Stick length. The simulation loop boils down to:
 
 In code:
 
-```clojure
+```Clojure
 (defn update-state
   [state]
   (->> state
@@ -145,7 +145,7 @@ This code can be read like this: 'with `state`, first `update-points`, then
 Points are the main abstraction in this code. I decided to use a record to name
 them:
 
-```clojure
+```Clojure
 (defrecord Point [x y oldx oldy pinned])
 ```
 
@@ -157,7 +157,7 @@ A pinned Point can be unpinned by clicking it with the mouse pointer.
 The `update-point` function calculates the velocity of the Point and adds some
 gravity in the mix:
 
-```clojure
+```Clojure
 (defn update-point
   [{:keys [x y oldx oldy pinned] :as point}]
   (if pinned
@@ -179,7 +179,7 @@ values in a data structure without explicitly querying the data structure. So
 instead of getting each and every value out of Point and binding it to a 'new'
 name...
 
-```clojure
+```Clojure
 (let [x      (:x      point)
       y      (:y      point)
       oldx   (:oldx   point)
@@ -208,7 +208,7 @@ already moving and reacting to gravity in the simulation.
 It's time for Points to meet the harsh reality of life. Walls are harder than
 Points and therefore Points should bounce off of them:
 
-```clojure
+```Clojure
 (defn hit-floor?       [y] (> y height))
 (defn hit-ceiling?     [y] (< y 0))
 (defn hit-left-wall?   [x] (< x 0))
@@ -276,7 +276,7 @@ Instead of trying to calculate the solution that satisfies all Stick constraints
 at once, this code simply looks at one Stick at a time and 'solves' the
 constraint problem by repeatedly solving Stick constraints in isolation.
 
-```clojure
+```Clojure
 (defn apply-stick-constraint
   [{length :length :as stick}
    {p0x :x p0y :y oldp0x :oldx oldp0y :oldy pinp0 :pinned :as p0}
@@ -336,7 +336,7 @@ is perceived to behave naturally.
 
 Finally, the Points and Sticks have to be drawn on screen:
 
-```clojure
+```Clojure
 (defn draw
   [state]
   (quil/background 255)
