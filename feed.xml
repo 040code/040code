@@ -1,4 +1,382 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.2">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-02-14T19:18:51+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Service Discovery on AWS</title><link href="https://040code.github.io//2018/02/14/service-discovery/" rel="alternate" type="text/html" title="Service Discovery on AWS" /><published>2018-02-14T00:00:00+00:00</published><updated>2018-02-14T00:00:00+00:00</updated><id>https://040code.github.io//2018/02/14/service-discovery</id><content type="html" xml:base="https://040code.github.io//2018/02/14/service-discovery/">&lt;p&gt;Last year I wrote a &lt;a href=&quot;/2017/04/20/discovery-agent/&quot;&gt;post&lt;/a&gt; how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the &lt;a href=&quot;https://github.com/aws/amazon-ecs-agent/releases/tag/v1.15.0&quot;&gt;ECS agent 1.15&lt;/a&gt; to retrieve container meta data in the container. This feature makes the discovery agent obsolete.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.3">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-03-08T07:57:22+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Verlet Integration</title><link href="https://040code.github.io//2018/03/04/verlet-integration/" rel="alternate" type="text/html" title="Verlet Integration" /><published>2018-03-04T00:00:00+00:00</published><updated>2018-03-04T00:00:00+00:00</updated><id>https://040code.github.io//2018/03/04/verlet-integration</id><content type="html" xml:base="https://040code.github.io//2018/03/04/verlet-integration/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;In this post we’re going to dive into physics simulation with Clojure. The
+ideas in this post were mostly inspired by &lt;a href=&quot;http://graphics.cs.cmu.edu/nsp/course/15-869/2006/papers/jakobsen.htm&quot;&gt;this paper by Thomas
+Jakobsen&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;My motivations for working on this toy project were:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Experimenting with a very mutable domain in a language with immutability at
+its core&lt;/li&gt;
+  &lt;li&gt;Having some fun by making a lot happen on screen without writing lots of code&lt;/li&gt;
+  &lt;li&gt;Coding using emacs &amp;amp; &lt;a href=&quot;https://github.com/clojure-emacs/cider&quot;&gt;CIDER&lt;/a&gt; (The
+&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;lojure &lt;code class=&quot;highlighter-rouge&quot;&gt;I&lt;/code&gt;nteractive &lt;code class=&quot;highlighter-rouge&quot;&gt;D&lt;/code&gt;evelopment &lt;code class=&quot;highlighter-rouge&quot;&gt;E&lt;/code&gt;nvironment that &lt;code class=&quot;highlighter-rouge&quot;&gt;R&lt;/code&gt;ocks)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The source code can be found &lt;a href=&quot;https://github.com/mmzsource/verlet&quot;&gt;here&lt;/a&gt;.
+The result:&lt;/p&gt;
+
+&lt;iframe src=&quot;https://player.vimeo.com/video/258632942&quot; width=&quot;640&quot; height=&quot;732&quot; frameborder=&quot;0&quot; webkitallowfullscreen=&quot;&quot; mozallowfullscreen=&quot;&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;h2 id=&quot;one-main--to-bind-them-all&quot;&gt;One &lt;code class=&quot;highlighter-rouge&quot;&gt;main-&lt;/code&gt; to bind them all&lt;/h2&gt;
+
+&lt;p&gt;This code uses the &lt;a href=&quot;https://github.com/quil/quil&quot;&gt;Quil library&lt;/a&gt; to render points
+and lines. In the &lt;code class=&quot;highlighter-rouge&quot;&gt;main-&lt;/code&gt; function, the &lt;code class=&quot;highlighter-rouge&quot;&gt;sketch&lt;/code&gt; macro from the Quil library is
+used to bind the physics domain to the UI.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn -main []
+  (quil/sketch
+    :host           -main
+    :title          &quot;Verlet Integration&quot;
+    :size           [width height]
+    :setup          setup
+    :update         update-state
+    :draw           draw
+    :key-pressed    key-pressed
+    :mouse-pressed  mouse-pressed
+    :mouse-dragged  mouse-dragged
+    :mouse-released mouse-released
+    :features       [:exit-on-close]
+    :middleware     [quil-mw/fun-mode]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The sketch macro basically asks the developer to configure which ‘handler
+functions’ it should call when certain events occur. For instance:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;a key is pressed -&amp;gt; call &lt;code class=&quot;highlighter-rouge&quot;&gt;key-pressed&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;the mouse is pressed -&amp;gt; call &lt;code class=&quot;highlighter-rouge&quot;&gt;mouse-pressed&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;the state of your program has to be updated -&amp;gt; call &lt;code class=&quot;highlighter-rouge&quot;&gt;update-state&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;it’s time to draw the new state -&amp;gt; call &lt;code class=&quot;highlighter-rouge&quot;&gt;draw&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;etc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Because I configured Quil to run in functional mode &lt;code class=&quot;highlighter-rouge&quot;&gt;(quil-mw/fun-mode)&lt;/code&gt;, Quil:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Uses the return value from the &lt;code class=&quot;highlighter-rouge&quot;&gt;:setup&lt;/code&gt; function as the initial &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Passes the &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; to each handler function to update it&lt;/li&gt;
+  &lt;li&gt;Additionally passes a keyboard- and mouse &lt;code class=&quot;highlighter-rouge&quot;&gt;event&lt;/code&gt; argument to keyboard - and
+mouse handler functions.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The handler function signatures therefore look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn draw          [state]       ...)
+(defn update-state  [state]       ...)
+(defn key-pressed   [state event] ...)
+(defn mouse-pressed [state event] ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;world-state&quot;&gt;World state&lt;/h2&gt;
+
+&lt;p&gt;What does a snapshot of this world state look like? &lt;code class=&quot;highlighter-rouge&quot;&gt;key-pressed&lt;/code&gt; gives some
+hints:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn key-pressed
+  [state event]
+  (let [raw-key   (:raw-key event)
+        new-state (cond
+                   (= \b raw-key) (load-world (load-a-file &quot;blocks.edn&quot;))
+                   (= \c raw-key) (load-world (load-a-file &quot;cloth.edn&quot;))
+                   (= \p raw-key) (load-world (load-a-file &quot;points.edn&quot;))
+                   (= \s raw-key) (load-world (load-a-file &quot;sticks.edn&quot;))
+                   (= \i raw-key) (show-info-message)
+                   (= \q raw-key) (quil/exit)
+                   :else state)]
+    new-state))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So on pressing a key, a certain world is loaded. Let’s look into the ‘sticks’
+world:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;{:points {:p0 {:x  10 :y   1 :oldx   0 :oldy   0}
+          :p1 {:x 100 :y 100 :oldx 100 :oldy 100}
+          :p2 {:x   0 :y 500 :oldx   0 :oldy 525}
+          :p3 {:x  25 :y 475 :oldx   0 :oldy 525}
+          :p4 {:x 250 :y 200 :oldx 250 :oldy 200 :pinned true}
+          :p5 {:x 350 :y 100 :oldx 350 :oldy 100}}
+ :sticks [{:links  [:p0 :p1] :length 138}
+          {:links  [:p2 :p3] :length  40}
+          {:links  [:p4 :p5] :length 140}]}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing special here. Just a map containing &lt;code class=&quot;highlighter-rouge&quot;&gt;:points&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;:sticks&lt;/code&gt;. We’ll dive
+into the particulars of points and sticks soon.&lt;/p&gt;
+
+&lt;h2 id=&quot;physics-simulation&quot;&gt;Physics Simulation&lt;/h2&gt;
+
+&lt;p&gt;This physics simulation deals with Points, and Sticks connecting Points. The
+Points are the things that seem to have direction and speed, are influenced by
+gravity and lose speed because of friction or because of bouncing against world
+borders. The Sticks try to keep their 2 Points apart according to the configured
+Stick length. The simulation loop boils down to:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Update Points&lt;/li&gt;
+  &lt;li&gt;Apply Stick constraints&lt;/li&gt;
+  &lt;li&gt;Apply world constraints&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn update-state
+  [state]
+  (-&amp;gt;&amp;gt; state
+       (update-points)
+       (apply-stick-constraints)
+       (apply-world-constraints)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This code can be read like this: ‘with &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt;, first &lt;code class=&quot;highlighter-rouge&quot;&gt;update-points&lt;/code&gt;, then
+&lt;code class=&quot;highlighter-rouge&quot;&gt;apply-stick-constraints&lt;/code&gt;, and finally &lt;code class=&quot;highlighter-rouge&quot;&gt;apply-world-constrains&lt;/code&gt;’.&lt;/p&gt;
+
+&lt;h3 id=&quot;points&quot;&gt;Points&lt;/h3&gt;
+
+&lt;p&gt;Points are the main abstraction in this code. I decided to use a record to name
+them:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defrecord Point [x y oldx oldy pinned])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A Point stores its current coordinates and the coordinates it had in the
+previous world state. On top of that it has a &lt;code class=&quot;highlighter-rouge&quot;&gt;pinned&lt;/code&gt; property which indicates
+if a Point is pinned in space and - as a result - stays on the same coordinate.
+A pinned Point can be unpinned by clicking it with the mouse pointer.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;update-point&lt;/code&gt; function calculates the velocity of the Point and adds some
+gravity in the mix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn update-point
+  [{:keys [x y oldx oldy pinned] :as point}]
+  (if pinned
+    point
+    (let [vx (velocity x oldx)
+          vy (velocity y oldy)]
+      (-&amp;gt;Point (+ x vx) (+ y vy gravity) x y pinned))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Reading superficially, this code says: if the Point is pinned then return the
+same Point. Otherwise, calculate it’s velocity (based on the current - and
+previous x &amp;amp; y coordinates), add some gravity in the y direction and return the
+newly calculated Point.&lt;/p&gt;
+
+&lt;p&gt;The function uses
+&lt;a href=&quot;https://gist.github.com/john2x/e1dca953548bfdfb9844&quot;&gt;destructuring&lt;/a&gt; to name all
+the arguments of the incoming Point. With destructuring, you can bind the
+values in a data structure without explicitly querying the data structure. So
+instead of getting each and every value out of Point and binding it to a ‘new’
+name…&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(let [x      (:x      point)
+      y      (:y      point)
+      oldx   (:oldx   point)
+      oldy   (:oldy   point)
+      pinned (:pinned point)]
+  ...)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;… you can very effectively tell the function that it will receive a map &lt;code class=&quot;highlighter-rouge&quot;&gt;{}&lt;/code&gt;
+with keys &lt;code class=&quot;highlighter-rouge&quot;&gt;x y oldx oldy pinned&lt;/code&gt; and that this function should have those
+variables available under the same name:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:keys&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oldx&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oldy&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pinned&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;point&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The code in my repository has some additional type hints, because I wanted the
+simulation to run smooth on my laptop and wanted to learn a bit more about type
+hinting and compiler optimizations.&lt;/p&gt;
+
+&lt;p&gt;And that’s it with regard to Points. In a couple of lines of code Points are
+already moving and reacting to gravity in the simulation.&lt;/p&gt;
+
+&lt;h3 id=&quot;world-constraints&quot;&gt;World constraints&lt;/h3&gt;
+
+&lt;p&gt;It’s time for Points to meet the harsh reality of life. Walls are harder than
+Points and therefore Points should bounce off of them:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn hit-floor?       [y] (&amp;gt; y height))
+(defn hit-ceiling?     [y] (&amp;lt; y 0))
+(defn hit-left-wall?   [x] (&amp;lt; x 0))
+(defn hit-right-wall?  [x] (&amp;gt; x width))
+
+
+(defn apply-world-constraint
+  [{:keys [x y oldx oldy pinned] :as point}]
+  (let [vxb (* (velocity x oldx) bounce)
+        vyb (* (velocity y oldy) bounce)]
+    (cond
+      (hit-ceiling?    y) (let [miry (- oldy)]
+                             (-&amp;gt;Point (+ oldx vxb) (+ miry (- vyb)) oldx miry pinned))
+      (hit-floor?      y) (let [miry (+ height height (- oldy))]
+                             (-&amp;gt;Point  (+ oldx vxb) (- miry vyb) oldx miry pinned))
+      (hit-left-wall?  x) (let [mirx (- oldx)]
+                             (-&amp;gt;Point (+ mirx (- vxb)) (+ oldy vyb) mirx oldy pinned))
+      (hit-right-wall? x) (let [mirx (+ width width (- oldx))]
+                             (-&amp;gt;Point (- mirx vxb) (+ oldy vyb) mirx oldy pinned))
+      ;; else: free movement
+      :else point)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To explain what happens here, a picture might help.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/img/verlet-physics/world-constraints.png&quot; alt=&quot;apply world constraints diagram&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Imagine a Point moved from A to B in the last Point update. This means a Point
+record is persisted with its &lt;code class=&quot;highlighter-rouge&quot;&gt;x&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;y&lt;/code&gt; being the coordinates of B and &lt;code class=&quot;highlighter-rouge&quot;&gt;oldx&lt;/code&gt;
+and &lt;code class=&quot;highlighter-rouge&quot;&gt;oldy&lt;/code&gt; being the coordinates of A. If a wall line crossed the imaginary line
+A-B, the Point history should be rewritten. In essence, line A-B is mirrored in
+the wall it hits, giving rise to another imaginary line C-D where C mirrors A
+and D mirrors B. The &lt;code class=&quot;highlighter-rouge&quot;&gt;miry&lt;/code&gt; (mirror-y) and &lt;code class=&quot;highlighter-rouge&quot;&gt;mirx&lt;/code&gt; (mirror-x) variables in the
+code contain C coordinates mirroring A coordinates.&lt;/p&gt;
+
+&lt;p&gt;The simulation will take a little velocity loss into account when bouncing at
+walls. Therefore, D’ is calculated by using the x and y velocities (vx and vy)
+multiplied by a bounce factor (leading to the &lt;code class=&quot;highlighter-rouge&quot;&gt;vxb&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;vyb&lt;/code&gt; variables in the
+code).&lt;/p&gt;
+
+&lt;p&gt;When the world state is drawn, the Point will fly off in exactly the right
+direction. Additionally, because of the history rewrite, subsequent Point
+updates will keep moving the Point in the right direction.&lt;/p&gt;
+
+&lt;p&gt;The picture shows the situation when hitting the ceiling. Hitting the floor and
+the walls works similar. And that’s all the math and code you need to simulate
+Points moving in a bounded space. Now let’s add Sticks to the simulation.&lt;/p&gt;
+
+&lt;h3 id=&quot;stick-constraints&quot;&gt;Stick constraints&lt;/h3&gt;
+
+&lt;p&gt;Not only walls are restricting Points from free movement; Sticks also constrain
+them. A Stick connects 2 Points and has a configured length. The goal of the
+Stick constraint is to move the Points at the end of the Stick to the configured
+length of the Stick.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/img/verlet-physics/stick-constraints.png&quot; alt=&quot;apply stick constraints diagram&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Instead of trying to calculate the solution that satisfies all Stick constraints
+at once, this code simply looks at one Stick at a time and ‘solves’ the
+constraint problem by repeatedly solving Stick constraints in isolation.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn apply-stick-constraint
+  [{length :length :as stick}
+   {p0x :x p0y :y oldp0x :oldx oldp0y :oldy pinp0 :pinned :as p0}
+   {p1x :x p1y :y oldp1x :oldx oldp1y :oldy pinp1 :pinned :as p1}]
+  (let [{:keys [dx dy distance]} (distance-map p0 p1)
+        difference (- length distance)
+        fraction   (/ (/ difference distance) 2)
+        offsetX    (* dx fraction)
+        offsetY    (* dy fraction)
+        p0-new     (-&amp;gt;Point (- p0x offsetX) (- p0y offsetY) oldp0x oldp0y pinp0)
+        p1-new     (-&amp;gt;Point (+ p1x offsetX) (+ p1y offsetY) oldp1x oldp1y pinp1)]
+    [(if pinp0 p0 p0-new) (if pinp1 p1 p1-new)]))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apply-stick-constraint&lt;/code&gt; takes a Stick and 2 Points (P0 and P1) as arguments.
+These arguments are heavily destructured. To understand what happens precisely,
+the next picture might be helpful:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/img/verlet-physics/stick-math.png&quot; alt=&quot;stick math diagram&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Let P0 and P1 be two Points with a Stick S between them. P0 and P1 have already
+been updated by the &lt;code class=&quot;highlighter-rouge&quot;&gt;update-point&lt;/code&gt; function and their new (x,y) coordinates are
+(40,50) and (70,90) respectively. This means:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;dx = 30&lt;/li&gt;
+  &lt;li&gt;dy = 40&lt;/li&gt;
+  &lt;li&gt;distance = 50&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Since the Stick between P0 and P1 was configured to have a &lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt; of 150, and
+we want P0 and P1 to be adjusted by the same amount, P0 &lt;em&gt;should&lt;/em&gt; be located at
+Point S0 (10,10) and P1 &lt;em&gt;should&lt;/em&gt; be located at Point S1 (100,130). This is
+exactly what &lt;code class=&quot;highlighter-rouge&quot;&gt;apply-stick-constraint&lt;/code&gt; achieves:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;difference&lt;/code&gt; in the configured &lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt; of the Stick and the &lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt; of P0
+and P1 is 100&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;fraction&lt;/code&gt; of the &lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt; between P0 and P1 that needs to be added to
+P0 AND to P1 is 1. So by extending the &lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt; P0 and P1 with exactly 50
+(&lt;code class=&quot;highlighter-rouge&quot;&gt;distance&lt;/code&gt; times &lt;code class=&quot;highlighter-rouge&quot;&gt;fraction&lt;/code&gt;) in both directions, we’ll solve the Stick
+constraint.&lt;/li&gt;
+  &lt;li&gt;This is done by using &lt;code class=&quot;highlighter-rouge&quot;&gt;offsetX&lt;/code&gt; on P0x and P1x and using &lt;code class=&quot;highlighter-rouge&quot;&gt;offsetY&lt;/code&gt; on P0y and
+P1y&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Conceptually a scaled helper triangle is used to move P0 and an identical scaled
+helper triangle is used to move P1. The scale of this triangle is determined by
+the &lt;code class=&quot;highlighter-rouge&quot;&gt;fraction&lt;/code&gt; which in this case is 1. These triangles are depicted in red.&lt;/p&gt;
+
+&lt;p&gt;Each Stick in the world is updated before a new world frame is drawn. It is very
+well possible that the neatly placed P0 and P1 are moved to different
+coordinates by another Stick constraint before the complete update is over. This
+sometimes results in wiggly behavior, although in most cases, the simulation
+is perceived to behave naturally.&lt;/p&gt;
+
+&lt;h2 id=&quot;drawing&quot;&gt;Drawing&lt;/h2&gt;
+
+&lt;p&gt;Finally, the Points and Sticks have to be drawn on screen:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn draw
+  [state]
+  (quil/background 255)
+  (if (:info-message state)
+    (quil/text info-message 20 20)
+    (do
+      (doseq [point (vals (:points state))]
+        (quil/ellipse (:x point) (:y point) 7 7))
+      (doseq [stick (:sticks state)]
+        (let [points (:points state)
+              p0     ((first (:links stick)) points)
+              p1     ((last  (:links stick)) points)]
+          (quil/line (:x p0) (:y p0) (:x p1) (:y p1)))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Start by clearing the screen. If there is an &lt;code class=&quot;highlighter-rouge&quot;&gt;:info-message&lt;/code&gt; entry in the
+&lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt;, draw the &lt;code class=&quot;highlighter-rouge&quot;&gt;info-message&lt;/code&gt;. Otherwise draw all Points in &lt;code class=&quot;highlighter-rouge&quot;&gt;state&lt;/code&gt; as a
+quil/ellipse and draw all Sticks as a quil/line. And that’s all folks!&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;As always, it was a pleasure working with Clojure. It turns out to be easy to
+work in a very mutable domain with mostly pure functions, also thanks to the
+excellent Quil library.&lt;/p&gt;
+
+&lt;p&gt;My current version of &lt;a href=&quot;https://github.com/AlDanial/cloc&quot;&gt;cloc&lt;/a&gt; tells me that
+core.clj is 230 lines long, but it counts the function documentation as code.
+Therefore, I ran a new &lt;code class=&quot;highlighter-rouge&quot;&gt;cloc&lt;/code&gt; command without the doc strings. It then counts
+159 lines of clojure, approximately half of which are dedicated to UI
+interaction and the other half to physics simulation. Not bad at all!&lt;/p&gt;
+
+&lt;p&gt;I’m glad I decided to ‘bite the bullet’ and learn Emacs and CIDER. I now use
+Emacs for all my Clojure(script) development. In addition, I use Emacs for most
+of my text editing these days including writing and planning.&lt;/p&gt;
+
+&lt;p&gt;I’d like to thank Michiel Borkent a.k.a.
+&lt;a href=&quot;https://twitter.com/borkdude&quot;&gt;@borkdude&lt;/a&gt; for reviewing an earlier version of
+the code and giving me very helpful feedback. Faults and not-so-idiomatic
+Clojure code remaining are my own.&lt;/p&gt;
+
+&lt;p&gt;Please share your comments, suggestions and thoughts about this blog post on
+&lt;a href=&quot;https://twitter.com/mmz_&quot;&gt;twitter.com/mmz_&lt;/a&gt;. Thanks for reading and Happy
+Coding!&lt;/p&gt;
+
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://graphics.cs.cmu.edu/nsp/course/15-869/2006/papers/jakobsen.htm&quot;&gt;Verlet integration
+paper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/mmzsource/verlet&quot;&gt;My verlet integration code in clojure&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/quil/quil&quot;&gt;Quil library&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/clojure-emacs/cider&quot;&gt;Emacs CIDER plugin&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/AlDanial/cloc&quot;&gt;Cloc - counting lines of code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-03-04-verlet-integration.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry><entry><title type="html">Service Discovery on AWS</title><link href="https://040code.github.io//2018/02/14/service-discovery/" rel="alternate" type="text/html" title="Service Discovery on AWS" /><published>2018-02-14T00:00:00+00:00</published><updated>2018-02-14T00:00:00+00:00</updated><id>https://040code.github.io//2018/02/14/service-discovery</id><content type="html" xml:base="https://040code.github.io//2018/02/14/service-discovery/">&lt;p&gt;Last year I wrote a &lt;a href=&quot;/2017/04/20/discovery-agent/&quot;&gt;post&lt;/a&gt; how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the &lt;a href=&quot;https://github.com/aws/amazon-ecs-agent/releases/tag/v1.15.0&quot;&gt;ECS agent 1.15&lt;/a&gt; to retrieve container meta data in the container. This feature makes the discovery agent obsolete.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
 &lt;p&gt;Looking back to the last years problem. A Spring service running in a container needs its external ip address and port to register to Eureka for service discovery. A service running in a container does not know the external exposed port and docker does not support a way to obtain the port mapping. We could inject the ip address but for the port that would not work. Since the port is unknown at start time. Of course, this in only valid when using random ports. But fixing the port can eventually cause port conflicts. Besides that, you are not able to scale the container on the same host. Therefore, it makes sense to use automatic port assignment.&lt;/p&gt;
@@ -1320,240 +1698,4 @@ Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quo
   &lt;li&gt;&lt;a href=&quot;http://cljs.github.io/api/syntax/#dot&quot;&gt;Javascript interop&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://clojure.org/reference/java_interop&quot;&gt;Java interop&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.w3schools.com/tags/ref_canvas.asp&quot;&gt;HTML Canvas functionality&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="clojurescript" /><category term="bézier" /><category term="functional" /><category term="klipse" /><category term="canvas" /><summary type="html">In my previous post I described how to visualise simple Bézier curves. I chose Clojure as implementation language. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.</summary></entry><entry><title type="html">Visualising Bézier Curves</title><link href="https://040code.github.io//2017/07/01/bezier-in-clojure/" rel="alternate" type="text/html" title="Visualising Bézier Curves" /><published>2017-07-01T00:00:00+00:00</published><updated>2017-07-01T00:00:00+00:00</updated><id>https://040code.github.io//2017/07/01/bezier-in-clojure</id><content type="html" xml:base="https://040code.github.io//2017/07/01/bezier-in-clojure/">&lt;p&gt;For reasons I might explain in another post, I was reading about &lt;a href=&quot;https://en.wikipedia.org/wiki/Bézier_curve&quot;&gt;Bézier curves on wikipedia&lt;/a&gt; the other day. Especially the paragraph on “Constructing Bézier curves” made me understand intuitively how these curves are constructed. I wondered if &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; could help me easily visualise some of these curves so I fired up a &lt;a href=&quot;https://en.wikipedia.org/wiki/Read–eval–print_loop&quot;&gt;REPL&lt;/a&gt; (Read-Eval-Print-Loop) to investigate.&lt;/p&gt;
-
-&lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
-
-&lt;p&gt;I assume you have a working &lt;a href=&quot;https://leiningen.org&quot;&gt;leiningen&lt;/a&gt; setup with the &lt;a href=&quot;https://github.com/rkneufeld/lein-try&quot;&gt;lein-try plugin&lt;/a&gt; installed.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Leiningen will help you get started with &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; right away from your shell&lt;/li&gt;
-  &lt;li&gt;Lein-try enables you to spin up a repl and try a library without any hassle.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Let’s first start a repl, and specify the library we want to try:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lein try incanter &lt;span class=&quot;s2&quot;&gt;&quot;1.5.7&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://incanter.org&quot;&gt;Incanter&lt;/a&gt; is a &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;-based, R-like platform for statistical computing and graphics. We’ll use it to visualise the Bézier curves.&lt;/p&gt;
-
-&lt;p&gt;Since the repl is already fired up, let’s immediately require the dependencies we’ll need:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.charts&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;charts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Nothing fancy going on here. Simply ‘import’ statements the &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; way.&lt;/p&gt;
-
-&lt;h2 id=&quot;helper-function&quot;&gt;Helper function&lt;/h2&gt;
-
-&lt;p&gt;I decided to hand-roll my own &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function, because we’ll need it later in the creation of bézier curves:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This function basically says:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;define a function named &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;let &lt;code class=&quot;highlighter-rouge&quot;&gt;base&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;exponent&lt;/code&gt; be its arguments&lt;/li&gt;
-  &lt;li&gt;make it &lt;code class=&quot;highlighter-rouge&quot;&gt;repeat&lt;/code&gt; the &lt;code class=&quot;highlighter-rouge&quot;&gt;base&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;exponent&lt;/code&gt; times&lt;/li&gt;
-  &lt;li&gt;and &lt;code class=&quot;highlighter-rouge&quot;&gt;reduce&lt;/code&gt; that result with the &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; multiply function&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;;; so:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; will lead to&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; which results in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;I’m using the &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; multiply function instead of the normal &lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt; multiply function, because according to the docs &lt;code class=&quot;highlighter-rouge&quot;&gt;*'&lt;/code&gt; supports arbitrary precision. You can see for yourself by typing &lt;code class=&quot;highlighter-rouge&quot;&gt;(doc *')&lt;/code&gt; in your repl, or study the code by typing &lt;code class=&quot;highlighter-rouge&quot;&gt;(source *')&lt;/code&gt; in your repl.&lt;/p&gt;
-
-&lt;h2 id=&quot;bézier&quot;&gt;Bézier&lt;/h2&gt;
-
-&lt;p&gt;Bézier functions work with control points. The minimum number of control points is 2 and Bézier curves with 2 control points are straight lines (although you can also create straight lines with more than 2 control points).&lt;/p&gt;
-
-&lt;p&gt;For the moment I only need Bézier curves with 3 control points: a start point, an end point and one point controlling the curve of the line between start and end.&lt;/p&gt;
-
-&lt;p&gt;Quoting the &lt;a href=&quot;https://en.wikipedia.org/wiki/Bézier_curve&quot;&gt;Wikipedia page&lt;/a&gt;: “A quadratic Bézier curve is the path traced by the function B(t), given points P0, P1, and P2”:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/img/bezier-formula.png&quot; alt=&quot;bezier-formula&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;So given 3 points (P0, P1 and P2) I should be able to describe the curve with this math function. Conceptually a pen is drawing the curve by starting on P0 on moment &lt;code class=&quot;highlighter-rouge&quot;&gt;t = 0&lt;/code&gt; and following the curve described by this formula and the position of the 3 points until it hits the end point at &lt;code class=&quot;highlighter-rouge&quot;&gt;t = 1&lt;/code&gt;. The only thing this resulting &lt;code class=&quot;highlighter-rouge&quot;&gt;B(t)&lt;/code&gt; function needs is the moment &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; and it will calculate the X or Y coördinate at that particular moment.&lt;/p&gt;
-
-&lt;p&gt;Let’s convert the math function to &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;       &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As you can see, you’ll have to translate the infix notation to &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s prefix notation. The advantage is there are no precedence rules to remember anymore. These are all just lists where the first element of the list is interpreted as a function to call and the brackets are used to put them into context. &lt;em&gt;(If you can’t live with that: you can also use infix notation in clojure. For instance incanter can also be fed with &lt;a href=&quot;https://data-sorcery.org/2010/05/14/infix-math/&quot;&gt;infix notation&lt;/a&gt;. However, you’ll lose &lt;a href=&quot;https://en.wikipedia.org/wiki/Lambda_calculus&quot;&gt;the power of the 𝝺&lt;/a&gt;)&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;This function basically states:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;define a function named &lt;code class=&quot;highlighter-rouge&quot;&gt;bezier-3&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;let it have 3 arguments: &lt;code class=&quot;highlighter-rouge&quot;&gt;P0&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;P2&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;make it return an anonymous function&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This anonymous function:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;takes &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; as an argument&lt;/li&gt;
-  &lt;li&gt;has &lt;code class=&quot;highlighter-rouge&quot;&gt;P0&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;P2&lt;/code&gt; already ‘injected’&lt;/li&gt;
-  &lt;li&gt;applies the Bézier math function&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Excellent. Let’s try it:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Here I’m defining a variable &lt;code class=&quot;highlighter-rouge&quot;&gt;test-b3&lt;/code&gt; which holds the anonymous function returned by the &lt;code class=&quot;highlighter-rouge&quot;&gt;bezier-3&lt;/code&gt; function call. The 3 points are either all x or all y coordinates of the points P0, P1 and P2.&lt;/p&gt;
-
-&lt;p&gt;With the &lt;code class=&quot;highlighter-rouge&quot;&gt;(test-b3 0)&lt;/code&gt; function call I’m calling the anonymous function with a &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; value of &lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;. This nicely returns an answer representing the x coordinates at moment &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; if you provided the (P0, P1 and P2) x coordinates when calling the &lt;code class=&quot;highlighter-rouge&quot;&gt;bezier-3&lt;/code&gt; function or the y coordinate at moment &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt; if you provided the (P0, P1 and P2) y coordinates.&lt;/p&gt;
-
-&lt;p&gt;Since this test didn’t blow the stack or throw a NullPointerException or anything,  let’s map this function over a range of &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;’s &lt;code class=&quot;highlighter-rouge&quot;&gt;[0 0.25 0.5 0.75 1]&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.25&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9375&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.4375&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Instead of typing these &lt;code class=&quot;highlighter-rouge&quot;&gt;t&lt;/code&gt;’s to &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt; over, we could also use the &lt;code class=&quot;highlighter-rouge&quot;&gt;range&lt;/code&gt; function:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;As you can see, &lt;code class=&quot;highlighter-rouge&quot;&gt;range&lt;/code&gt; allows you to specify a start (inclusive), an end (exclusive) and a step size (optional).&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test-b3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;=&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9900000000000001&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9600000000000002&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.9099999999999999&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.84&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.75&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.64&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.51&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.3600000000000001&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.19000000000000014&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.220446049250313&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E-16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Although a certain pattern is already visible in these numbers, now might be the right time to start visualising the curves.&lt;/p&gt;
-
-&lt;h2 id=&quot;visualise&quot;&gt;Visualise&lt;/h2&gt;
-
-&lt;p&gt;Let’s be brave and go right to the essence:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/conj-cols&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;charts/xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:points&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/view&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; form is &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s way of defining local variables. So &lt;code class=&quot;highlighter-rouge&quot;&gt;b3x&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;xs&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;b3y&lt;/code&gt;, etc. can be seen as local variables with their values specified in the functions directly after their declaration.&lt;/p&gt;
-
-&lt;p&gt;This function basically states:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;define a function named &lt;code class=&quot;highlighter-rouge&quot;&gt;view-bezier-plot&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;let it have 3 arguments which are destructured into their 2D x &amp;amp; y coordinates&lt;/li&gt;
-  &lt;li&gt;let the fourth argument be the title of the plot&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt; it have some local variables:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;b3x&lt;/code&gt; takes all x coordinates of the 3 points&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;b3y&lt;/code&gt; takes the y coordinates&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xs&lt;/code&gt; are the all x values resulting from applying the &lt;code class=&quot;highlighter-rouge&quot;&gt;b3x&lt;/code&gt; anonymous function with all the range values&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ys&lt;/code&gt; are the all y values resulting from applying the &lt;code class=&quot;highlighter-rouge&quot;&gt;b3y&lt;/code&gt; anonymous function with all the range values&lt;/li&gt;
-      &lt;li&gt;incanter can work with columns similarly to spreadsheets. &lt;code class=&quot;highlighter-rouge&quot;&gt;dataset&lt;/code&gt; is an incanter dataset where 2 columns are ‘brought together’, or in &lt;a href=&quot;https://en.wikipedia.org/wiki/Lisp_(programming_language)&quot;&gt;lisp&lt;/a&gt; terms &lt;code class=&quot;highlighter-rouge&quot;&gt;conj&lt;/code&gt;[oined]. By default, these columns are called &lt;code class=&quot;highlighter-rouge&quot;&gt;col-0&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;col-1&lt;/code&gt;, … , &lt;code class=&quot;highlighter-rouge&quot;&gt;col-n&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;xy-plot contains an incanter chart where &lt;code class=&quot;highlighter-rouge&quot;&gt;dataset&lt;/code&gt; provides the data, the x-axis - and y-axis values are found in columns &lt;code class=&quot;highlighter-rouge&quot;&gt;col-0&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;col-1&lt;/code&gt; respectively and viewing the points is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;and make it return an &lt;code class=&quot;highlighter-rouge&quot;&gt;xy-plot&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;i-love-it-when-a-plan-comes-together&quot;&gt;I love it when a plan comes together&lt;/h2&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;increasing ascending&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;swoosh&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;y = x^2 ?&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;-1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;my pulse after a useless meeting&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/img/incanter-plots.png&quot; alt=&quot;incanter-plots&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The generated charts will be opened in external java windows. Sometimes they stay hidden behind other windows on your screen, so you might have to bring your java windows to the foreground in order to see them.&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;In a relatively short repl session I was able to get a better understanding of (3 point) Bézier curves. Although the blogpost is long, not much code or time was needed to create the curves:&lt;/p&gt;
-
-&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;incanter.charts&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;charts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;repeat&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exponent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;       &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-
-
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;view-bezier-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3x&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bezier-3&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y1&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b3y&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.01&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/conj-cols&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xs&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;charts/xy-plot&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-1&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:points&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plot-title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;incanter/view&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xy-plot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Actually, the hand-rolled &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function isn’t really needed. I could have used &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt;’s java interop: &lt;code class=&quot;highlighter-rouge&quot;&gt;(Math/pow 2 3)&lt;/code&gt;. In that case I would have been calling the &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; method directly on java’s &lt;code class=&quot;highlighter-rouge&quot;&gt;Math&lt;/code&gt; class. I weighted the option of hand-rolling the &lt;code class=&quot;highlighter-rouge&quot;&gt;pow&lt;/code&gt; function, showing some functional code and explaining how functions are defined in &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; versus explaining java interop.&lt;/p&gt;
-
-&lt;p&gt;Explaining in text what the code does took me 5 times as long as writing the code itself. That’s a great thing about &lt;a href=&quot;https://en.wikipedia.org/wiki/Lisp_(programming_language)&quot;&gt;lisps&lt;/a&gt; in general and &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; in particular: no fluff, just stuff!&lt;/p&gt;
-
-&lt;p&gt;Thanks Niek for posting my guest blog. Please share your comments, suggestions and thoughts about this blog with me on &lt;a href=&quot;https://twitter.com/mmz_&quot;&gt;twitter.com/mmz_&lt;/a&gt;. Thanks for reading and Happy Coding!&lt;/p&gt;
-
-&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://gist.github.com/mmzsource/833ddfb2cf87c54fe4fc26996466cd1d&quot;&gt;A gist with the code from this post&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://clojure.org&quot;&gt;Clojure website&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Lisp_(programming_language)&quot;&gt;Lisps or LIst Processing Language&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Lambda_calculus&quot;&gt;𝝺 calculus&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Read–eval–print_loop&quot;&gt;REPL or Read Eval Print Loop&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.davidtanzer.net/rdd_and_tests&quot;&gt;REPL Driven Development&lt;/a&gt; - a blog which is a bit outdated on the test part, because nowadays, with &lt;a href=&quot;https://clojure.org/about/spec&quot;&gt;clojure spec&lt;/a&gt; we easily generate our tests and test data by specifying our data structures, functions, etc. in &lt;code class=&quot;highlighter-rouge&quot;&gt;clojure&lt;/code&gt; itself. With proper specs, you’ll get even more than generative testing; you’ll get validation, better error reporting, destructuring and type- and range checking in one go - without losing the power &amp;amp; pleasure of a dynamic programming language!&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://leiningen.org&quot;&gt;Leiningen&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://github.com/rkneufeld/lein-try&quot;&gt;Lein-try plugin&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://incanter.org&quot;&gt;Incanter&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://data-sorcery.org/2010/05/14/infix-math/&quot;&gt;Incanter infix notation&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Bézier_curve&quot;&gt;Wikipedia page on Bézier curves&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://plus.maths.org/content/formula-bezier-curve&quot;&gt;The formula for a bezier curve&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blogs.sitepointstatic.com/examples/tech/canvas-curves/bezier-curve.html&quot;&gt;Play around with bézier curves with 4 control points&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="bézier" /><category term="functional" /><category term="incanter" /><summary type="html">For reasons I might explain in another post, I was reading about Bézier curves on wikipedia the other day. Especially the paragraph on “Constructing Bézier curves” made me understand intuitively how these curves are constructed. I wondered if clojure could help me easily visualise some of these curves so I fired up a REPL (Read-Eval-Print-Loop) to investigate.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-03-04-verlet-integration.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="clojurescript" /><category term="bézier" /><category term="functional" /><category term="klipse" /><category term="canvas" /><summary type="html">In my previous post I described how to visualise simple Bézier curves. I chose Clojure as implementation language. Unfortunately I had to ask you to jump through a couple of hoops in order to code along: installing leiningen, installing and configuring the lein-try plugin and maybe even installing the JVM.</summary></entry></feed>
