@@ -58,6 +58,10 @@ docker run -it --env-file <AWS_KEYS_FILE> -v $(pwd):/data -w /data \
 ```
 <br>
 
+In this example you can swithc the reqion by changing the region variable
+`aws_region` to your own choice. Or set the following environment variable: `export TF_VAR_aws_region=ap-northeast-1`
+for Tokyo.
+
 #### Create network layers (VPC)
 In the next steps we will create the network layers.
 
