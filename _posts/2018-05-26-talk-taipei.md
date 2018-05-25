@@ -2,7 +2,7 @@
 layout:     post
 title:      "Immutable Infrastructure"
 subtitle:   "Cloud Native User Group Taipei"
-date:       2018-04-26
+date:       2018-05-26
 authors:     [niek]
 header-img: "img/strijp-s-ols.png"
 tags:       [terraform, aws, docker, microservices]
@@ -14,7 +14,8 @@ The Docker slogan 'Build, Ship, and Run' advertises easy set up of immutable sof
 In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..
 
 ## Slides
-Below the slides that I used for the talk, the slides are available as well on [GitLab](https://immutable-infrastructure.gitlab.io/dodr-2017/). You can easy navigate through the slides with the spacebar.
+Below the slides that I used for the talk, the slides are available as well on
+[GitLab](https://immutable-infrastructure.gitlab.io/taipei-2018/). You can easy navigate through the slides with the spacebar.
 
 <div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
     <iframe style="position:absolute; left:0; top:0; width:100%; height:100%"
@@ -70,7 +71,7 @@ Terraform should print on the console that 19 needs to be added and 0 to change 
 #### Add ECS cluster
 Now we have the network layer created, we will add the ECS cluster. By default the bastion host is disabled, the bastion can be enabled by updating the variable `enable_bastion` in the `terraform.tfvars` file. Time to plan and apply the new resources for ECS.
 ```
-git checkout ecs
+git checkout taipei-ecs-1
 terraform plan
 terraform apply
 ```
