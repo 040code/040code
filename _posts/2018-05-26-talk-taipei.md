@@ -8,8 +8,8 @@ header-img: "img/strijp-s-ols.png"
 tags:       [terraform, aws, docker, microservices]
 ---
 
-The Docker slogan 'Build, Ship, and Run' advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. [In the talk at the DevOps Days in Riga](https://www.devopsdays.org/events/2017-riga/program/niek-palm/) I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.
-
+The Docker slogan 'Build, Ship, and Run' advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at
+the Cloud Native Meetup in Taipei I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.
 
 In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..
 
