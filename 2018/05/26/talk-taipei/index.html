@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Immutable Infrastructure - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2018/05/26/talk-taipei/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/img/strijp-s-ols.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Immutable Infrastructure</h1>
+                    
+                    <h2 class="subheading">Cloud Native User Group Taipei</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      on 2018-05-26</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/terraform/">Terraform</a><a class="badge " href="/blog/tag/aws/">Amazon</a><a class="badge " href="/blog/tag/docker/">Docker</a><a class="badge " href="/blog/tag/microservices/">Micro Services</a>
+
+
+				<p>The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. <a href="https://www.devopsdays.org/events/2017-riga/program/niek-palm/">In the talk at the DevOps Days in Riga</a> I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</p>
+
+<p>In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..</p>
+
+<h2 id="slides">Slides</h2>
+<p>Below the slides that I used for the talk, the slides are available as well on
+<a href="https://immutable-infrastructure.gitlab.io/taipei-2018/">GitLab</a>. You can easy navigate through the slides with the spacebar.</p>
+
+<div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
+    <iframe style="position:absolute; left:0; top:0; width:100%; height:100%" src="https://immutable-infrastructure.gitlab.io/taipei-2018/">
+    </iframe>
+</div>
+
+<p>To get started with Terraform the best starting points are:</p>
+<ul>
+  <li><a href="https://www.terraform.io/intro/examples/">Terraform.io</a></li>
+  <li><a href="https://github.com/npalm/tf-helloworld-demo">Hello World example</a></li>
+</ul>
+
+<h2 id="examples">Examples</h2>
+
+<h3 id="hello-world">Hello World</h3>
+<p>During the talk, I demonstrated a hello world example, see the link above. This examples shows some basics of terraform by creating a ec2 instance and security group to server a simple web application. The example only works in the AWS region <code class="highlighter-rouge">eu-west-1</code> since the AMI used is only available in this region.</p>
+
+<h3 id="ecs-demo">ECS demo</h3>
+<p>The second example I have shown, is creating an immutable infrastructure to server docker containers. The picture below descibes briefly the enviroment that will be cretaed.</p>
+
+<p><a href="#">
+    <img src="/img/20170919-immutable-infra/ecs-black.png" alt="ecs-diagram" />
+</a></p>
+
+<p>The example also creates log groups in cloudwatch to capture the logging of the ecs agent and the running containers (services).</p>
+
+<h4 id="setup">Setup</h4>
+<p>Before you can start, you need an AWS account with sufficient rights (admin), and you should create a <code class="highlighter-rouge">AWS_ACCESS_KEY_ID</code> and <code class="highlighter-rouge">AWS_SECRET_ACCESS_KEY</code> to be able to access your account programmatically.</p>
+
+<p>Clone the repository containing the ECS <a href="https://github.com/npalm/tf-ecs-demo.git">sample</a> terraform code. To create the infrastructure step-by-step you can check out the tags <code class="highlighter-rouge">vpc</code> and <code class="highlighter-rouge">ecs</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/npalm/tf-ecs-demo.git
+git checkout taipei-vpc
+</code></pre></div></div>
+<p>You should also have Terraform installed (<code class="highlighter-rouge">home brew install terraform</code>) and
+tfenv to manage your terraform installation. Alternatively use a docker container to run the terraform commands, for example:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -it --env-file &lt;AWS_KEYS_FILE&gt; -v $(pwd):/data -w /data \
+  hashicorp/terraform:0.10.4 &lt;terraform command&gt;
+</code></pre></div></div>
+<p><br /></p>
+
+<p>In this example you can swithc the reqion by changing the region variable
+<code class="highlighter-rouge">aws_region</code> to your own choice. Or set the following environment variable: <code class="highlighter-rouge">export TF_VAR_aws_region=ap-northeast-1</code>
+for Tokyo.</p>
+
+<h4 id="create-network-layers-vpc">Create network layers (VPC)</h4>
+<p>In the next steps we will create the network layers.</p>
+
+<p>First, we initialize and plan our changes.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>terraform init
+terraform plan
+</code></pre></div></div>
+<p>Terraform should print on the console that 19 needs to be added and 0 to change or destroyed. Next we apply the change be executing <code class="highlighter-rouge">terraform apply</code>.</p>
+
+<h4 id="add-ecs-cluster">Add ECS cluster</h4>
+<p>Now we have the network layer created, we will add the ECS cluster. By default the bastion host is disabled, the bastion can be enabled by updating the variable <code class="highlighter-rouge">enable_bastion</code> in the <code class="highlighter-rouge">terraform.tfvars</code> file. Time to plan and apply the new resources for ECS.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout taipei-ecs-1
+terraform plan
+terraform apply
+</code></pre></div></div>
+<p>Once terraform is ready it will print the url of two applications on the console. One application, is a simple micro service that just prints the AWS availabilty zone where it is running, the other is a <a href="/2017/05/20/nextbuild-graphql/">graphql micro service</a>. It will take a few minutes before the services are available.</p>
+
+<h4 id="adding-your-own-service">Adding your own service.</h4>
+<p>Time to have some more fun. Edit the <code class="highlighter-rouge">main.tf</code> and start making changes. Remove all the services, add your own service. By default for each service an application load balancer (ALB) is created. Add for each services that you want to deploy a configuration as below and update the variables as required.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module "your-service" {
+  source = "ecs-service"
+
+  service_name   = "&lt;service-name&gt;"
+  image_url      = "&lt;docker-image&gt;"
+  container_port = &lt;port in the container where the service is listening&gt;
+  desired_count  = &lt;number of instances&gt;
+
+  aws_region  = "${var.aws_region}"
+  environment = "${var.environment}"
+
+  vpc_id  = "${module.vpc.vpc_id}"
+  subnets = "${module.vpc.public_subnets}"
+
+  cluster_id            = "${module.ecs-cluster.cluster_id}"
+  ecs_service_role_name = "${module.ecs-cluster.ecs_service_role_name}"
+}
+</code></pre></div></div>
+<p>Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.</p>
+
+<h3 id="clean-up">Clean up</h3>
+<p>Once done you can easily clean-up all created resources in AWS, just run <code class="highlighter-rouge">terraform destroy</code>.</p>
+
+<h3 id="serverless-containers">Serverless containers.</h3>
+<p>Since a few months Amazon support running containers without managing your
+ec2 instances, aka Serverless Containers. This services is called Fargate. I
+have written a <a href="https://040code.github.io/2018/01/30/fargate_with_terraform/">blog
+post</a> about
+how to run you containers serveless with terraform. Creating a mix of both
+ways of running of containers is explained as well. Be aware that Fargate is
+still only avaialable in <code class="highlighter-rouge">us-east-1</code>.</p>
+
+<p>Have fun!</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/03/04/verlet-integration/" data-toggle="tooltip" data-placement="top" title="Verlet Integration">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2018</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
