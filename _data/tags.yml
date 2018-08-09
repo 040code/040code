@@ -85,3 +85,9 @@ microhack:
 python:
   slug: python
   name: Python
+mac:
+  slug: mac
+  name: MacOS
+brew:
+  slug: brew
+  name: HomeBrew
