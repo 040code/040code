@@ -4,7 +4,7 @@ title:      "Microhack Brew your code"
 subtitle:   "How to create a brew package"
 date:       2018-08-08
 authors:     [jeroen]
-header-img: "img/strijp-s-ols.png"
+header-img: "img/vanmoll-brew.jpg"
 tags:       [microhack, mac, brew]
 ---
 
