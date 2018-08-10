@@ -4,7 +4,7 @@ title:      "Microhack Brew your code"
 subtitle:   "How to create a brew package"
 date:       2018-08-08
 authors:     [jeroen]
-header-img: "img/vanmoll-brew.jpg"
+header-img: "assets/2018-08-08-brew-some-code/vanmoll-brew.jpg"
 tags:       [microhack, mac, brew]
 ---
 
@@ -23,7 +23,8 @@ $ sudo chmod ugo+x /usr/local/bin/gits
 $ gits
 ```
 
-I always forget these scripts, so they are never updated and never removed. Your system becomes a mess.
+When I see something like this, it's another hurdle for using great scripts. It's a good practice to check these scripts, before putting them into your bash with execution rights. Sometimes, I'm to lazy to do that..
+Also I always tend to forget these scripts, so they are never updated and never removed. Your system becomes a mess.
 
 More people did not like that. An [issue](https://github.com/roylines/gits/issues/6) was raised with a question whether it could be installed with homebrew..
 
@@ -108,9 +109,9 @@ brew tap jeroenknoops/tap
 
 After that they can install gits with `brew install gits`
 
-## I want it to be available without having to tap into someone's tap
+## I do not want to tap into someone's tap
 
-You can also put the Formula directly into the [homebrew-core](https://github.com/Homebrew/homebrew-core) so people don't need to tap into someones private tap.
+To even raise the level of trust of the script / tool and install convenience, you can also put the Formula directly into the [homebrew-core](https://github.com/Homebrew/homebrew-core). Now people don't need to tap into someones private tap.
 This will require some extra steps, like adding tests.
 
 Brew has a way to test your formula by doing: `brew audit --new-formula gits`
