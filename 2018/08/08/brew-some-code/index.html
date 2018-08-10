@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Microhack Brew your code - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2018/08/08/brew-some-code/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2018-08-08-brew-some-code/vanmoll-brew.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Microhack Brew your code</h1>
+                    
+                    <h2 class="subheading">How to create a brew package</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/jeroen/">
+                            Jeroen Knoops
+                          </a>
+                          
+                      
+                      on 2018-08-08</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/microhack/">MicroHack</a><a class="badge " href="/blog/tag/mac/">MacOS</a><a class="badge " href="/blog/tag/brew/">HomeBrew</a>
+
+
+				<p>Working on a Mac made my work a lot more fun. Especially when I was introduced to <a href="https://brew.sh/">homebrew</a>, the missing package manager for macOS.</p>
+
+<p>MacPorts was fine, but it felt clumsy. Every tool seems to be switched to Homebrew and life was good.. Except when you encounter that one tool you need but is not available in brew….</p>
+
+<h2 id="meet-gits">Meet Gits</h2>
+<p>An example of this is the great shell script made by Roy Lines: <a href="https://github.com/roylines/gits">gits</a>.
+A shell script to share contribution between two git accounts when pair programming.</p>
+
+<p>Unfortunately you have to install it by getting a remote bash script and add it in your /usr/local/bin directory with root rights.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo wget https://raw.github.com/roylines/gits/master/gits.sh -O /usr/local/bin/gits
+$ sudo chmod ugo+x /usr/local/bin/gits
+$ gits
+</code></pre></div></div>
+
+<p>When I see something like this, it’s another hurdle for using great scripts. It’s a good practice to check these scripts, before putting them into your bash with execution rights. Sometimes, I’m to lazy to do that..
+Also I always tend to forget these scripts, so they are never updated and never removed. Your system becomes a mess.</p>
+
+<p>More people did not like that. An <a href="https://github.com/roylines/gits/issues/6">issue</a> was raised with a question whether it could be installed with homebrew..</p>
+
+<blockquote>
+  <p>How can it install it on mac? I would prefer to use homebrew.</p>
+</blockquote>
+
+<p>Well, let’s help Adam!</p>
+
+<h2 id="create-our-own-tap">Create our own tap</h2>
+
+<h3 id="correct-format">Correct format</h3>
+
+<p>First step is to change the structure of your script so it can be used for brew.
+Scripts need to be in the <code class="highlighter-rouge">bin/</code> directory so that is the first thing we need to do.</p>
+
+<p>Simply moving the script to the <code class="highlighter-rouge">bin</code> directory..</p>
+
+<p><a href="https://github.com/JeroenKnoops/gits/commit/4de9197fe1e24b751af2a1fe214b4259bf256c49">https://github.com/JeroenKnoops/gits/commit/4de9197fe1e24b751af2a1fe214b4259bf256c49</a></p>
+
+<h3 id="release-the-script">Release the script</h3>
+
+<p>You have to create a release of your script. You can do that by <a href="https://github.com/JeroenKnoops/gits/releases">drafting a new release</a></p>
+
+<p>Once you have a release, we need the SHA-256 checksum of the release to ensure a proper version of the download.
+Browse to the release and copy the name of the tar-file (in our case: <code class="highlighter-rouge">https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz</code>)</p>
+
+<p>Download the tar and generate the SHA-256.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ wget https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz
+$ shasum -a 256 0.1.0.tar.gz
+13b778bf5a7f92285f54179cd88bea4b39f661a3de47a7ff0a84b9aa5d865962  0.1.0.tar.gz
+</code></pre></div></div>
+
+<p>We will need this SHA-256 for our formula.</p>
+
+<h3 id="define-the-formula">Define the Formula</h3>
+
+<p>We have to define the formula. This can be done by creating a repo called <a href="https://github.com/JeroenKnoops/homebrew-tap">homebrew-tap</a> in your own github repo.
+It’s best practice to put some information in the README of this repo about the Formulas which are defined.</p>
+
+<p>In our case:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## homebrew-tap
+Homebrew tap with formula for installing the following:
+
+- [gits](https://github.com/jeroenknoops/gits)
+
+
+#### Add this tap
+`brew tap jeroenknoops/tap`
+
+
+#### Install
+- gits: `brew install gits`
+</code></pre></div></div>
+
+<p>In the <code class="highlighter-rouge">/Formula</code> directory you must create a ruby file with the definition, in our case: <a href="https://github.com/JeroenKnoops/homebrew-tap/blob/master/Formula/gits.rb">gits.rb</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Gits &lt; Formula
+  desc "A shell script to share contribution between two git accounts when pair programming."
+  homepage "https://github.com/jeroenknoops/gits"
+  url "https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz"
+  version "0.1.0"
+  sha256 "13b778bf5a7f92285f54179cd88bea4b39f661a3de47a7ff0a84b9aa5d865962"
+
+  def install
+    bin.install "bin/gits"
+  end
+end
+</code></pre></div></div>
+
+<p>Push the repo to github and we’re ready to go.</p>
+
+<h3 id="test-it">Test it</h3>
+<p>Now people can use the script by installing it with homebrew.
+It’s still in my private homebrew-tap, so people first have to tap into our private tap.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew tap jeroenknoops/tap
+</code></pre></div></div>
+
+<p>After that they can install gits with <code class="highlighter-rouge">brew install gits</code></p>
+
+<h2 id="i-do-not-want-to-tap-into-someones-tap">I do not want to tap into someone’s tap</h2>
+
+<p>To even raise the level of trust of the script / tool and install convenience, you can also put the Formula directly into the <a href="https://github.com/Homebrew/homebrew-core">homebrew-core</a>. Now people don’t need to tap into someones private tap.
+This will require some extra steps, like adding tests.</p>
+
+<p>Brew has a way to test your formula by doing: <code class="highlighter-rouge">brew audit --new-formula gits</code></p>
+
+<p>This will show you what you still need to do, before you can submit it to homebrew. You can also find more information on that in the <a href="https://docs.brew.sh/Formula-Cookbook">Formula-Cookbook</a></p>
+
+<h2 id="improvements">Improvements</h2>
+
+<p>There are more improvements I should make to release it to homebrew. F.e. add dependencies to <code class="highlighter-rouge">git</code>.
+For now I’m not going to dive into that. Homebrew has good documentation on that: https://docs.brew.sh/Formula-Cookbook</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I really liked the way homebrew is set up. I like the way they name things, like <code class="highlighter-rouge">brew</code>, <code class="highlighter-rouge">tap</code> and <code class="highlighter-rouge">bottle</code>. By adding my own <code class="highlighter-rouge">bottle</code> I’ve learned how homebrew is working and now I even feel more confident in using it. I like the fact that only bottles with tests and with the proper dependencies check can be added in the core homebrew formulas.</p>
+
+<h3 id="homebrew-cask">Homebrew cask</h3>
+<p>Homebrew has another great feature, called <a href="https://github.com/Homebrew/homebrew-cask">homebrew cask</a>. No more: “To install, drag this icon..”. Now you can install tools like <code class="highlighter-rouge">atom</code> or <code class="highlighter-rouge">1password</code> by simply calling: <code class="highlighter-rouge">brew cask install atom</code>…</p>
+
+<h2 id="more-info">More info</h2>
+<ul>
+  <li><a href="https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap">https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap</a></li>
+  <li><a href="https://docs.brew.sh/Formula-Cookbook">https://docs.brew.sh/Formula-Cookbook</a></li>
+  <li><a href="https://github.com/Homebrew/homebrew-cask">https://github.com/Homebrew/homebrew-cask</a></li>
+</ul>
+
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/05/26/talk-taipei/" data-toggle="tooltip" data-placement="top" title="Immutable Infrastructure">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2018</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

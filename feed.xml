@@ -1,4 +1,128 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-08-09T17:05:23+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2018/05/26/talk-taipei/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2018-05-26T00:00:00+00:00</published><updated>2018-05-26T00:00:00+00:00</updated><id>https://040code.github.io//2018/05/26/talk-taipei</id><content type="html" xml:base="https://040code.github.io//2018/05/26/talk-taipei/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-08-10T06:59:28+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Microhack Brew your code</title><link href="https://040code.github.io//2018/08/08/brew-some-code/" rel="alternate" type="text/html" title="Microhack Brew your code" /><published>2018-08-08T00:00:00+00:00</published><updated>2018-08-08T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/08/brew-some-code</id><content type="html" xml:base="https://040code.github.io//2018/08/08/brew-some-code/">&lt;p&gt;Working on a Mac made my work a lot more fun. Especially when I was introduced to &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt;, the missing package manager for macOS.&lt;/p&gt;
+
+&lt;p&gt;MacPorts was fine, but it felt clumsy. Every tool seems to be switched to Homebrew and life was good.. Except when you encounter that one tool you need but is not available in brew….&lt;/p&gt;
+
+&lt;h2 id=&quot;meet-gits&quot;&gt;Meet Gits&lt;/h2&gt;
+&lt;p&gt;An example of this is the great shell script made by Roy Lines: &lt;a href=&quot;https://github.com/roylines/gits&quot;&gt;gits&lt;/a&gt;.
+A shell script to share contribution between two git accounts when pair programming.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately you have to install it by getting a remote bash script and add it in your /usr/local/bin directory with root rights.&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo wget https://raw.github.com/roylines/gits/master/gits.sh -O /usr/local/bin/gits
+$ sudo chmod ugo+x /usr/local/bin/gits
+$ gits
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When I see something like this, it’s another hurdle for using great scripts. It’s a good practice to check these scripts, before putting them into your bash with execution rights. Sometimes, I’m to lazy to do that..
+Also I always tend to forget these scripts, so they are never updated and never removed. Your system becomes a mess.&lt;/p&gt;
+
+&lt;p&gt;More people did not like that. An &lt;a href=&quot;https://github.com/roylines/gits/issues/6&quot;&gt;issue&lt;/a&gt; was raised with a question whether it could be installed with homebrew..&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;How can it install it on mac? I would prefer to use homebrew.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Well, let’s help Adam!&lt;/p&gt;
+
+&lt;h2 id=&quot;create-our-own-tap&quot;&gt;Create our own tap&lt;/h2&gt;
+
+&lt;h3 id=&quot;correct-format&quot;&gt;Correct format&lt;/h3&gt;
+
+&lt;p&gt;First step is to change the structure of your script so it can be used for brew.
+Scripts need to be in the &lt;code class=&quot;highlighter-rouge&quot;&gt;bin/&lt;/code&gt; directory so that is the first thing we need to do.&lt;/p&gt;
+
+&lt;p&gt;Simply moving the script to the &lt;code class=&quot;highlighter-rouge&quot;&gt;bin&lt;/code&gt; directory..&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/JeroenKnoops/gits/commit/4de9197fe1e24b751af2a1fe214b4259bf256c49&quot;&gt;https://github.com/JeroenKnoops/gits/commit/4de9197fe1e24b751af2a1fe214b4259bf256c49&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;release-the-script&quot;&gt;Release the script&lt;/h3&gt;
+
+&lt;p&gt;You have to create a release of your script. You can do that by &lt;a href=&quot;https://github.com/JeroenKnoops/gits/releases&quot;&gt;drafting a new release&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Once you have a release, we need the SHA-256 checksum of the release to ensure a proper version of the download.
+Browse to the release and copy the name of the tar-file (in our case: &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz&lt;/code&gt;)&lt;/p&gt;
+
+&lt;p&gt;Download the tar and generate the SHA-256.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ wget https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz
+$ shasum -a 256 0.1.0.tar.gz
+13b778bf5a7f92285f54179cd88bea4b39f661a3de47a7ff0a84b9aa5d865962  0.1.0.tar.gz
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We will need this SHA-256 for our formula.&lt;/p&gt;
+
+&lt;h3 id=&quot;define-the-formula&quot;&gt;Define the Formula&lt;/h3&gt;
+
+&lt;p&gt;We have to define the formula. This can be done by creating a repo called &lt;a href=&quot;https://github.com/JeroenKnoops/homebrew-tap&quot;&gt;homebrew-tap&lt;/a&gt; in your own github repo.
+It’s best practice to put some information in the README of this repo about the Formulas which are defined.&lt;/p&gt;
+
+&lt;p&gt;In our case:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;## homebrew-tap
+Homebrew tap with formula for installing the following:
+
+- [gits](https://github.com/jeroenknoops/gits)
+
+
+#### Add this tap
+`brew tap jeroenknoops/tap`
+
+
+#### Install
+- gits: `brew install gits`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In the &lt;code class=&quot;highlighter-rouge&quot;&gt;/Formula&lt;/code&gt; directory you must create a ruby file with the definition, in our case: &lt;a href=&quot;https://github.com/JeroenKnoops/homebrew-tap/blob/master/Formula/gits.rb&quot;&gt;gits.rb&lt;/a&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class Gits &amp;lt; Formula
+  desc &quot;A shell script to share contribution between two git accounts when pair programming.&quot;
+  homepage &quot;https://github.com/jeroenknoops/gits&quot;
+  url &quot;https://github.com/JeroenKnoops/gits/archive/0.1.0.tar.gz&quot;
+  version &quot;0.1.0&quot;
+  sha256 &quot;13b778bf5a7f92285f54179cd88bea4b39f661a3de47a7ff0a84b9aa5d865962&quot;
+
+  def install
+    bin.install &quot;bin/gits&quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Push the repo to github and we’re ready to go.&lt;/p&gt;
+
+&lt;h3 id=&quot;test-it&quot;&gt;Test it&lt;/h3&gt;
+&lt;p&gt;Now people can use the script by installing it with homebrew.
+It’s still in my private homebrew-tap, so people first have to tap into our private tap.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew tap jeroenknoops/tap
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After that they can install gits with &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install gits&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;i-do-not-want-to-tap-into-someones-tap&quot;&gt;I do not want to tap into someone’s tap&lt;/h2&gt;
+
+&lt;p&gt;To even raise the level of trust of the script / tool and install convenience, you can also put the Formula directly into the &lt;a href=&quot;https://github.com/Homebrew/homebrew-core&quot;&gt;homebrew-core&lt;/a&gt;. Now people don’t need to tap into someones private tap.
+This will require some extra steps, like adding tests.&lt;/p&gt;
+
+&lt;p&gt;Brew has a way to test your formula by doing: &lt;code class=&quot;highlighter-rouge&quot;&gt;brew audit --new-formula gits&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will show you what you still need to do, before you can submit it to homebrew. You can also find more information on that in the &lt;a href=&quot;https://docs.brew.sh/Formula-Cookbook&quot;&gt;Formula-Cookbook&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;improvements&quot;&gt;Improvements&lt;/h2&gt;
+
+&lt;p&gt;There are more improvements I should make to release it to homebrew. F.e. add dependencies to &lt;code class=&quot;highlighter-rouge&quot;&gt;git&lt;/code&gt;.
+For now I’m not going to dive into that. Homebrew has good documentation on that: https://docs.brew.sh/Formula-Cookbook&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;I really liked the way homebrew is set up. I like the way they name things, like &lt;code class=&quot;highlighter-rouge&quot;&gt;brew&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;tap&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;bottle&lt;/code&gt;. By adding my own &lt;code class=&quot;highlighter-rouge&quot;&gt;bottle&lt;/code&gt; I’ve learned how homebrew is working and now I even feel more confident in using it. I like the fact that only bottles with tests and with the proper dependencies check can be added in the core homebrew formulas.&lt;/p&gt;
+
+&lt;h3 id=&quot;homebrew-cask&quot;&gt;Homebrew cask&lt;/h3&gt;
+&lt;p&gt;Homebrew has another great feature, called &lt;a href=&quot;https://github.com/Homebrew/homebrew-cask&quot;&gt;homebrew cask&lt;/a&gt;. No more: “To install, drag this icon..”. Now you can install tools like &lt;code class=&quot;highlighter-rouge&quot;&gt;atom&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;1password&lt;/code&gt; by simply calling: &lt;code class=&quot;highlighter-rouge&quot;&gt;brew cask install atom&lt;/code&gt;…&lt;/p&gt;
+
+&lt;h2 id=&quot;more-info&quot;&gt;More info&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap&quot;&gt;https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.brew.sh/Formula-Cookbook&quot;&gt;https://docs.brew.sh/Formula-Cookbook&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/Homebrew/homebrew-cask&quot;&gt;https://github.com/Homebrew/homebrew-cask&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="microhack" /><category term="mac" /><category term="brew" /><summary type="html">Working on a Mac made my work a lot more fun. Especially when I was introduced to homebrew, the missing package manager for macOS.</summary></entry><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2018/05/26/talk-taipei/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2018-05-26T00:00:00+00:00</published><updated>2018-05-26T00:00:00+00:00</updated><id>https://040code.github.io//2018/05/26/talk-taipei</id><content type="html" xml:base="https://040code.github.io//2018/05/26/talk-taipei/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at
 the Cloud Native Meetup in Taipei I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.&lt;/p&gt;
 
 &lt;p&gt;In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..&lt;/p&gt;
@@ -1300,7 +1424,7 @@ Look at &lt;a href=&quot;https://github.com/Miserlou/Zappa&quot;&gt;https://gith
   &lt;li&gt;Full Stack Fest - backend: &lt;a href=&quot;https://040code.github.io/2017/09/05/fsf-backend/&quot;&gt;https://040code.github.io/2017/09/05/fsf-backend/&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.zappa.io&quot;&gt;https://www.zappa.io&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/Miserlou/Zappa&quot;&gt;https://github.com/Miserlou/Zappa&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="serverless" /><category term="microhack" /><category term="python" /><category term="aws" /><category term="cloud" /><summary type="html">MicroHack - Python serverless with Zappa.io</summary></entry><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2017-09-19T00:00:00+00:00</published><updated>2017-09-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/19/talk-immutable-infrastructure</id><content type="html" xml:base="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. &lt;a href=&quot;https://www.devopsdays.org/events/2017-riga/program/niek-palm/&quot;&gt;In the talk at the DevOps Days in Riga&lt;/a&gt; I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="serverless" /><category term="microhack" /><category term="python" /><category term="aws" /><category term="cloud" /><summary type="html">MicroHack - Python serverless with Zappa.io</summary></entry><entry><title type="html">Immutable Infrastructure</title><link href="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/" rel="alternate" type="text/html" title="Immutable Infrastructure" /><published>2017-09-19T00:00:00+00:00</published><updated>2017-09-19T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/19/talk-immutable-infrastructure</id><content type="html" xml:base="https://040code.github.io//2017/09/19/talk-immutable-infrastructure/">&lt;p&gt;The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. &lt;a href=&quot;https://www.devopsdays.org/events/2017-riga/program/niek-palm/&quot;&gt;In the talk at the DevOps Days in Riga&lt;/a&gt; I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.&lt;/p&gt;
 
 &lt;p&gt;In this talk I briefly touch upon building immutable software. But the main focus of the talk will be on creating an immutable infrastructure. In this talk I will show you how to create an immutable infrastructure on AWS with Terraform. I will use a real world example to explain and show live how easy you can get micro services live on AWS and continuously apply changes to the same cloud environment..&lt;/p&gt;
 
@@ -1491,107 +1615,4 @@ Nice reference to &lt;a href=&quot;https://www.youtube.com/watch?v=hjzRbgxZXz8&q
 &lt;a href=&quot;https://cojs.co&quot;&gt;https://cojs.co&lt;/a&gt; is collaborate platform were people can co-create software. With blocks you can split the code. Adding a &lt;code class=&quot;highlighter-rouge&quot;&gt;!&lt;/code&gt; behind the url will fork the code. Other users can continue on the code in their own context, but with shared code. Awesome. The second part was about Microhacks. He explained how you should constrain your experiments to make them work. Plan your goal, not your work. Start it and finish it.&lt;/p&gt;
 
 &lt;h2 id=&quot;awesome&quot;&gt;Awesome!!!&lt;/h2&gt;
-&lt;p&gt;Many thanks to &lt;a href=&quot;https://www.codegram.com/&quot;&gt;Codegram&lt;/a&gt; the company that organized once again the best conference!&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="aframe" /><category term="serviceworkers" /><category term="css" /><category term="javascript" /><category term="ast" /><category term="svg" /><category term="blockchain" /><category term="react" /><summary type="html">Full Stack Fest 2017</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/05/fsf-backend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-05T00:00:00+00:00</published><updated>2017-09-05T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/05/fsf-backend</id><content type="html" xml:base="https://040code.github.io//2017/09/05/fsf-backend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
-
-&lt;p&gt;This week we (Jeroen and Niek) enjoyining &lt;a href=&quot;https://2017.fullstackfest.com/&quot;&gt;Full Stack Fest 2017 Barcelona&lt;/a&gt;,
-a week-long full stack development conference with a focus on solving current problems with new &amp;amp; inspiring perspectives.&lt;/p&gt;
-
-&lt;p&gt;In this quite short blog we just summarizing briefly the talks and &lt;strong&gt;our opinion&lt;/strong&gt; about the talks. We have rated all talks, the rating is subjective ass well.&lt;/p&gt;
-
-&lt;p&gt;The first two days are more backend focussed, the last two days have a frontend focus, read more &lt;a href=&quot;https://040code.github.io/2017/09/08/fsf-fontend/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;day-one&quot;&gt;Day one&lt;/h2&gt;
-
-&lt;h3 id=&quot;keynotes---science---backup-the-internet&quot;&gt;Keynotes - Science - Backup the internet&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Karissa McKelvey (&lt;a href=&quot;https://twitter.com/okdistribute&quot;&gt;@okdistribute&lt;/a&gt;) discussed the topic to share fairly large data sets in the science community in a secure and distributed way. The &lt;a href=&quot;https://docs.datproject.org/&quot;&gt;dat project&lt;/a&gt; enables file sharing via peer to peer for example with the beaker browser.&lt;/p&gt;
-
-&lt;h3 id=&quot;ehtereum-aeternity-and-the-distributed-wonders&quot;&gt;Ehtereum, aeternity and the distributed wonders&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Luca Marchesini (&lt;a href=&quot;https://twitter.com/kuzzleio&quot;&gt;@kuzzleio&lt;/a&gt;) did a great job by explanining about blockchain and the differences between ethereum and bitcoin. Blockchain; the system where playing by the rules is more profitable than cheating.&lt;/p&gt;
-
-&lt;h3 id=&quot;terraform-in-your-delivery-pipeline&quot;&gt;Terraform in your delivery pipeline&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;We love the Terraform framework of HashiCorp but the talk not as good as we hoped, nothing new. The speaker Anton (&lt;a href=&quot;https://twitter.com/antonbabenko&quot;&gt;@antonbabenko&lt;/a&gt;) is an expert on the topic and also maintains some great &lt;a href=&quot;https://github.com/terraform-community-modules&quot;&gt;Terraform modules&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;migrating-an-existing-service-to-serverless&quot;&gt;Migrating an existing service to serverless&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;For us a standard talk by Marcia (&lt;a href=&quot;https://twitter.com/mavi888uy&quot;&gt;@mavi888uy&lt;/a&gt;) about migrating an existing monolitic applicaton to smaller components. We loved all the (angry) birds flying around.&lt;/p&gt;
-
-&lt;h3 id=&quot;defending-the-human-network&quot;&gt;Defending the human network&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Good story about cyber security by Dr. Jessica Barker (&lt;a href=&quot;https://twitter.com/drjessicabarker&quot;&gt;@drjessicabarker&lt;/a&gt;). About how the mood of a user is one of the weakest link. How you can trick people into clicking a bad links. Socially engineering and use stress full situation let a user execute an (maybe) unwanted action.&lt;/p&gt;
-
-&lt;p&gt;Key take aways, learn to think as hacker and focus on the why not on how to enforce / restrict users to do something.&lt;/p&gt;
-
-&lt;h3 id=&quot;rise-and-the-fall-of-the-full-stack-database&quot;&gt;Rise and the fall of the full stack database&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Comparison with the army knife. Don’t be afraid of new technologies.
-One tool for everything is not going to work.
-Example with analytics service, kafka stream, bus. Frank Lyaruu (&lt;a href=&quot;https://twitter.com/lyaruu&quot;&gt;@lyaruu&lt;/a&gt;) did a great job!&lt;/p&gt;
-
-&lt;h3 id=&quot;how-bookingcom-serves-deep-learning-model-predictions&quot;&gt;How booking.com serves deep learning model predictions&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Good explaination by Sahil (&lt;a href=&quot;https://twitter.com/sahildua2305&quot;&gt;@sahildua2305&lt;/a&gt;) about how to train a model and how to deploy them.&lt;/p&gt;
-
-&lt;h3 id=&quot;what-to-do-when-complex-systems-fail&quot;&gt;What to do when complex systems fail&lt;/h3&gt;
-&lt;p&gt;Rating:&lt;/p&gt;
-
-&lt;p&gt;Not relevant to our needs.&lt;/p&gt;
-
-&lt;h2 id=&quot;day-two&quot;&gt;Day Two:&lt;/h2&gt;
-
-&lt;h3 id=&quot;the-internet-of-things-an-army-of-devices-ready-for-ddos&quot;&gt;The internet of things: An army of devices ready for DDoS&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Good talk by John Graham-Cummin (&lt;a href=&quot;https://twitter.com/jgrahamc&quot;&gt;@jgrahamc&lt;/a&gt;) about how IoT device can be used to do a DDoS attack. About port 1900 showing all kinds of information which is sent to victims address. How to block DDoS attacks by putting the ip-address in a grid to search for patterns. Talked about Trump attacks and anonymous being stupid by setting the evil flag (We’re anonymous).&lt;/p&gt;
-
-&lt;h3 id=&quot;how-to-properly-blame-things-for-causing-latency-an-introduction-to-distributed-tracing-and-zipkin&quot;&gt;How to properly blame things for causing latency: An introduction to distributed tracing and Zipkin&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Difference between logs, metric and trace. Good (known) story by Adrian Cole (&lt;a href=&quot;https://twitter.com/adrianfcole&quot;&gt;@adrianfcole&lt;/a&gt;).&lt;/p&gt;
-
-&lt;h3 id=&quot;ship-more-sink-less-changing-chaos-engineering--distributed-tracing&quot;&gt;Ship more, sink less. Changing chaos engineering &amp;amp; Distributed tracing&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;The story about testing in real live situations is not new, good te remember the importance to be prepared for failure. For not much new things in this talk since we here the chaos monkeys stories new for a couple of years. But we will plan our Chaos GameDay soon. Thanks to Aish (&lt;a href=&quot;https://twitter.com/aishrajdahal&quot;&gt;@aishrajdahal&lt;/a&gt;)&lt;/p&gt;
-
-&lt;h3 id=&quot;flying-spaghetti-monster-verifying-protocols-with-types-and-finite-state-machines&quot;&gt;Flying Spaghetti monster: Verifying protocols with types and finite-state machines&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Complexity of systems cause a lot of problems. &lt;code class=&quot;highlighter-rouge&quot;&gt;Idris&lt;/code&gt; has a nice feature that Types are also values, so state changes can easialy be checked in compile time. &lt;code class=&quot;highlighter-rouge&quot;&gt;talk.applaud()&lt;/code&gt; should only run after &lt;code class=&quot;highlighter-rouge&quot;&gt;talk.give()&lt;/code&gt; and Idris has a way to check this easily during compile time.&lt;/p&gt;
-
-&lt;p&gt;Inspiration for doing more with new languages. Chris Ford (&lt;a href=&quot;https://twitter.com/ctford&quot;&gt;@ctford&lt;/a&gt;), thanks!&lt;/p&gt;
-
-&lt;h3 id=&quot;smart-grid-how-iot-fights-climate-change&quot;&gt;Smart grid: How iot fights climate change&lt;/h3&gt;
-&lt;p&gt;Rating: :star:&lt;/p&gt;
-
-&lt;p&gt;Kelsey Breseman (&lt;a href=&quot;https://twitter.com/ifoundtheme&quot;&gt;@ifoundtheme&lt;/a&gt;) explains us how complex the eletrical grids works which makes it hard as well to safe for example solar eneregy. It was great to hear the complecity of this relevant topic but unfortunately there was not much relation betwoon the world of of software.&lt;/p&gt;
-
-&lt;h3 id=&quot;beyond-patterns-technological-systems-and-the-nature-of-order&quot;&gt;Beyond patterns: Technological systems and the nature of order&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Good to see the that our hipster shit is the same as the problems the manufacturing has already solved. Learn from that! Talk by Jerome Scheuring&lt;/p&gt;
-
-&lt;h3 id=&quot;lighting-talks&quot;&gt;Lighting Talks&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;There where quite a lot fo lighting talks. In our opinion: hight quality but too many.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Docker talk about &lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt; was fun. Docker build takes long, and from now on I can’t ignore it anymore. THANKS!!! aka we should fix the layer thing.&lt;/li&gt;
-  &lt;li&gt;Fullstack is a zoo. Complexity of our work environment.&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://exercism.io/&quot;&gt;http://exercism.io/&lt;/a&gt;: Nice code kata kind of thing. (not a talk, but worth to mention)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;gone-in-60-milliseconds-offensive-security-in-the-serverless-age&quot;&gt;Gone in 60 milliseconds: Offensive security in the serverless age&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Awesome DDoS attack of slides by Rich Jones (&lt;a href=&quot;https://twitter.com/GUNdotIO&quot;&gt;@GUNdotIO&lt;/a&gt;). A lot of cool stuff. A very usefull and insight talk about how unsecure you serverless application can be. Serverless python with &lt;a href=&quot;http://zappa.io&quot;&gt;zappa&lt;/a&gt; and &lt;a href=&quot;https://rawgit.com/Miserlou/Talks/master/full-stack-barcelona-2017/stack.html&quot;&gt;slides&lt;/a&gt;&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="iot" /><category term="cloud" /><category term="fullstack" /><category term="microservices" /><category term="security" /><summary type="html">Full Stack Fest 2017</summary></entry></feed>
+&lt;p&gt;Many thanks to &lt;a href=&quot;https://www.codegram.com/&quot;&gt;Codegram&lt;/a&gt; the company that organized once again the best conference!&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="aframe" /><category term="serviceworkers" /><category term="css" /><category term="javascript" /><category term="ast" /><category term="svg" /><category term="blockchain" /><category term="react" /><summary type="html">Full Stack Fest 2017</summary></entry></feed>
