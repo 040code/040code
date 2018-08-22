@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Maze Generation - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2018/08/22/mazes/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2018-08-22-mazes/htc-roof.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Maze Generation</h1>
+                    
+                    <h2 class="subheading">Generating Mazes from the REPL</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/maarten/">
+                            Maarten Metz
+                          </a>
+                          
+                      
+                      on 2018-08-22</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/clojure/">Clojure</a><a class="badge " href="/blog/tag/functional/">Functional</a>
+
+
+				<h2 id="introduction">Introduction</h2>
+
+<p>During my summer holiday, in between long walks and nice food &amp; drinks, I felt
+like writing some code for fun. Unfortunately, I didn’t bring my laptop.
+Luckily, <a href="https://twitter.com/mfikes">Mike Fikes</a> created a <a href="https://itunes.apple.com/us/app/replete/id1013465639">ClojureScript REPL
+for mobile devices</a> to
+write some Clojure(script) without a laptop close at hand.</p>
+
+<p>A REPL, or a Read Eval Print Loop, reads your input, evaluates it, prints the
+result and waits for new inputs to read. In the meantime, the code you wrote
+lives in REPL memory. So if I define a function in the REPL, it will be read and
+evaluated and in my next input I can call this function, because it lives in
+REPL space.</p>
+
+<p>So, back to this REPL on my phone. Permanently saving work is not possible in
+this REPL, there are no debugging capabilities, no code completion, no test
+runners … just a REPL: 35 characters wide in portrait mode, 79 characters wide
+in landscape mode. To give you an idea of my ‘Integrated Development
+Environment’ and the resulting mazes, I recorded a 30 seconds screen cast:</p>
+
+<iframe src="https://player.vimeo.com/video/286153487" width="640" height="360" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+
+<p>At home, I created a gist containing all 70 lines of <a href="https://gist.github.com/mmzsource/ee88b93a3829f98fcb6188f2f2162fcf">maze
+code</a> (56
+lines according to the command-line tool cloc). In this blog I’m going to explain
+the concepts and code.</p>
+
+<h2 id="grids-cells-and-neighbours">Grids, Cells and Neighbours</h2>
+
+<p>First of all, we’ll need a grid and a coordinate system to point to individual
+cells in the grid. The reason is that most maze generators expect to be able to
+traverse a grid and lookup information about cells and neighbours of cells.</p>
+
+<p>A grid can be modeled as a vector of vectors, representing rows and columns:</p>
+
+<pre><code class="language-Clojure">(def grid
+  [[1 2 3]
+   [4 5 6]
+   [7 8 9]])
+</code></pre>
+
+<p>A cell can be pinpointed by its [row col] coordinate which matches perfectly
+with the <code class="highlighter-rouge">get-in</code> function in clojure. This <code class="highlighter-rouge">get-in</code> function is used to find
+items in nested data structures. For instance, <code class="highlighter-rouge">(get-in grid [2 1])</code> will result
+in the value <code class="highlighter-rouge">8</code>.</p>
+
+<p>To find the neighbours of a cell, I created a couple of helper functions:</p>
+
+<pre><code class="language-Clojure">(defn north-of [[row col]] [(dec row) col])
+(defn south-of [[row col]] [(inc row) col])
+(defn west-of  [[row col]] [row (dec col)])
+(defn east-of  [[row col]] [row (inc col)])
+</code></pre>
+
+<p>The function argument is destructured (taken apart and named) and the
+<code class="highlighter-rouge">north-of</code>, <code class="highlighter-rouge">south-of</code>, <code class="highlighter-rouge">west-of</code> or <code class="highlighter-rouge">east-of</code> neighbour coordinate is
+calculated by <code class="highlighter-rouge">inc</code>rementing or <code class="highlighter-rouge">dec</code>rementing the row or column number. For
+instance, <code class="highlighter-rouge">(north-of [1 1])</code> results in the value <code class="highlighter-rouge">[0 1]</code>.</p>
+
+<p>Using the <code class="highlighter-rouge">juxt</code> function we can now calculate all neighbours in one go. <code class="highlighter-rouge">juxt</code>
+takes a variable number of functions as arguments and returns a new function.
+This new function returns a vector containing the result of applying each
+function to the arguments provided. So for instance <code class="highlighter-rouge">((juxt north-of south-of
+west-of east-of) [1 1])</code> results in the value <code class="highlighter-rouge">[[0 1] [2 1] [1 0] [1 2]]</code>.</p>
+
+<p>Unfortunately, these functions don’t care about the grid. <code class="highlighter-rouge">((juxt north-of
+south-of west-of east-of) [0 0])</code> will happily return <code class="highlighter-rouge">[[-1 0] [1 0] [0 -1] [0
+1]]</code> containing cell coordinates inside AND outside the grid. Therefore, in
+order to calculate all neighbours <strong>in</strong> the grid, we need to filter out the
+ones that are not part of the grid. This results in the following <code class="highlighter-rouge">neighbours</code>
+function:</p>
+
+<pre><code class="language-Clojure">(defn neighbours [grid cell]
+  (filter #(get-in grid %) ((juxt north-of south-of west-of east-of) cell)))
+</code></pre>
+
+<h2 id="mazes-and-cells">Mazes and Cells</h2>
+
+<p>Now working with the grid is easy, let’s move on to the maze. A maze is
+basically a grid, augmented with some information to determine if borders
+between cells are open or closed. That information can be easily stored in the
+cells themselves.</p>
+
+<p>I liked the approach <a href="http://fn-code.blogspot.com/2015/04/a-maze-ing-mazes-with-clojure.html">Mark
+Bastian</a>
+took: in a cell, simply list the coordinates of neighbours the cell is connected
+to. We can even list the coordinates in a set <code class="highlighter-rouge">#{}</code>, since duplicating neighbour
+coordinates is useless. A 2x2 ‘maze’ with all borders closed looks like this:</p>
+
+<pre><code class="language-Clojure">[[#{} #{}]
+ [#{} #{}]]
+</code></pre>
+
+<p>A 2x2 ‘maze’ with an open border between the 2 cells on the left looks like this:</p>
+
+<pre><code class="language-Clojure">[[#{[1 0]} #{}]
+ [#{[0 0]} #{}]]
+</code></pre>
+
+<p>The two connected cells reference each other. It would be convenient to have a
+function that updates the grid when a border needs to be removed between 2
+cells:</p>
+
+<pre><code class="language-Clojure">(defn remove-border [grid c1 c2]
+  (-&gt; grid
+      (update-in c1 conj c2)
+      (update-in c2 conj c1)))
+</code></pre>
+
+<h2 id="maze-generation">Maze Generation</h2>
+
+<p>Now it’s time for the maze generation. Luckily I had a copy of the <a href="https://www.amazon.com/Mazes-Programmers-Twisty-Little-Passages/dp/1680500554">‘Mazes for
+Programmers
+book’</a>
+on my phone. Because I like the texture of the mazes coming out of the recursive
+backtracker algorithm, I decided to implement that one.</p>
+
+<p>The algorithm can start on any cell on the grid and I decided to start on <code class="highlighter-rouge">[0
+0]</code> every single time. Every cell that is visited by the algorithm is pushed on
+a stack which I have called the <code class="highlighter-rouge">backtrackstack</code>. The cell on top of the stack
+is considered the current cell.</p>
+
+<p>From the current cell, a path is created (<code class="highlighter-rouge">remove-border</code>) to a randomly
+selected, previously unvisited neighbour. An unvisited neighbour can easily be
+detected, since it’s simply an empty set <code class="highlighter-rouge">#{}</code>. That previously unvisited cell
+(<code class="highlighter-rouge">next</code> in my code) is also pushed unto the stack. This process repeats
+continuously until a cell is visited that has no unvisited neighbours. At that
+point, that dead-end cell is popped of the stack, making the previous cell the
+current cell. Again, the algorithm will check if this cell has unvisited
+neighbours and will either create a path to that unvisited neighbour or pop
+another cell from the <code class="highlighter-rouge">backtrackstack</code>. This will continue until every cell has
+been visited and the <code class="highlighter-rouge">backtrackstack</code> is empty.</p>
+
+<pre><code class="language-Clojure">(defn find-unvisited-neighbours [grid cell]
+  (let [n (neighbours grid cell)]
+    (filter #(empty? (get-in grid %)) n)))
+
+(defn generate-maze [rows cols]
+  (loop [maze           (create-grid rows cols)
+         backtrackstack '([0 0])]
+    (if (empty? backtrackstack)
+      (print-maze maze)
+      (let [unvn (find-unvisited-neighbours maze (first backtrackstack))]
+        (if (empty? unvn)
+          (recur maze (rest backtrackstack))
+          (let [next (rand-nth unvn)]
+            (recur
+             (remove-border maze (first backtrackstack) next)
+             (conj backtrackstack next))))))))
+</code></pre>
+
+<p>Fingers crossed:</p>
+
+<pre><code class="language-Clojure"> (generate-maze 4 4)
+
+[[#{[1 0]} #{[0 2]} #{[0 3] [0 1]} #{[1 3] [0 2]}]
+ [#{[0 0] [2 0]} #{[2 1] [1 2]} #{[1 1] [1 3]} #{[2 3] [0 3] [1 2]}]
+ [#{[1 0] [3 0]} #{[2 2] [1 1]} #{[2 1] [3 2]} #{[3 3] [1 3]}]
+ [#{[2 0] [3 1]} #{[3 0] [3 2]} #{[2 2] [3 1]} #{[2 3]}]]
+
+ (generate-maze 4 4)
+
+[[#{[0 1]} #{[0 0] [0 2]} #{[1 2] [0 1]} #{[1 3]}]
+ [#{[1 1] [2 0]} #{[1 0] [1 2]} #{[1 1] [0 2]} #{[2 3] [0 3]}]
+ [#{[1 0] [2 1]} #{[2 0] [3 1]} #{[2 3]} #{[2 2] [3 3] [1 3]}]
+ [#{[3 1]} #{[3 0] [2 1] [3 2]} #{[3 3] [3 1]} #{[2 3] [3 2]}]]
+
+ (generate-maze 6 4)
+
+[[#{[1 0]} #{[0 2]} #{[0 3] [0 1]} #{[1 3] [0 2]}]
+ [#{[0 0] [2 0]} #{[2 1] [1 2]} #{[1 1] [1 3]} #{[2 3] [0 3] [1 2]}]
+ [#{[1 0] [3 0]} #{[1 1] [3 1]} #{[3 2]} #{[3 3] [1 3]}]
+ [#{[2 0] [3 1]} #{[3 0] [2 1]} #{[2 2] [4 2]} #{[4 3] [2 3]}]
+ [#{[4 1] [5 0]} #{[4 0]} #{[4 3] [5 2] [3 2]} #{[3 3] [4 2]}]
+ [#{[5 1] [4 0]} #{[5 2] [5 0]} #{[4 2] [5 3] [5 1]} #{[5 2]}]]
+</code></pre>
+
+<p>Nice! Now the only thing left is printing a more human friendly view of this
+maze.</p>
+
+<h2 id="maze-printing">Maze Printing</h2>
+
+<p>First, the top of the maze is printed:</p>
+
+<pre><code class="language-Ascii">`+---+---+---+`
+</code></pre>
+
+<p>Then, for every row the left border is printed <code class="highlighter-rouge">|</code> and 2 passes over the cells
+have to be made. The first pass determines if there should be a border between
+the current cell and its <code class="highlighter-rouge">east-of</code> neighbour, resulting in something like this:</p>
+
+<pre><code class="language-Ascii">+---+---+---+---+
+|           |   |
+</code></pre>
+
+<p>The second pass over the row adds a <code class="highlighter-rouge">+</code> and then determines if there should be a
+border between the current cell and its <code class="highlighter-rouge">south-of</code> neighbour, for instance
+resulting in this:</p>
+
+<pre><code class="language-Ascii">+---+---+---+---+
+|           |   |
++---+---+   +   +
+</code></pre>
+
+<p>After repeating this for all rows, a maze like this is printed:</p>
+
+<pre><code class="language-Ascii">+---+---+---+---+
+|           |   |
++---+---+   +   +
+|       |       |
++   +   +---+   +
+|   |       |   |
++   +---+   +   +
+|       |       |
++---+---+---+---+
+</code></pre>
+
+<p>The code:</p>
+
+<pre><code class="language-Clojure">(defn east-open-border? [maze cell]
+  (contains? (get-in maze (east-of cell)) cell))
+
+(defn south-open-border? [maze cell]
+  (contains? (get-in maze (south-of cell)) cell))
+
+(defn print-cell-body [maze cell]
+  (if (east-open-border? maze cell)
+    "    "
+    "   |"))
+
+(defn print-cell-bottom [maze cell]
+  (if (south-open-border? maze cell)
+    "   +"
+    "---+"))
+
+(defn print-maze [maze]
+  (let [result (atom [])
+        rows   (range (count maze))
+        cols   (range (count (get-in maze [0])))]
+    (swap! result conj "+" (repeat (count cols) "---+") "\n")
+    (doseq [row rows]
+      (swap! result conj "|")
+      (doseq [col cols]
+        (swap! result conj (print-cell-body maze [row col])))
+      (swap! result conj "\n" "+")
+      (doseq [col cols]
+        (swap! result conj (print-cell-bottom maze [row col])))
+      (swap! result conj "\n"))
+    (println (s/join (flatten @result)))))
+</code></pre>
+
+<p>Finally, we can print all the mazes we want:</p>
+
+<pre><code class="language-Clojure">(generate-maze 4 4)
+
++---+---+---+---+
+|   |           |
++   +   +   +---+
+|   |   |       |
++   +---+---+   +
+|   |       |   |
++   +   +   +   +
+|       |       |
++---+---+---+---+
+
+(generate-maze 4 4)
+
++---+---+---+---+
+|       |       |
++---+   +   +   +
+|   |   |   |   |
++   +   +---+   +
+|   |       |   |
++   +---+   +   +
+|               |
++---+---+---+---+
+
+(generate-maze 8 18)
+
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|   |               |   |       |                   |       |           |
++   +   +   +---+   +   +   +   +   +---+   +---+   +   +   +---+---+   +
+|   |   |   |   |   |   |   |       |   |   |           |           |   |
++   +---+   +   +   +   +   +---+---+   +   +---+---+---+---+---+   +   +
+|       |   |       |   |   |           |           |   |           |   |
++---+   +   +   +---+   +   +   +---+---+   +---+   +   +   +---+---+   +
+|   |       |   |       |   |   |       |   |       |       |           |
++   +---+---+   +   +   +   +   +   +   +---+   +---+   +---+   +   +   +
+|           |   |   |   |       |   |           |   |   |   |   |   |   |
++   +---+---+   +   +   +   +---+   +---+---+---+   +   +   +   +   +   +
+|   |           |   |       |       |   |           |   |       |   |   |
++   +   +---+---+---+---+   +   +---+   +   +---+   +   +---+   +   +   +
+|   |   |               |   |       |   |       |   |       |   |   |   |
++   +   +---+   +---+   +---+---+   +   +---+   +   +---+   +---+   +   +
+|               |                   |           |                   |   |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>So there you have it: a maze generator in ~ 30 lines of code with a 30 lines of
+code ascii view on top of it, build with nothing but a REPL on a phone. I really
+enjoyed the puzzle and the small (and large) successes while working in the
+REPL. I hope you enjoyed this recap.</p>
+
+<p>I’d like to thanks <a href="https://twitter.com/mfikes">Mike Fikes</a> for his excellent
+ClojureScript REPL, <a href="https://twitter.com/mark_bastian">Mark Bastian</a> for the
+inspiration for the maze data structure, <a href="https://twitter.com/jamis">Jamis Buck</a>
+for his lovely ‘Mazes for programmers’ book and <a href="https://twitter.com/gertgoet">Gert
+Goet</a> for reviewing an earlier version of this
+blog. Faults and not-so-idiomatic Clojure code remaining are my own.</p>
+
+<p>Back home, I’m happy to be working in Emacs with the excellent Clojure CIDER
+plugin again. Which reminds me that during my holiday I visited a picturesque
+CIDER factory in France. Cheers!</p>
+
+<p><a href="#">
+    <img src="/assets/2018-08-22-mazes/CIDER.png" alt="CIDER factory" />
+</a></p>
+
+<p>Please share your comments, suggestions and thoughts about this blog post on
+<a href="https://twitter.com/mmz_">twitter.com/mmz_</a>. Thanks for reading and Happy
+Coding!</p>
+
+<h2 id="links">Links</h2>
+
+<ul>
+  <li><a href="https://www.amazon.com/Mazes-Programmers-Twisty-Little-Passages/dp/1680500554">‘Mazes for Programmers
+book’</a></li>
+  <li><a href="https://itunes.apple.com/us/app/replete/id1013465639">ClojureScript REPL
+for mobile devices</a></li>
+  <li><a href="https://gist.github.com/mmzsource/ee88b93a3829f98fcb6188f2f2162fcf">Maze generation
+code</a></li>
+  <li><a href="https://clojure.org/guides/repl/introduction">Excellent ‘Programming at the REPL’
+documentation</a></li>
+</ul>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/08/08/brew-some-code/" data-toggle="tooltip" data-placement="top" title="Microhack Brew your code">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2018</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

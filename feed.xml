@@ -1,4 +1,339 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-08-10T06:59:28+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Microhack Brew your code</title><link href="https://040code.github.io//2018/08/08/brew-some-code/" rel="alternate" type="text/html" title="Microhack Brew your code" /><published>2018-08-08T00:00:00+00:00</published><updated>2018-08-08T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/08/brew-some-code</id><content type="html" xml:base="https://040code.github.io//2018/08/08/brew-some-code/">&lt;p&gt;Working on a Mac made my work a lot more fun. Especially when I was introduced to &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt;, the missing package manager for macOS.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-08-22T19:30:19+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Maze Generation</title><link href="https://040code.github.io//2018/08/22/mazes/" rel="alternate" type="text/html" title="Maze Generation" /><published>2018-08-22T00:00:00+00:00</published><updated>2018-08-22T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/22/mazes</id><content type="html" xml:base="https://040code.github.io//2018/08/22/mazes/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;During my summer holiday, in between long walks and nice food &amp;amp; drinks, I felt
+like writing some code for fun. Unfortunately, I didn’t bring my laptop.
+Luckily, &lt;a href=&quot;https://twitter.com/mfikes&quot;&gt;Mike Fikes&lt;/a&gt; created a &lt;a href=&quot;https://itunes.apple.com/us/app/replete/id1013465639&quot;&gt;ClojureScript REPL
+for mobile devices&lt;/a&gt; to
+write some Clojure(script) without a laptop close at hand.&lt;/p&gt;
+
+&lt;p&gt;A REPL, or a Read Eval Print Loop, reads your input, evaluates it, prints the
+result and waits for new inputs to read. In the meantime, the code you wrote
+lives in REPL memory. So if I define a function in the REPL, it will be read and
+evaluated and in my next input I can call this function, because it lives in
+REPL space.&lt;/p&gt;
+
+&lt;p&gt;So, back to this REPL on my phone. Permanently saving work is not possible in
+this REPL, there are no debugging capabilities, no code completion, no test
+runners … just a REPL: 35 characters wide in portrait mode, 79 characters wide
+in landscape mode. To give you an idea of my ‘Integrated Development
+Environment’ and the resulting mazes, I recorded a 30 seconds screen cast:&lt;/p&gt;
+
+&lt;iframe src=&quot;https://player.vimeo.com/video/286153487&quot; width=&quot;640&quot; height=&quot;360&quot; frameborder=&quot;0&quot; webkitallowfullscreen=&quot;&quot; mozallowfullscreen=&quot;&quot; allowfullscreen=&quot;&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;At home, I created a gist containing all 70 lines of &lt;a href=&quot;https://gist.github.com/mmzsource/ee88b93a3829f98fcb6188f2f2162fcf&quot;&gt;maze
+code&lt;/a&gt; (56
+lines according to the command-line tool cloc). In this blog I’m going to explain
+the concepts and code.&lt;/p&gt;
+
+&lt;h2 id=&quot;grids-cells-and-neighbours&quot;&gt;Grids, Cells and Neighbours&lt;/h2&gt;
+
+&lt;p&gt;First of all, we’ll need a grid and a coordinate system to point to individual
+cells in the grid. The reason is that most maze generators expect to be able to
+traverse a grid and lookup information about cells and neighbours of cells.&lt;/p&gt;
+
+&lt;p&gt;A grid can be modeled as a vector of vectors, representing rows and columns:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(def grid
+  [[1 2 3]
+   [4 5 6]
+   [7 8 9]])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A cell can be pinpointed by its [row col] coordinate which matches perfectly
+with the &lt;code class=&quot;highlighter-rouge&quot;&gt;get-in&lt;/code&gt; function in clojure. This &lt;code class=&quot;highlighter-rouge&quot;&gt;get-in&lt;/code&gt; function is used to find
+items in nested data structures. For instance, &lt;code class=&quot;highlighter-rouge&quot;&gt;(get-in grid [2 1])&lt;/code&gt; will result
+in the value &lt;code class=&quot;highlighter-rouge&quot;&gt;8&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To find the neighbours of a cell, I created a couple of helper functions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn north-of [[row col]] [(dec row) col])
+(defn south-of [[row col]] [(inc row) col])
+(defn west-of  [[row col]] [row (dec col)])
+(defn east-of  [[row col]] [row (inc col)])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The function argument is destructured (taken apart and named) and the
+&lt;code class=&quot;highlighter-rouge&quot;&gt;north-of&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;south-of&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;west-of&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;east-of&lt;/code&gt; neighbour coordinate is
+calculated by &lt;code class=&quot;highlighter-rouge&quot;&gt;inc&lt;/code&gt;rementing or &lt;code class=&quot;highlighter-rouge&quot;&gt;dec&lt;/code&gt;rementing the row or column number. For
+instance, &lt;code class=&quot;highlighter-rouge&quot;&gt;(north-of [1 1])&lt;/code&gt; results in the value &lt;code class=&quot;highlighter-rouge&quot;&gt;[0 1]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;juxt&lt;/code&gt; function we can now calculate all neighbours in one go. &lt;code class=&quot;highlighter-rouge&quot;&gt;juxt&lt;/code&gt;
+takes a variable number of functions as arguments and returns a new function.
+This new function returns a vector containing the result of applying each
+function to the arguments provided. So for instance &lt;code class=&quot;highlighter-rouge&quot;&gt;((juxt north-of south-of
+west-of east-of) [1 1])&lt;/code&gt; results in the value &lt;code class=&quot;highlighter-rouge&quot;&gt;[[0 1] [2 1] [1 0] [1 2]]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, these functions don’t care about the grid. &lt;code class=&quot;highlighter-rouge&quot;&gt;((juxt north-of
+south-of west-of east-of) [0 0])&lt;/code&gt; will happily return &lt;code class=&quot;highlighter-rouge&quot;&gt;[[-1 0] [1 0] [0 -1] [0
+1]]&lt;/code&gt; containing cell coordinates inside AND outside the grid. Therefore, in
+order to calculate all neighbours &lt;strong&gt;in&lt;/strong&gt; the grid, we need to filter out the
+ones that are not part of the grid. This results in the following &lt;code class=&quot;highlighter-rouge&quot;&gt;neighbours&lt;/code&gt;
+function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn neighbours [grid cell]
+  (filter #(get-in grid %) ((juxt north-of south-of west-of east-of) cell)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;mazes-and-cells&quot;&gt;Mazes and Cells&lt;/h2&gt;
+
+&lt;p&gt;Now working with the grid is easy, let’s move on to the maze. A maze is
+basically a grid, augmented with some information to determine if borders
+between cells are open or closed. That information can be easily stored in the
+cells themselves.&lt;/p&gt;
+
+&lt;p&gt;I liked the approach &lt;a href=&quot;http://fn-code.blogspot.com/2015/04/a-maze-ing-mazes-with-clojure.html&quot;&gt;Mark
+Bastian&lt;/a&gt;
+took: in a cell, simply list the coordinates of neighbours the cell is connected
+to. We can even list the coordinates in a set &lt;code class=&quot;highlighter-rouge&quot;&gt;#{}&lt;/code&gt;, since duplicating neighbour
+coordinates is useless. A 2x2 ‘maze’ with all borders closed looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;[[#{} #{}]
+ [#{} #{}]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A 2x2 ‘maze’ with an open border between the 2 cells on the left looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;[[#{[1 0]} #{}]
+ [#{[0 0]} #{}]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The two connected cells reference each other. It would be convenient to have a
+function that updates the grid when a border needs to be removed between 2
+cells:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn remove-border [grid c1 c2]
+  (-&amp;gt; grid
+      (update-in c1 conj c2)
+      (update-in c2 conj c1)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;maze-generation&quot;&gt;Maze Generation&lt;/h2&gt;
+
+&lt;p&gt;Now it’s time for the maze generation. Luckily I had a copy of the &lt;a href=&quot;https://www.amazon.com/Mazes-Programmers-Twisty-Little-Passages/dp/1680500554&quot;&gt;‘Mazes for
+Programmers
+book’&lt;/a&gt;
+on my phone. Because I like the texture of the mazes coming out of the recursive
+backtracker algorithm, I decided to implement that one.&lt;/p&gt;
+
+&lt;p&gt;The algorithm can start on any cell on the grid and I decided to start on &lt;code class=&quot;highlighter-rouge&quot;&gt;[0
+0]&lt;/code&gt; every single time. Every cell that is visited by the algorithm is pushed on
+a stack which I have called the &lt;code class=&quot;highlighter-rouge&quot;&gt;backtrackstack&lt;/code&gt;. The cell on top of the stack
+is considered the current cell.&lt;/p&gt;
+
+&lt;p&gt;From the current cell, a path is created (&lt;code class=&quot;highlighter-rouge&quot;&gt;remove-border&lt;/code&gt;) to a randomly
+selected, previously unvisited neighbour. An unvisited neighbour can easily be
+detected, since it’s simply an empty set &lt;code class=&quot;highlighter-rouge&quot;&gt;#{}&lt;/code&gt;. That previously unvisited cell
+(&lt;code class=&quot;highlighter-rouge&quot;&gt;next&lt;/code&gt; in my code) is also pushed unto the stack. This process repeats
+continuously until a cell is visited that has no unvisited neighbours. At that
+point, that dead-end cell is popped of the stack, making the previous cell the
+current cell. Again, the algorithm will check if this cell has unvisited
+neighbours and will either create a path to that unvisited neighbour or pop
+another cell from the &lt;code class=&quot;highlighter-rouge&quot;&gt;backtrackstack&lt;/code&gt;. This will continue until every cell has
+been visited and the &lt;code class=&quot;highlighter-rouge&quot;&gt;backtrackstack&lt;/code&gt; is empty.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn find-unvisited-neighbours [grid cell]
+  (let [n (neighbours grid cell)]
+    (filter #(empty? (get-in grid %)) n)))
+
+(defn generate-maze [rows cols]
+  (loop [maze           (create-grid rows cols)
+         backtrackstack '([0 0])]
+    (if (empty? backtrackstack)
+      (print-maze maze)
+      (let [unvn (find-unvisited-neighbours maze (first backtrackstack))]
+        (if (empty? unvn)
+          (recur maze (rest backtrackstack))
+          (let [next (rand-nth unvn)]
+            (recur
+             (remove-border maze (first backtrackstack) next)
+             (conj backtrackstack next))))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Fingers crossed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt; (generate-maze 4 4)
+
+[[#{[1 0]} #{[0 2]} #{[0 3] [0 1]} #{[1 3] [0 2]}]
+ [#{[0 0] [2 0]} #{[2 1] [1 2]} #{[1 1] [1 3]} #{[2 3] [0 3] [1 2]}]
+ [#{[1 0] [3 0]} #{[2 2] [1 1]} #{[2 1] [3 2]} #{[3 3] [1 3]}]
+ [#{[2 0] [3 1]} #{[3 0] [3 2]} #{[2 2] [3 1]} #{[2 3]}]]
+
+ (generate-maze 4 4)
+
+[[#{[0 1]} #{[0 0] [0 2]} #{[1 2] [0 1]} #{[1 3]}]
+ [#{[1 1] [2 0]} #{[1 0] [1 2]} #{[1 1] [0 2]} #{[2 3] [0 3]}]
+ [#{[1 0] [2 1]} #{[2 0] [3 1]} #{[2 3]} #{[2 2] [3 3] [1 3]}]
+ [#{[3 1]} #{[3 0] [2 1] [3 2]} #{[3 3] [3 1]} #{[2 3] [3 2]}]]
+
+ (generate-maze 6 4)
+
+[[#{[1 0]} #{[0 2]} #{[0 3] [0 1]} #{[1 3] [0 2]}]
+ [#{[0 0] [2 0]} #{[2 1] [1 2]} #{[1 1] [1 3]} #{[2 3] [0 3] [1 2]}]
+ [#{[1 0] [3 0]} #{[1 1] [3 1]} #{[3 2]} #{[3 3] [1 3]}]
+ [#{[2 0] [3 1]} #{[3 0] [2 1]} #{[2 2] [4 2]} #{[4 3] [2 3]}]
+ [#{[4 1] [5 0]} #{[4 0]} #{[4 3] [5 2] [3 2]} #{[3 3] [4 2]}]
+ [#{[5 1] [4 0]} #{[5 2] [5 0]} #{[4 2] [5 3] [5 1]} #{[5 2]}]]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nice! Now the only thing left is printing a more human friendly view of this
+maze.&lt;/p&gt;
+
+&lt;h2 id=&quot;maze-printing&quot;&gt;Maze Printing&lt;/h2&gt;
+
+&lt;p&gt;First, the top of the maze is printed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Ascii&quot;&gt;`+---+---+---+`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, for every row the left border is printed &lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt; and 2 passes over the cells
+have to be made. The first pass determines if there should be a border between
+the current cell and its &lt;code class=&quot;highlighter-rouge&quot;&gt;east-of&lt;/code&gt; neighbour, resulting in something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Ascii&quot;&gt;+---+---+---+---+
+|           |   |
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The second pass over the row adds a &lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt; and then determines if there should be a
+border between the current cell and its &lt;code class=&quot;highlighter-rouge&quot;&gt;south-of&lt;/code&gt; neighbour, for instance
+resulting in this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Ascii&quot;&gt;+---+---+---+---+
+|           |   |
++---+---+   +   +
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After repeating this for all rows, a maze like this is printed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Ascii&quot;&gt;+---+---+---+---+
+|           |   |
++---+---+   +   +
+|       |       |
++   +   +---+   +
+|   |       |   |
++   +---+   +   +
+|       |       |
++---+---+---+---+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(defn east-open-border? [maze cell]
+  (contains? (get-in maze (east-of cell)) cell))
+
+(defn south-open-border? [maze cell]
+  (contains? (get-in maze (south-of cell)) cell))
+
+(defn print-cell-body [maze cell]
+  (if (east-open-border? maze cell)
+    &quot;    &quot;
+    &quot;   |&quot;))
+
+(defn print-cell-bottom [maze cell]
+  (if (south-open-border? maze cell)
+    &quot;   +&quot;
+    &quot;---+&quot;))
+
+(defn print-maze [maze]
+  (let [result (atom [])
+        rows   (range (count maze))
+        cols   (range (count (get-in maze [0])))]
+    (swap! result conj &quot;+&quot; (repeat (count cols) &quot;---+&quot;) &quot;\n&quot;)
+    (doseq [row rows]
+      (swap! result conj &quot;|&quot;)
+      (doseq [col cols]
+        (swap! result conj (print-cell-body maze [row col])))
+      (swap! result conj &quot;\n&quot; &quot;+&quot;)
+      (doseq [col cols]
+        (swap! result conj (print-cell-bottom maze [row col])))
+      (swap! result conj &quot;\n&quot;))
+    (println (s/join (flatten @result)))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, we can print all the mazes we want:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Clojure&quot;&gt;(generate-maze 4 4)
+
++---+---+---+---+
+|   |           |
++   +   +   +---+
+|   |   |       |
++   +---+---+   +
+|   |       |   |
++   +   +   +   +
+|       |       |
++---+---+---+---+
+
+(generate-maze 4 4)
+
++---+---+---+---+
+|       |       |
++---+   +   +   +
+|   |   |   |   |
++   +   +---+   +
+|   |       |   |
++   +---+   +   +
+|               |
++---+---+---+---+
+
+(generate-maze 8 18)
+
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+|   |               |   |       |                   |       |           |
++   +   +   +---+   +   +   +   +   +---+   +---+   +   +   +---+---+   +
+|   |   |   |   |   |   |   |       |   |   |           |           |   |
++   +---+   +   +   +   +   +---+---+   +   +---+---+---+---+---+   +   +
+|       |   |       |   |   |           |           |   |           |   |
++---+   +   +   +---+   +   +   +---+---+   +---+   +   +   +---+---+   +
+|   |       |   |       |   |   |       |   |       |       |           |
++   +---+---+   +   +   +   +   +   +   +---+   +---+   +---+   +   +   +
+|           |   |   |   |       |   |           |   |   |   |   |   |   |
++   +---+---+   +   +   +   +---+   +---+---+---+   +   +   +   +   +   +
+|   |           |   |       |       |   |           |   |       |   |   |
++   +   +---+---+---+---+   +   +---+   +   +---+   +   +---+   +   +   +
+|   |   |               |   |       |   |       |   |       |   |   |   |
++   +   +---+   +---+   +---+---+   +   +---+   +   +---+   +---+   +   +
+|               |                   |           |                   |   |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;So there you have it: a maze generator in ~ 30 lines of code with a 30 lines of
+code ascii view on top of it, build with nothing but a REPL on a phone. I really
+enjoyed the puzzle and the small (and large) successes while working in the
+REPL. I hope you enjoyed this recap.&lt;/p&gt;
+
+&lt;p&gt;I’d like to thanks &lt;a href=&quot;https://twitter.com/mfikes&quot;&gt;Mike Fikes&lt;/a&gt; for his excellent
+ClojureScript REPL, &lt;a href=&quot;https://twitter.com/mark_bastian&quot;&gt;Mark Bastian&lt;/a&gt; for the
+inspiration for the maze data structure, &lt;a href=&quot;https://twitter.com/jamis&quot;&gt;Jamis Buck&lt;/a&gt;
+for his lovely ‘Mazes for programmers’ book and &lt;a href=&quot;https://twitter.com/gertgoet&quot;&gt;Gert
+Goet&lt;/a&gt; for reviewing an earlier version of this
+blog. Faults and not-so-idiomatic Clojure code remaining are my own.&lt;/p&gt;
+
+&lt;p&gt;Back home, I’m happy to be working in Emacs with the excellent Clojure CIDER
+plugin again. Which reminds me that during my holiday I visited a picturesque
+CIDER factory in France. Cheers!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2018-08-22-mazes/CIDER.png&quot; alt=&quot;CIDER factory&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Please share your comments, suggestions and thoughts about this blog post on
+&lt;a href=&quot;https://twitter.com/mmz_&quot;&gt;twitter.com/mmz_&lt;/a&gt;. Thanks for reading and Happy
+Coding!&lt;/p&gt;
+
+&lt;h2 id=&quot;links&quot;&gt;Links&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.amazon.com/Mazes-Programmers-Twisty-Little-Passages/dp/1680500554&quot;&gt;‘Mazes for Programmers
+book’&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://itunes.apple.com/us/app/replete/id1013465639&quot;&gt;ClojureScript REPL
+for mobile devices&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://gist.github.com/mmzsource/ee88b93a3829f98fcb6188f2f2162fcf&quot;&gt;Maze generation
+code&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://clojure.org/guides/repl/introduction&quot;&gt;Excellent ‘Programming at the REPL’
+documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-03-04-verlet-integration.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-22-mazes.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry><entry><title type="html">Microhack Brew your code</title><link href="https://040code.github.io//2018/08/08/brew-some-code/" rel="alternate" type="text/html" title="Microhack Brew your code" /><published>2018-08-08T00:00:00+00:00</published><updated>2018-08-08T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/08/brew-some-code</id><content type="html" xml:base="https://040code.github.io//2018/08/08/brew-some-code/">&lt;p&gt;Working on a Mac made my work a lot more fun. Especially when I was introduced to &lt;a href=&quot;https://brew.sh/&quot;&gt;homebrew&lt;/a&gt;, the missing package manager for macOS.&lt;/p&gt;
 
 &lt;p&gt;MacPorts was fine, but it felt clumsy. Every tool seems to be switched to Homebrew and life was good.. Except when you encounter that one tool you need but is not available in brew….&lt;/p&gt;
 
@@ -605,7 +940,7 @@ paper&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/quil/quil&quot;&gt;Quil library&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/clojure-emacs/cider&quot;&gt;Emacs CIDER plugin&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/AlDanial/cloc&quot;&gt;Cloc - counting lines of code&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-03-04-verlet-integration.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry><entry><title type="html">Service Discovery on AWS</title><link href="https://040code.github.io//2018/02/14/service-discovery/" rel="alternate" type="text/html" title="Service Discovery on AWS" /><published>2018-02-14T00:00:00+00:00</published><updated>2018-02-14T00:00:00+00:00</updated><id>https://040code.github.io//2018/02/14/service-discovery</id><content type="html" xml:base="https://040code.github.io//2018/02/14/service-discovery/">&lt;p&gt;Last year I wrote a &lt;a href=&quot;/2017/04/20/discovery-agent/&quot;&gt;post&lt;/a&gt; how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the &lt;a href=&quot;https://github.com/aws/amazon-ecs-agent/releases/tag/v1.15.0&quot;&gt;ECS agent 1.15&lt;/a&gt; to retrieve container meta data in the container. This feature makes the discovery agent obsolete.&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-07-01-bezier-in-clojure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-07-12-bezier-in-clojurescript.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-03-04-verlet-integration.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-22-mazes.md collection=posts&gt;]}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry><entry><title type="html">Service Discovery on AWS</title><link href="https://040code.github.io//2018/02/14/service-discovery/" rel="alternate" type="text/html" title="Service Discovery on AWS" /><published>2018-02-14T00:00:00+00:00</published><updated>2018-02-14T00:00:00+00:00</updated><id>https://040code.github.io//2018/02/14/service-discovery</id><content type="html" xml:base="https://040code.github.io//2018/02/14/service-discovery/">&lt;p&gt;Last year I wrote a &lt;a href=&quot;/2017/04/20/discovery-agent/&quot;&gt;post&lt;/a&gt; how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the &lt;a href=&quot;https://github.com/aws/amazon-ecs-agent/releases/tag/v1.15.0&quot;&gt;ECS agent 1.15&lt;/a&gt; to retrieve container meta data in the container. This feature makes the discovery agent obsolete.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
 &lt;p&gt;Looking back to the last years problem. A Spring service running in a container needs its external ip address and port to register to Eureka for service discovery. A service running in a container does not know the external exposed port and docker does not support a way to obtain the port mapping. We could inject the ip address but for the port that would not work. Since the port is unknown at start time. Of course, this in only valid when using random ports. But fixing the port can eventually cause port conflicts. Besides that, you are not able to scale the container on the same host. Therefore, it makes sense to use automatic port assignment.&lt;/p&gt;
@@ -1511,108 +1846,4 @@ terraform apply
 &lt;p&gt;Now plan and apply your changes, Terraform will inform you that a few resources will be destroyed (the removed services) and a few will be added.&lt;/p&gt;
 
 &lt;h3 id=&quot;clean-up&quot;&gt;Clean up&lt;/h3&gt;
-&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-02-14-service-discovery.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-05-26-talk-taipei.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry><entry><title type="html">Full Stack Fest 2017</title><link href="https://040code.github.io//2017/09/08/fsf-fontend/" rel="alternate" type="text/html" title="Full Stack Fest 2017" /><published>2017-09-08T00:00:00+00:00</published><updated>2017-09-08T00:00:00+00:00</updated><id>https://040code.github.io//2017/09/08/fsf-fontend</id><content type="html" xml:base="https://040code.github.io//2017/09/08/fsf-fontend/">&lt;h1 id=&quot;full-stack-fest-2017&quot;&gt;Full Stack Fest 2017&lt;/h1&gt;
-
-&lt;p&gt;This week we (Jeroen and Niek) enjoyining &lt;a href=&quot;https://2017.fullstackfest.com/&quot;&gt;Full Stack Fest 2017 Barcelona&lt;/a&gt;,
-a week-long full stack development conference with a focus on solving current problems with new &amp;amp; inspiring perspectives.&lt;/p&gt;
-
-&lt;p&gt;In this quite short blog we just summarizing briefly the talks and &lt;strong&gt;our opinion&lt;/strong&gt; about the talks. We have rated all talks, the rating is subjective ass well.&lt;/p&gt;
-
-&lt;p&gt;The last days are more frontend focussed read &lt;a href=&quot;https://040code.github.io/2017/09/05/fsf-backend/&quot;&gt;here&lt;/a&gt; more about the backend days.&lt;/p&gt;
-
-&lt;h2 id=&quot;day-four&quot;&gt;Day four&lt;/h2&gt;
-
-&lt;h3 id=&quot;keynote&quot;&gt;Keynote&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Jenn Schiffer (&lt;a href=&quot;https://twitter.com/jennschiffer&quot;&gt;@jennschiffer&lt;/a&gt;) showed how to make coding actually friendly with &lt;a href=&quot;https://glitch.com/&quot;&gt;glitch&lt;/a&gt;. And remember once you got bored you will not trying new cool stuff which makes you even unhappier and so on… And some cool &lt;a href=&quot;http://jennmoney.biz/&quot;&gt;pixel art&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;once-you-go-prpl&quot;&gt;Once you go PRPL…&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Service Workers by Houssein Djireden (&lt;a href=&quot;https://twitter.com/hdjirdeh&quot;&gt;@hdjirdeh&lt;/a&gt;) are stable and most serious browsers support them. SWs are a big help in improving the experience for the user. &lt;code class=&quot;highlighter-rouge&quot;&gt;Workbox-cli&lt;/code&gt; is a great for configuring your app to cache usefull stuff only. Don’t cache too much. &lt;code class=&quot;highlighter-rouge&quot;&gt;FoamTree&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;webpack-bundle-analytics&lt;/code&gt; show a good overview what to cache. Split up your js, with http/2, we do not need one big js file. React has good SW support.&lt;/p&gt;
-
-&lt;h3 id=&quot;magic-tricks-with-css-houdini&quot;&gt;Magic tricks with css houdini&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Absolutely awesome to see the future already working in this talk by Sam Richard (&lt;a href=&quot;https://twitter.com/Snugug&quot;&gt;@Snugug&lt;/a&gt;). A lot of visual stuff is currently blocking the main JS thread. With Houdini CSS a lot of css stuff can be handle on Worklets. ‘Much like Service Workers are a low-level JavaScript API for the browser’s cache Houdini introduces low-level JavaScript APIs for the browser’s render engine’. Currently only available in Chrome Canary and the definition of unstable, but ooooh so beautiful, &lt;a href=&quot;https://snugug.github.io/magic-tricks-with-houdini/#/0/0&quot;&gt;slides in canary&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;master-the-art-of-the-ast-and-take-control-of-your-js&quot;&gt;Master the art of the ast (and take control of your js)&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Talk by Sears israel (&lt;a href=&quot;https://twitter.com/cowchimp&quot;&gt;@cowchimp&lt;/a&gt;) to understand most JS libraries you only need to know two things. AST and the visitor pattern. With this knowledge you can easily add ESLint, create Babel plugins or add jscodeshift refactor modules. A great tool to help with AST is https://astexplorer.net&lt;/p&gt;
-
-&lt;h3 id=&quot;svg-can-do-that&quot;&gt;SVG can do that?!&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Awesome what you can do with SVG by Sarah Drasner (&lt;a href=&quot;https://twitter.com/sarah_edo&quot;&gt;@sarah_edo&lt;/a&gt;). This girl really knows her stuff. SVG is supported by all browsers including Opera Mini! Good integration with VueJS, react and other modern frameworks is possible. Lots of examples of really beautiful animations all working for all types of devices. Size does matter for images and animations. Normally it will result in ugly things, but with SVG this is absolutely not the case, &lt;a href=&quot;http://slides.com/sdrasner/svg-can-do-that#/&quot;&gt;slides&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;using-react-native--clojurescript-to-launch-iosandroid-apps-to-1m-users&quot;&gt;Using react native + clojurescript to launch ios/android apps to 1m users&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;A long intro to &lt;code class=&quot;highlighter-rouge&quot;&gt;react native&lt;/code&gt;, which is most likely not necessary on this conference. A nice twist with &lt;code class=&quot;highlighter-rouge&quot;&gt;clojureScript&lt;/code&gt;. The code looks very clean. It is possible to create apps for both iOS and Android with a 99% simular codebase. The crashlogs of apps created with clojurescript and reactnative are unfortunately almost not readible. This set of tools is also great to use in combination with &lt;code class=&quot;highlighter-rouge&quot;&gt;codepush&lt;/code&gt;. Now we can update the app on the fly without bothering appstores. Talk by Emin Hasanov (&lt;a href=&quot;https://twitter.com/hasanove&quot;&gt;@hasanove&lt;/a&gt;)&lt;/p&gt;
-
-&lt;h3 id=&quot;blasting-react-into-space-building-fluid-beautiful-interfaces-with-react-and-webgl-and-other-exotic-explorations&quot;&gt;Blasting react into space: building fluid, beautiful interfaces with react and webgl (and other exotic explorations)&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;A good talk by Chad Ostrowski (&lt;a href=&quot;https://twitter.com/chadoh&quot;&gt;@chadoh&lt;/a&gt;), on how all the new technologies can help us in the future when live is possible on Mars. Using: &lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP/2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ServiceWorkers&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;LocalStorage&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Bittorent + git&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;IPFS&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;blockchain&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;bitcoin&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ethereum&lt;/code&gt;. “Tomorrow’s problems === Today’s problems but bigger.” Last year a simular talk was told on FSF, but it’s good to see that the technologies mentioned then are now in a much further state. Great talk and good choice from the organiser of this beautiful conference.&lt;/p&gt;
-
-&lt;div style=&quot;position:relative; width:100%; height:0px; padding-bottom:56.25%;&quot;&gt;
-    &lt;iframe style=&quot;position:absolute; left:0; top:0; width:100%; height:100%&quot; src=&quot;https://chadoh.github.io/online-offline-equivalence/&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;day-five&quot;&gt;Day five&lt;/h2&gt;
-
-&lt;h3 id=&quot;bringing-back-the-1990s-the-revenge-of-javascript-stylesheets&quot;&gt;Bringing back the 1990s: The revenge of javascript stylesheets&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Steve Kinney (&lt;a href=&quot;https://twitter.com/stevekinney&quot;&gt;@stevekinney&lt;/a&gt;) did a lot of work in getting the Javascript Stylesheets, a technology only working in 1996 in Netscape 4) to work in 2017. In the beginning of the internet, people were debating about the split of concern regarding content and layout. One of the proposals was Javascript Stylesheets. Netscape 4 was the only browser capable of this feature. Steve showed us how we can do some really neat stuff in 1996 technology. A lot of this, we now take for granted, but we have to keep in mind that this was 1996. A lot of simularities with SASS, LESS, but also REACT like structures with the &lt;a href=&quot;https://en.wikipedia.org/wiki/ECMAScript_for_XML&quot;&gt;ECMA E4X for XML proposal&lt;/a&gt;. Conclusion: We still can learn from the past. Although some good initiatives take 20 years to become meanstream.&lt;/p&gt;
-
-&lt;h3 id=&quot;rendering-performance-from-the-ground-up&quot;&gt;Rendering performance from the ground up&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Good presentation about how we can improve the performance a lot by using the GPU instead of CPU. A good explaination what the differences are between a CPU and GPU. Try to use translate and shaders because they don’t require repaintings. Thanks Martin Splitt (&lt;a href=&quot;https://twitter.com/g33konaut&quot;&gt;@g33konaut&lt;/a&gt;)!, &lt;a href=&quot;https://t.co/oFDjyf5Bb6&quot;&gt;slides&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;web-based-virtual-reality&quot;&gt;Web based virtual reality&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Shagufta Gurmukhdas (&lt;a href=&quot;https://twitter.com/shaguftamethwan&quot;&gt;@shaguftamethwan&lt;/a&gt;) give a good talk ok the Web based virtual reality. Starting WebVR with WebGL is very hard. She showed us &lt;a href=&quot;https://aframe.io&quot;&gt;A-Frame&lt;/a&gt;. A-Frame was already mentioned three times in FSF, so we were already very curious about it. You can easily start your own VR world with this framework. It uses GPU under the hood and you can use one of your favourite webframeworks (vueJS, React, and so on) to change properties of the 3D models. Very impressive. With this tool, even the most suburn backenders, (we) can start with VR.&lt;/p&gt;
-
-&lt;h3 id=&quot;exploring-the-world-of-decentralized-networks-with-webrtc&quot;&gt;Exploring the world of decentralized networks with webRTC&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Nikita Baksalyar (&lt;a href=&quot;https://twitter.com/nbaksalyar&quot;&gt;@nbaksalyar&lt;/a&gt;) started his talk with some technical issues, but he recovered quickly from that. Nikita tought us about how the internet can truly be implemented the way it was supposed to be implemented. Decentralised! Now-a-days we’re using a lot of things which are ment to be decentralised in a centralised way. Git and the internet are a nice examples of that. Serving the web, securely and encrypted, with webRTC through all client devices will make it imposible to censor the internet by governments. During the Q&amp;amp;A a question come up on what to do with unwanted content. The response of Nikita was amazing. We should educate people that they don’t want to see unwanted content instead of putting the responsibility of this on technology, &lt;a href=&quot;https://gist.github.com/nbaksalyar/cfee2bdac7cd0f66e0a91af9621ab264&quot;&gt;resources&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;developing-for-the-next-billion&quot;&gt;Developing for the next billion&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Look to your target group. Keep in mind that your apps might not be used by the people you’ve targetted on. Natalie Pispistunovich (&lt;a href=&quot;https://twitter.com/nataliepis&quot;&gt;@nataliepis&lt;/a&gt;) showed some examples from Kenya. What apps are used and why. The delivery of apps can be very different from ours. The way payments are done also.
-Nice reference to &lt;a href=&quot;https://www.youtube.com/watch?v=hjzRbgxZXz8&quot;&gt;Fun with Flags&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;progressive-web-apps-and-the-internet-of-things&quot;&gt;Progressive web apps and the internet of things&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;A story of with amongst other libraries, the &lt;code class=&quot;highlighter-rouge&quot;&gt;johnny-five&lt;/code&gt; library. Today it’s easy to communicate with all kind of device with &lt;code class=&quot;highlighter-rouge&quot;&gt;nodeJS&lt;/code&gt;. Well done, Luis Montes (&lt;a href=&quot;https://twitter.com/monteslu&quot;&gt;@monteslu&lt;/a&gt;)&lt;/p&gt;
-
-&lt;h3 id=&quot;lightning-talks&quot;&gt;Lightning talks&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;PAKO a zlib for uploads in js. For uploading large files. :) NICE. @bombasarkadian&lt;/li&gt;
-  &lt;li&gt;DevTools in Firefox: Alex Lakatos @lakatos88;  BASIC&lt;/li&gt;
-  &lt;li&gt;Internet for Everyone. Tom Enden en Liran Kurtz. Accessible. GOOD&lt;/li&gt;
-  &lt;li&gt;Marek - ProRouter.js - Router.maniak.pro - No idea what this is all about.&lt;/li&gt;
-  &lt;li&gt;Kirill Pimenov - Rust! Go write to Rust and go back to your own language and you will be beter. Awesome!&lt;/li&gt;
-  &lt;li&gt;Raj - iOS Event Communication without internet, API and no loss of data. Way to fast. OMG… Peer to Peer connectivity with iPhone through Bonjour protocol&lt;/li&gt;
-  &lt;li&gt;Paulo -  Functional Programming: Elixir and Phoenix. I love Phoenix! See also &lt;a href=&quot;https://paulodiniz.github.io/flappy-bird&quot;&gt;git&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;FSF designer. Uses emoiji as classes. Awesome way of keeping the names short and compact. Really high quality frontend work. See &lt;a href=&quot;http://2017.fullstackfest.com&quot;&gt;Full Stack Fest web page&lt;/a&gt; and Inspect the code!&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;making-a-lot-of-things&quot;&gt;Making a lot of things&lt;/h3&gt;
-&lt;p&gt;Rating: :star: :star: :star:&lt;/p&gt;
-
-&lt;p&gt;Ben Foxall (&lt;a href=&quot;https://twitter.com/benjaminbenben&quot;&gt;@benjaminbenben&lt;/a&gt;) gave us two talks for the price of one!
-&lt;a href=&quot;https://cojs.co&quot;&gt;https://cojs.co&lt;/a&gt; is collaborate platform were people can co-create software. With blocks you can split the code. Adding a &lt;code class=&quot;highlighter-rouge&quot;&gt;!&lt;/code&gt; behind the url will fork the code. Other users can continue on the code in their own context, but with shared code. Awesome. The second part was about Microhacks. He explained how you should constrain your experiments to make them work. Plan your goal, not your work. Start it and finish it.&lt;/p&gt;
-
-&lt;h2 id=&quot;awesome&quot;&gt;Awesome!!!&lt;/h2&gt;
-&lt;p&gt;Many thanks to &lt;a href=&quot;https://www.codegram.com/&quot;&gt;Codegram&lt;/a&gt; the company that organized once again the best conference!&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="aframe" /><category term="serviceworkers" /><category term="css" /><category term="javascript" /><category term="ast" /><category term="svg" /><category term="blockchain" /><category term="react" /><summary type="html">Full Stack Fest 2017</summary></entry></feed>
+&lt;p&gt;Once done you can easily clean-up all created resources in AWS, just run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform destroy&lt;/code&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/about.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-04-20-discovery-agent.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-04-21-gitlab-perodic-build.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-07-docker-multi-stage-builds.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-05-20-nextbuild-graphql.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-06-18-terraform-aws-vpc.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-19-talk-immutable-infrastructure.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-19-graphql-geecon.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-11-24-runners-on-the-spot.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-01-30-fargate_with_terraform.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-02-14-service-discovery.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-05-26-talk-taipei.md collection=posts&gt;]}</name><email>dev.npalm@gmail.com</email></author><category term="terraform" /><category term="aws" /><category term="docker" /><category term="microservices" /><summary type="html">The Docker slogan ‘Build, Ship, and Run’ advertises easy set up of immutable software builds, but it is not always that easy. Setting up immutable builds with Docker is pretty straight forward and shipping is just a matter of pushing the image to a repository. The next step is building the cloud infrastructure to run the containers. In the talk at the DevOps Days in Riga I have shown how to create an immutable infrastructure on AWS with Terraform. The example belows shows how you can run your micro services in docker containers on AWS.</summary></entry></feed>
