@@ -1,19 +1,55 @@
 ---
 layout:     post
 title:      "Git Bisect"
-subtitle:   "Find the bug-introducing-commit with Git Bisect"
-date:       2018-08-13
-authors:     [jeroen]
+subtitle:   "Find the bug-introducing commit with Git Bisect"
+date:       2018-08-12
+authors:    [jeroen]
 header-img: "assets/2018-08-13-git-bisect/vanmoll-brew.jpg"
-tags:       [git]
+tags:       ["git"]
 ---
 
-https://github.com/JeroenKnoops/rust-example
+I want to tell you a little story about what happened to me a few days ago.
+I went to the office and a colleague of mine was not very happy. This is strange because I work for a very nice company.. What happened? I asked him what was wrong. It turned out that he updated a lot of dependencies and some code for a certain service. And now the SonarQube reporting was not working anymore with a very strange message: HTTP Error 502 Bad gateway.. 
+
+I decided to help him, because we don't work alone and especially when you're stuck (and frustrated) at something it's best to include other human beings.
+
+Since there we're already several commits done I've decided to use `git bisect` to find the bug-introducing commit.
+
+I've noticed that it was new to my colleague so let's write a blog post about it.
+
+## Prerequisites
+
+In order to follow the instructions, you need the following things:
+- [Git](https://git-scm.com/downloads) - Duh... This blog is about Git!
+- [Rust & Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) - The best language ever I'm NOT using in my daily work.  
+- Clone [https://github.com/JeroenKnoops/rust-example](https://github.com/JeroenKnoops/rust-example). This is an example codebase with a bug we want to find.
+
+## Rust example
+The rust-example is very simple. It's a rust library with four functions namely: `add`, `substract`, `multiply` and `division`. By no means this should every be used in real systems, this repo only exists as example for this blog post. It has 9 commits. 
+
+```
+$ git log --pretty=format:"%h - %an, %ad : %s"
+4d7f719 - Jeroen Knoops, Sun Aug 12 17:10:07 2018 +0200 : Adds link to blog post on git bisect
+380d12e - Jeroen Knoops, Sun Aug 12 17:09:04 2018 +0200 : Refactors tests in seperate directory
+1ae37e1 - Jeroen Knoops, Sun Aug 12 17:07:32 2018 +0200 : Adds edge cases for division
+0580aec - Jeroen Knoops, Sun Aug 12 17:06:41 2018 +0200 : Adds information on how to run tests and create the documentation
+d619b4d - Jeroen Knoops, Sun Aug 12 17:04:50 2018 +0200 : Adds function 'division'
+abc4c40 - Jeroen Knoops, Sun Aug 12 17:03:29 2018 +0200 : Adds function 'multiply' with a runnable example in the documentation
+2a5a057 - Jeroen Knoops, Sun Aug 12 17:01:27 2018 +0200 : Adds readme.md
+3d75d3d - Jeroen Knoops, Sun Aug 12 16:59:58 2018 +0200 : Adds travis-ci pipeline
+030b725 - Jeroen Knoops, Sun Aug 12 16:58:49 2018 +0200 : Adds functions 'add' and 'substract'
+```
+
+It starts with adding two functions, adding travis-ci, add some documentation, more functions, some refactoring... everything you expect from a 'real' project.
+
+Of course it has some tests and I've tested everything manually before I commit... But for some reason at the end, the `substract` function is not working anymore..
+Oeps, I've tested it manually, but for some reason I've forgot to add a 
+
 
 
 Create test in `/tests/bug.rs`
 
-```rust
+```
 extern crate example;
 use example::*;
 
