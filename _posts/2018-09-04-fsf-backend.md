@@ -36,12 +36,19 @@ Rating:
 
 Horea Porutiu [@horeaporutiu](https://twitter.com/horeaporutiu)
 
+I'm currently working for a project with Hyperledger, so this talk was very relevant for me.
+Great balance between technical information, examples and real applications of the chain.
+I liked their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/). See exactly what happened with the beans of your coffee.
 
 ### A Game of Theories: Why languages do what they do
 Rating:
 
 Rae Krantz
 
+Great talk on languages. I've recognized a lot and she was spot on with the Game of Thrones characters.
+When my favourite language Rust was mentioned, she was really enthousiastic.
+
+Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
 
 ### The Future of ChatBots in the Travel Industry
 Rating:
@@ -58,10 +65,14 @@ Rating:
 
 Sasha Romijn
 
+Quote: "Export in cypher builder should ring an alarm bell"
+
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating:
 
 Silvia Puglisi
+
+Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor.
 
 ## Day 2
 
