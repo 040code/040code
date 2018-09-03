@@ -1,14 +1,14 @@
 ---
 layout:     post
-title:      "Full Stack Fest 2017"
+title:      "Full Stack Fest 2018"
 subtitle:   "Backend days"
-date:       2018-09-04
+date:       2018-09-02
 authors:    [jeroen, niek]
 header-img: "assets/2018-09_fullstackfest/kanaal_nre.jpg"
 tags:       [iot, cloud, fullstack, microservices, security]
 ---
 
-# Full Stack Fest 2017
+# Full Stack Fest 2018
 
 This week we (Jeroen and Niek) enjoying [Full Stack Fest 2018 Barcelona](https://2018.fullstackfest.com/),
 a week-long full stack development conference with a focus on solving current problems with new & inspiring perspectives.
@@ -21,19 +21,19 @@ In this quite short blog we just summarizing briefly the talks and **our opinion
 ### Reinvent the social web
 Rating:
 
-André Staltz,
+André Staltz [@andrestaltz](https://twitter.com/andrestaltz),
 
 
 ### Open Gateway - Decentralized IoT
 Rating:
 
-Kalyan Dikshit
+Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev)
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
 Rating:
 
-Horea Porutiu
+Horea Porutiu [@horeaporutiu](https://twitter.com/horeaporutiu)
 
 
 ### A Game of Theories: Why languages do what they do
