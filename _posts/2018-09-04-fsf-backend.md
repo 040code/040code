@@ -6,6 +6,7 @@ date:       2018-09-02
 authors:    [jeroen, niek]
 header-img: "assets/2018-09_fullstackfest/kanaal_nre.jpg"
 tags:       [iot, cloud, fullstack, microservices, security]
+comments:   true
 ---
 
 # Full Stack Fest 2018
