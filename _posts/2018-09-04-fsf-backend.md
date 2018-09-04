@@ -28,7 +28,7 @@ André Staltz [@andrestaltz](https://twitter.com/andrestaltz),
 ### Open Gateway - Decentralized IoT
 Rating:
 
-Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev)
+Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev) 
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
@@ -43,7 +43,7 @@ I liked their work with [Brooklyn Roasting Company](https://www.brooklynroasting
 ### A Game of Theories: Why languages do what they do
 Rating:
 
-Rae Krantz
+Rae Krantz [@rustbeltrae](https://twitter.com/rustbeltrae)
 
 Great talk on languages. I've recognized a lot and she was spot on with the Game of Thrones characters.
 When my favourite language Rust was mentioned, she was really enthousiastic.
@@ -58,21 +58,17 @@ Prabh Simran Singh Baweja
 ### Avoiding Digital Bias
 Rating:
 
-Adam L Smith
+Adam L Smith,[@adamleonsmith](https://twitter.com/adamleonsmith)
 
 ### Everything I always wanted to know about crypto, but never thought I'd understand
-Rating:
+Rating: :star: :star: :star:
 
-Sasha Romijn
-
-Quote: "Export in cypher builder should ring an alarm bell"
+Sasha Romijn, [@mxsash](https://twitter.com/mxsash) a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
 
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating:
 
-Silvia Puglisi
-
-Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor.
+Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor.
 
 ## Day 2
 
