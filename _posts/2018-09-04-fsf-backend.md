@@ -20,15 +20,12 @@ In this quite short blog we just summarizing briefly the talks and **our opinion
 ## Day one
 
 ### Reinvent the social web
-Rating:
+Rating: :star: :star: :star: :star:
 
-André Staltz [@andrestaltz](https://twitter.com/andrestaltz),
+André Staltz [@andrestaltz](https://twitter.com/andrestaltz) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks sunch as [scuttlebutt](https://www.scuttlebutt.nz/).
 
 
-### Open Gateway - Decentralized IoT
-Rating:
-
-Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev) 
+Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev)
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
@@ -76,6 +73,8 @@ Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia
 Rating:
 
 Charity Majors
+Cool shirt, "I test in prod".
+
 
 ### Do you need a Service Mesh?
 Rating:
