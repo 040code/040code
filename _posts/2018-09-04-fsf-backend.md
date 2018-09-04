@@ -25,7 +25,10 @@ Rating: :star: :star: :star: :star:
 André Staltz [@andrestaltz](https://twitter.com/andrestaltz) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks sunch as [scuttlebutt](https://www.scuttlebutt.nz/).
 
 
-Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev)
+### Open Gateway - Decentralized IoT
+Rating:
+
+Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev) presents about the open gateway initiative from Mozila. Not our topic.
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
