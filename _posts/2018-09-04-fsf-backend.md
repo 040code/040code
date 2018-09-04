@@ -41,14 +41,9 @@ Great balance between technical information, examples and real applications of t
 I liked their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/). See exactly what happened with the beans of your coffee.
 
 ### A Game of Theories: Why languages do what they do
-Rating:
+Rating: :start: :start: :start: :start: :start:
 
-Rae Krantz [@rustbeltrae](https://twitter.com/rustbeltrae)
-
-Great talk on languages. I've recognized a lot and she was spot on with the Game of Thrones characters.
-When my favourite language Rust was mentioned, she was really enthousiastic.
-
-Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
+Rae Krantz [@rustbeltrae](https://twitter.com/rustbeltrae), quickly compare the ugly and beauty of Ruby, Python, Go, Clojure, JavaScript, Erlang, Rust and Elixir. Yeah we never will do Clojure and from tomorrow we only do Rust and Elixir. Awesome session. Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
 
 ### The Future of ChatBots in the Travel Industry
 Rating:
