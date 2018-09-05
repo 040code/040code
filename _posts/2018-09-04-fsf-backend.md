@@ -16,6 +16,8 @@ a week-long full stack development conference with a focus on solving current pr
 
 In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
+First of all we would like to thank [Luca Marchesini](https://twitter.com/xbill82) for hosting the sessions.
+
 ## Day one
 
 ### Reinvent the social web
@@ -84,12 +86,12 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
 Rating: :star: :star: :star: :star:
 
-Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
+Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod". Quote: "What is unknown, we must leave uncoded."
 
 ### Do you need a Service Mesh?
-Rating:
+Rating: :star: :star: :star: :star:
 
-Matt Turner
+A great presentation given by Matt Turner ([@mt165pro](https://twitter.com/mt165pro)) about Service Mesh. He demo-ed the principles of Service Mash by using [istio.io](https://istio.io/). He used kubernetes to demo some of the configuration you can setup with only proxy-ing between different services. Very powerful concept. I'm wondering how this can be used in an infrastructure-as-code architecture. 
 
 ### HTTP and JSON for your gRPC Services
 Rating: :star: :star: :star: :star:
