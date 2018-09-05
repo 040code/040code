@@ -73,10 +73,9 @@ Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia
 ## Day 2
 
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
-Rating:
+Rating: :star: :star: :star: :star:
 
-Charity Majors
-Cool shirt, "I test in prod".
+Charity Majors [@mipsytipsy](https://twitter.com/mipsytipsy), We cannot repeat the message enouth: "They who write the code. Can and should deploy their code. Ans support it in production."  Charity showed us that systems tend to be that complex that is even not hard but impossible to have a staged environment that represent your production system. Having just monitoring in place is not good enough. You will run continuously to the next fire. Build observability in from day one. Super cool shirt, "I test in prod".
 
 
 ### Do you need a Service Mesh?
