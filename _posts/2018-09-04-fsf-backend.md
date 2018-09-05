@@ -2,7 +2,7 @@
 layout:     post
 title:      "Full Stack Fest 2018"
 subtitle:   "Backend days"
-date:       2018-09-02
+date:       2018-09-05
 authors:    [jeroen, niek]
 header-img: "assets/2018-09_fullstackfest/kanaal_nre.jpg"
 tags:       [iot, cloud, fullstack, microservices, security]
@@ -86,9 +86,12 @@ Rating: :star: :star: :star: :star:
 Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
 
 ### Do you need a Service Mesh?
-Rating:
+Rating: :star: :star: :star: :star:
 
 Matt Turner
+
+
+
 
 ### HTTP and JSON for your gRPC Services
 Rating: :star: :star: :star: :star:
