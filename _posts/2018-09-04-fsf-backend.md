@@ -108,15 +108,16 @@ Tom Enden [@tom_enden](https://twitter.com/tom_enden). Did you know that Plato i
 
 
 ### Take a (Client) Hint!
-Rating:
+Rating: :star: :star: :star: :star:
 
-Jeremy Wagner
+Jeremy Wagner [@malchata](https://twitter.com/malchata), explained nicely the power of client hints. Having a fast internet and reliable internet connection is still not common. For example a survey by Pew Research shows that one-third of American adults do not subscribe to any internet access faster than dial-up at their home. So building responsive clients on slow or unreliable networks still counts. Client hints comes in different types. By opting in (header `ACCEPT-CH`) a client can inform that it understands client hints, Device hints enables for example responsive images and netwrok hints can inform the server about the speed of the network of the client. The slides are [here](https://jlwagner.net/talks/take-a-client-hint/) available.
+
 
 ### Lost in transaction? Strategies to deal with (in-)consistency in distributed systems
 Rating:
 
 Bernd Rücker
-
+https://jlwagner.net/talks/take-a-client-hint/#/
 [https://blog.bernd-ruecker.com/]
 
 ### Lightning talks
