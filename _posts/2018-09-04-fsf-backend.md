@@ -16,6 +16,8 @@ a week-long full stack development conference with a focus on solving current pr
 
 In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
+First of all we would like to thank [Luca Marchesini](https://twitter.com/xbill82) for hosting the sessions.
+
 ## Day one
 
 ### Reinvent the social web
@@ -46,7 +48,8 @@ Rating: :star: :star: :star:
 
 Prabh Simran Singh Baweja
 
-Designing a chatbot is not that easy as it sounds. "Book me a hotel for this weekend." What kind of hotel? Where? Weekend, is it friday and saturnday or is it saturday and sunday? How to combine data in a good way so people are not annoyed. Nice inside on how bookings.com is building these bots.
+Designing a chatbot is not that easy as it sounds. "Book me a hotel for this weekend." What kind of hotel? Where? Weekend, is it friday and saturnday or is it saturday and sunday? How to combine data in a good way so people are not annoyed. Nice insights on how bookings.com is building these bots.
+Look at [his slides](https://speakerdeck.com/prabh27/the-future-of-chatbots-in-the-travel-industry)
 
 ### Avoiding Digital Bias
 Rating: :star: :star: :star: :star:
@@ -83,12 +86,12 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
 Rating: :star: :star: :star: :star:
 
-Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
+Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod". Quote: "What is unknown, we must leave uncoded."
 
 ### Do you need a Service Mesh?
 Rating: :star: :star: :star: :star:
 
-Matt Turner
+A great presentation given by Matt Turner ([@mt165pro](https://twitter.com/mt165pro)) about Service Mesh. He demo-ed the principles of Service Mash by using [istio.io](https://istio.io/). He used kubernetes to demo some of the configuration you can setup with only proxy-ing between different services. Very powerful concept. I'm wondering how this can be used in an infrastructure-as-code architecture. 
 
 
 
@@ -112,26 +115,28 @@ Jeremy Wagner ([@malchata](https://twitter.com/malchata)) explained nicely the p
 
 
 ### Lost in transaction? Strategies to deal with (in-)consistency in distributed systems
-Rating:
+Rating: :star: :star: :star: :star:
 
-Bernd Rücker
-https://jlwagner.net/talks/take-a-client-hint/#/
-[https://blog.bernd-ruecker.com/]
+Bernd Rücker ([@berndruecker](https://twitter.com/berndruecker)) is a (work-)flow automation enthusiast. He explained the strategies to deal with the temporary inconsistency and how you can convert it to consistency again using the starbucks as example. One can use different approaches to it. Chorography vs orchestration.
+These kind of problems can be solved by using a BPMN product like Camunda. System become complexer every day and this will become a bigger problem everyday. And what should we never forget: Zucchini and idempotency.
+
+This talk triggered a lot of thoughts for me personally. This is one of the areas where blockchain might actually solve things. Use smartcontracts to atomically commit transactions all at the same time. Fortunately he already wrote a blog post about the topic. Great speaker!
+[Bernd Ruecker's blog](https://blog.bernd-ruecker.com/)
+
 
 ### Lightning talks
 Antiona Librada ([@antoniolibrada](https://twitter.com/antoniolibrada)) showed us how he improved a complex ci build pipeline which took > 45 minutes to run by using 2 lambdas and Amazon Code Build. The outcome was a more stable, cheaper and faster build pipeline. They increased the number of daily deployments drastically.
 
-Peter van der Meulen ([@HendrikPetertje](https://twitter.com/HendrikPetertje) showed us his terminal. This shows again how important improving your daily workflow is. Some highights: Spotify in Vim, thefuck, circleci-cli, wee-slack. For more info: [https://git.picodevelopment.nl/explore/snippets](https://git.picodevelopment.nl/explore/snippets) and [https://git.picodevelopment.nl/explore/projects](https://git.picodevelopment.nl/explore/projects)
+Peter van der Meulen ([@HendrikPetertje](https://twitter.com/HendrikPetertje)) showed us his terminal. This shows again how important improving your daily workflow is. Some highights: Spotify in Vim, thefuck, circleci-cli, wee-slack. For more info: [snippets](https://git.picodevelopment.nl/explore/snippets) and [projects](https://git.picodevelopment.nl/explore/projects)
 
 Aaron Bassett ([@aaronbassett](https://twitter.com/aaronbassett)) showed us some amazing (and probably illegal) things about SMS. [Here](https://speakerdeck.com/aaronbassett/stupid-and-possibly-illegal-stuff-you-can-do-with-sms-but-probably-shouldnt) you can find his slides. Really scary.
 
 Two nice talks on our power as developers to shape the world. Let's do this right this time.
 
-
 ### Cats, The Musical! Algorithmic Song Meow-ification
 Rating: :star: :star: :star: :star:
 
-Beth Haubert [@haubertdashery](https://twitter.com/haubertdashery), Awesome to see how passioned shed hacked her way around to generated a cat meow song from songs using. Was realy fun to see!
+Awesome to see how Beth Haubert ([@haubertdashery](https://twitter.com/haubertdashery)) passionated hacked her way around to generated a cat meow song from songs using ruby. It was really fun to see, how the program evolved! Especially because at the end, the result was really terrible..
 
 ### Everything in sketchnotes..
 
