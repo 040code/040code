@@ -11,38 +11,35 @@ comments:   true
 
 # Full Stack Fest 2018
 
-This week we (Jeroen and Niek) enjoying [Full Stack Fest 2018 Barcelona](https://2018.fullstackfest.com/),
+This week we (Jeroen, Niek, Gertjan, Eric and Kike) are enjoying [Full Stack Fest 2018 Barcelona](https://2018.fullstackfest.com/),
 a week-long full stack development conference with a focus on solving current problems with new & inspiring perspectives.
 
-In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective ass well.
-
+In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
 ## Day one
 
 ### Reinvent the social web
 Rating: :star: :star: :star: :star:
 
-André Staltz [@andrestaltz](https://twitter.com/andrestaltz) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks sunch as [scuttlebutt](https://www.scuttlebutt.nz/).
+André Staltz ([@andrestaltz](https://twitter.com/andrestaltz)) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks sunch as [scuttlebutt](https://www.scuttlebutt.nz/).
 
 
 ### Open Gateway - Decentralized IoT
 Rating:
 
-Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev) presents about the open gateway initiative from Mozila. Not our topic.
+Kalyan Dikshit ([@decode_dev](https://twitter.com/decode_dev)) presents about the open gateway initiative from Mozilla. Not our topic.
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
 Rating: :star: :star: :star:
 
-Horea Porutiu [@horeaporutiu](https://twitter.com/horeaporutiu)
 
-Hyperledger is something we're looking into right now, so this talk was very relevant. It's good to show some of the basic things about hyperledger for the audience. Great balance between technical information, examples and real applications of the chain.
-Their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/) was a good example how to use the blockchain. It shows an audit trail on your coffee.
+Hyperledger is something we're looking into right now, so this talk was very relevant. Horea Porutiu ([@horeaporutiu](https://twitter.com/horeaporutiu)) showed the basic things about hyperledger and that's great for this audience. Great balance between technical information, examples and real applications of the chain. Their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/) was a good example how to use the blockchain. It shows an audit trail on your coffee.
 
 ### A Game of Theories: Why languages do what they do
 Rating: :star: :star: :star: :star: :star:
 
-Rae Krantz [@rustbeltrae](https://twitter.com/rustbeltrae), quickly compare the ugly and beauty of Ruby, Python, Go, Clojure, JavaScript, Erlang, Rust and Elixir. Yeah we never will do Clojure and from tomorrow we only do Rust and Elixir. Awesome session. Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
+Rae Krantz ([@rustbeltrae](https://twitter.com/rustbeltrae)) quickly compared the ugly and beauty of Ruby, Python, Go, Clojure, JavaScript, Erlang, Rust and Elixir. Yeah we never will do Clojure and from tomorrow we only do Rust and Elixir. Awesome session. Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
 
 ### The Future of ChatBots in the Travel Industry
 Rating: :star: :star: :star:
@@ -54,25 +51,24 @@ Designing a chatbot is not that easy as it sounds. "Book me a hotel for this wee
 ### Avoiding Digital Bias
 Rating: :star: :star: :star: :star:
 
-Adam L Smith,[@adamleonsmith](https://twitter.com/adamleonsmith)
+Adam L Smith ([@adamleonsmith](https://twitter.com/adamleonsmith))
 
 In modern worlds we use large datasets to tune our models. This is not without danger. Our datasets are often biased. Good tips on how to test if the models are digitally bias, by changing some of the fields like gender. Never use stock images. Nice example was shown if you google on CTO. This is not a good representation of the world. Enough food for thoughts!
-
 
 ### Everything I always wanted to know about crypto, but never thought I'd understand
 Rating: :star: :star: :star:
 
-Sasha Romijn, [@mxsash](https://twitter.com/mxsash) a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
+Sasha Romijn ([@mxsash](https://twitter.com/mxsash)) gave a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
 A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh.
 
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating: :star: :star: :star:
 
-Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor. Important to keep on bringing the message it's not that obvious to have freedom of speech and expression. /me installing TOR.
+Respect for Silvia Puglisi ([@nopressure](https://twitter.com/nopressure)) for giving this talk when she has the flu. Very good to see all the activity around Tor. Important to keep on bringing the message it's not that obvious to have freedom of speech and expression. /me installing TOR.
 
 ### Everything in sketchnotes..
 
-A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for creating these sketchnotes!
+A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg" alt="fullstackfest-2018-01">
@@ -87,8 +83,7 @@ A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for 
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
 Rating: :star: :star: :star: :star:
 
-Charity Majors [@mipsytipsy](@https://twitter.com/mipsytipsy)
-I very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
+Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
 
 ### Do you need a Service Mesh?
 Rating:
