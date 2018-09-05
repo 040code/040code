@@ -47,6 +47,7 @@ Rating: :star: :star: :star:
 Prabh Simran Singh Baweja
 
 Designing a chatbot is not that easy as it sounds. "Book me a hotel for this weekend." What kind of hotel? Where? Weekend, is it friday and saturnday or is it saturday and sunday? How to combine data in a good way so people are not annoyed. Nice insights on how bookings.com is building these bots.
+Look at [his slides](https://speakerdeck.com/prabh27/the-future-of-chatbots-in-the-travel-industry)
 
 ### Avoiding Digital Bias
 Rating: :star: :star: :star: :star:
