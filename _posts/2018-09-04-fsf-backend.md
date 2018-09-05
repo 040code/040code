@@ -77,11 +77,11 @@ Respect for Silvia Puglisi ([@nopressure](https://twitter.com/nopressure)) for g
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg" alt="fullstackfest-2018-01">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg" alt="fullstackfest-2018-01" width="100%">
 </a>
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg" alt="fullstackfest-2018-02">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg" alt="fullstackfest-2018-02" width="100%">
 </a>
 
 
@@ -147,9 +147,9 @@ Awesome to see how Beth Haubert ([@haubertdashery](https://twitter.com/haubertda
 A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for creating these sketchnotes!
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg" alt="fullstackfest-2018-03">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg" alt="fullstackfest-2018-03" width="100%">
 </a>
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
 </a>
