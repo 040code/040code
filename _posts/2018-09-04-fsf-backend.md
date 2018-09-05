@@ -125,6 +125,8 @@ Antiona Librada ([@antoniolibrada](https://twitter.com/antoniolibrada)) showed u
 
 Peter van der Meulen ([@HendrikPetertje](https://twitter.com/HendrikPetertje) showed us his terminal. This shows again how important improving your daily workflow is. Some highights: Spotify in Vim, thefuck, circleci-cli, wee-slack. For more info: [https://git.picodevelopment.nl/explore/snippets](https://git.picodevelopment.nl/explore/snippets) and [https://git.picodevelopment.nl/explore/projects](https://git.picodevelopment.nl/explore/projects)
 
+Aaron Bassett ([@aaronbassett](https://twitter.com/aaronbassett)) showed us some amazing (and probably illegal) things about SMS. [Here](https://speakerdeck.com/aaronbassett/stupid-and-possibly-illegal-stuff-you-can-do-with-sms-but-probably-shouldnt) you can find his slides. Really scary.
+
 Two nice talks on our power as developers to shape the world. Let's do this right this time.
 
 
