@@ -75,8 +75,8 @@ Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
 Rating: :star: :star: :star: :star:
 
-Charity Majors [@mipsytipsy](https://twitter.com/mipsytipsy), We cannot repeat the message enouth: "They who write the code. Can and should deploy their code. Ans support it in production."  Charity showed us that systems tend to be that complex that is even not hard but impossible to have a staged environment that represent your production system. Having just monitoring in place is not good enough. You will run continuously to the next fire. Build observability in from day one. Super cool shirt, "I test in prod".
-
+Charity Majors [@mipsytipsy](@https://twitter.com/mipsytipsy)
+I very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod".
 
 ### Do you need a Service Mesh?
 Rating:
