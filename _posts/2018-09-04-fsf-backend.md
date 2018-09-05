@@ -127,11 +127,10 @@ Aaron Bassett ([@aaronbassett](https://twitter.com/aaronbassett)) showed us some
 
 Two nice talks on our power as developers to shape the world. Let's do this right this time.
 
-
 ### Cats, The Musical! Algorithmic Song Meow-ification
 Rating: :star: :star: :star: :star:
 
-Beth Haubert [@haubertdashery](https://twitter.com/haubertdashery), Awesome to see how passioned shed hacked her way around to generated a cat meow song from songs using. Was realy fun to see!
+Awesome to see how Beth Haubert ([@haubertdashery](https://twitter.com/haubertdashery)) passionated hacked her way around to generated a cat meow song from songs using ruby. It was really fun to see, how the program evolved! Especially because at the end, the result was really terrible..
 
 ### Everything in sketchnotes..
 
