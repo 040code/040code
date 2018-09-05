@@ -63,7 +63,7 @@ In modern worlds we use large datasets to tune our models. This is not without d
 Rating: :star: :star: :star:
 
 Sasha Romijn, [@mxsash](https://twitter.com/mxsash) a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
-A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh. 
+A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh.
 
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating:
@@ -108,6 +108,6 @@ Rating:
 Silvia Puglisi
 
 ### Cats, The Musical! Algorithmic Song Meow-ification
-Rating:
+Rating: :star: :star: :star: :star:
 
-Beth Haubert
+Beth Haubert [@haubertdashery](https://twitter.com/haubertdashery), Awesome to see how passioned shed hacked her way around to generated a cat meow song from songs using. Was realy fun to see!
