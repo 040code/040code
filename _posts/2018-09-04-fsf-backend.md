@@ -84,7 +84,10 @@ Rating:
 Matt Turner
 
 ### HTTP and JSON for your gRPC Services
-Michael Hamrah
+Rating: :star: :star: :star: :star:
+
+Michael Hamrah [@mhamrah](https://twitter.com/mhamrah), gRPCed all the things. First feeling was Oh no we go to do again CORBA, and there are similairities between gRPC and CORBA. In this talk Michael explained how you can build high performance application and left the all the plumbing code to the gRPC framweork. Just simply define an interface via IDL and only take care of the real business code. It was also nice to see how you can combine gRPC via [rejoiner](https://github.com/google/rejoiner) with GraphQL. Slides are available [here](https://speakerdeck.com/mhamrah/grpc-all-the-things)
+
 
 ### Software Engineering - A philosophical activity
 Rating:
