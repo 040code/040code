@@ -66,9 +66,9 @@ Sasha Romijn, [@mxsash](https://twitter.com/mxsash) a fast introduction to crypt
 A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh. 
 
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
-Rating:
+Rating: :star: :star: :star:
 
-Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor.
+Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor. Important to keep on bringing the message it's not that obvious to have freedom of speech and expression. /me installing TOR.
 
 ## Day 2
 
