@@ -101,12 +101,19 @@ Rating:
 
 Bernd Rücker
 
-### Lightning talks
-Rating:
+[https://blog.bernd-ruecker.com/]
 
-Silvia Puglisi
+### Lightning talks
+Antiona Librada ([@antoniolibrada](https://twitter.com/antoniolibrada)) showed us how he improved a complex ci build pipeline which took > 45 minutes to run by using 2 lambdas and Amazon Code Build. The outcome was a more stable, cheaper and faster build pipeline. They increased the number of daily deployments drastically.
+
+Peter van der Meulen ([@HendrikPetertje](https://twitter.com/HendrikPetertje) showed us his terminal. This shows again how important improving your daily workflow is. Some highights: Spotify in Vim, thefuck, circleci-cli, wee-slack. For more info: [https://git.picodevelopment.nl/explore/snippets](https://git.picodevelopment.nl/explore/snippets) and [https://git.picodevelopment.nl/explore/projects](https://git.picodevelopment.nl/explore/projects)
+
+Two nice talks on our power as developers to shape the world. Let's do this right this time.
+
 
 ### Cats, The Musical! Algorithmic Song Meow-ification
 Rating: :star: :star: :star: :star:
 
 Beth Haubert [@haubertdashery](https://twitter.com/haubertdashery), Awesome to see how passioned shed hacked her way around to generated a cat meow song from songs using. Was realy fun to see!
+
+
