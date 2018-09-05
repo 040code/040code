@@ -116,8 +116,8 @@ Bernd Rücker ([@berndruecker](https://twitter.com/berndruecker)) is a (work-)fl
 These kind of problems can be solved by using a BPMN product like Camunda. System become complexer every day and this will become a bigger problem everyday. And what should we never forget: Zucchini and idempotency.
 
 This talk triggered a lot of thoughts for me personally. This is one of the areas where blockchain might actually solve things. Use smartcontracts to atomically commit transactions all at the same time. Fortunately he already wrote a blog post about the topic. Great speaker!
+[Bernd Ruecker's blog](https://blog.bernd-ruecker.com/)
 
-[https://blog.bernd-ruecker.com/]
 
 ### Lightning talks
 Antiona Librada ([@antoniolibrada](https://twitter.com/antoniolibrada)) showed us how he improved a complex ci build pipeline which took > 45 minutes to run by using 2 lambdas and Amazon Code Build. The outcome was a more stable, cheaper and faster build pipeline. They increased the number of daily deployments drastically.
