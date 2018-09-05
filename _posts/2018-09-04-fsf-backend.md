@@ -32,33 +32,38 @@ Kalyan Dikshit [@decode_dev](https://twitter.com/decode_dev) presents about the 
 
 
 ### Build and deploy a Blockchain web-app with Hyperledger Fabric and Hyperledger Composer
-Rating:
+Rating: :star: :star: :star:
 
 Horea Porutiu [@horeaporutiu](https://twitter.com/horeaporutiu)
 
-I'm currently working for a project with Hyperledger, so this talk was very relevant for me.
-Great balance between technical information, examples and real applications of the chain.
-I liked their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/). See exactly what happened with the beans of your coffee.
+Hyperledger is something we're looking into right now, so this talk was very relevant. It's good to show some of the basic things about hyperledger for the audience. Great balance between technical information, examples and real applications of the chain.
+Their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/) was a good example how to use the blockchain. It shows an audit trail on your coffee.
 
 ### A Game of Theories: Why languages do what they do
-Rating: :start: :start: :start: :start: :start:
+Rating: :star: :star: :star: :star: :star:
 
 Rae Krantz [@rustbeltrae](https://twitter.com/rustbeltrae), quickly compare the ugly and beauty of Ruby, Python, Go, Clojure, JavaScript, Erlang, Rust and Elixir. Yeah we never will do Clojure and from tomorrow we only do Rust and Elixir. Awesome session. Best quote of the day: "JavaScript was written in the time of Netscape when Java was popular." :)
 
 ### The Future of ChatBots in the Travel Industry
-Rating:
+Rating: :star: :star: :star:
 
 Prabh Simran Singh Baweja
 
+Designing a chatbot is not that easy as it sounds. "Book me a hotel for this weekend." What kind of hotel? Where? Weekend, is it friday and saturnday or is it saturday and sunday? How to combine data in a good way so people are not annoyed. Nice inside on how bookings.com is building these bots.
+
 ### Avoiding Digital Bias
-Rating:
+Rating: :star: :star: :star: :star:
 
 Adam L Smith,[@adamleonsmith](https://twitter.com/adamleonsmith)
+
+In modern worlds we use large datasets to tune our models. This is not without danger. Our datasets are often biased. Good tips on how to test if the models are digitally bias, by changing some of the fields like gender. Never use stock images. Nice example was shown if you google on CTO. This is not a good representation of the world. Enough food for thoughts!
+
 
 ### Everything I always wanted to know about crypto, but never thought I'd understand
 Rating: :star: :star: :star:
 
 Sasha Romijn, [@mxsash](https://twitter.com/mxsash) a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
+A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh. 
 
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating:
