@@ -38,6 +38,7 @@ Rating: :star: :star: :star:
 
 Hyperledger is something we're looking into right now, so this talk was very relevant. Horea Porutiu ([@horeaporutiu](https://twitter.com/horeaporutiu)) showed the basic things about hyperledger and that's great for this audience. Great balance between technical information, examples and real applications of the chain. Their work with [Brooklyn Roasting Company](https://www.brooklynroasting.com/) was a good example how to use the blockchain. It shows an audit trail on your coffee.
 
+
 ### A Game of Theories: Why languages do what they do
 Rating: :star: :star: :star: :star: :star:
 
@@ -50,6 +51,7 @@ Prabh Simran Singh Baweja
 
 Designing a chatbot is not that easy as it sounds. "Book me a hotel for this weekend." What kind of hotel? Where? Weekend, is it friday and saturnday or is it saturday and sunday? How to combine data in a good way so people are not annoyed. Nice insights on how bookings.com is building these bots.
 Look at [his slides](https://speakerdeck.com/prabh27/the-future-of-chatbots-in-the-travel-industry)
+
 
 ### Avoiding Digital Bias
 Rating: :star: :star: :star: :star:
@@ -64,13 +66,14 @@ Rating: :star: :star: :star:
 Sasha Romijn ([@mxsash](https://twitter.com/mxsash)) gave a fast introduction to cryptographic basic concepts that every developer should know. Quote: "Export in cypher builder should ring an alarm bell"
 A good overview of the magical world of Crypto. If you want to learn more about this, I would certainly recommend a free [coursera course on this topic](https://www.coursera.org/learn/crypto) given by Dan Boneh.
 
+
 ### Onion adventures: how to use onion services and the Tor network in your web endeavors
 Rating: :star: :star: :star:
 
 Respect for Silvia Puglisi ([@nopressure](https://twitter.com/nopressure)) for giving this talk when she has the flu. Very good to see all the activity around Tor. Important to keep on bringing the message it's not that obvious to have freedom of speech and expression. /me installing TOR.
 
-### Everything in sketchnotes..
 
+### Everything in sketchnotes..
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
 
 <a href="#">
@@ -81,6 +84,7 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
     <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg" alt="fullstackfest-2018-02">
 </a>
 
+
 ## Day 2
 
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
@@ -88,12 +92,11 @@ Rating: :star: :star: :star: :star:
 
 Charity Majors ([@mipsytipsy](@https://twitter.com/mipsytipsy)) gave a very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Build observability in from day one! Cool shirt, "I test in prod". Quote: "What is unknown, we must leave uncoded."
 
+
 ### Do you need a Service Mesh?
 Rating: :star: :star: :star: :star:
 
-A great presentation given by Matt Turner ([@mt165pro](https://twitter.com/mt165pro)) about Service Mesh. He demo-ed the principles of Service Mash by using [istio.io](https://istio.io/). He used kubernetes to demo some of the configuration you can setup with only proxy-ing between different services. Very powerful concept. I'm wondering how this can be used in an infrastructure-as-code architecture. 
-
-
+A great presentation given by Matt Turner ([@mt165pro](https://twitter.com/mt165pro)) about Service Mesh. He demo-ed the principles of Service Mash by using [istio.io](https://istio.io/). He used kubernetes to demo some of the configuration you can setup with only proxy-ing between different services. Very powerful concept. I'm wondering how this can be used in an infrastructure-as-code architecture.
 
 
 ### HTTP and JSON for your gRPC Services
@@ -132,6 +135,7 @@ Peter van der Meulen ([@HendrikPetertje](https://twitter.com/HendrikPetertje)) s
 Aaron Bassett ([@aaronbassett](https://twitter.com/aaronbassett)) showed us some amazing (and probably illegal) things about SMS. [Here](https://speakerdeck.com/aaronbassett/stupid-and-possibly-illegal-stuff-you-can-do-with-sms-but-probably-shouldnt) you can find his slides. Really scary.
 
 Two nice talks on our power as developers to shape the world. Let's do this right this time.
+
 
 ### Cats, The Musical! Algorithmic Song Meow-ification
 Rating: :star: :star: :star: :star:
