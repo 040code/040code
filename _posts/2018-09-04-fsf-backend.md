@@ -70,6 +70,18 @@ Rating: :star: :star: :star:
 
 Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia for giving this talk when she has the flu. Very good to see all the activity around Tor. Important to keep on bringing the message it's not that obvious to have freedom of speech and expression. /me installing TOR.
 
+### Everything in sketchnotes..
+
+A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for creating these sketchnotes!
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg" alt="fullstackfest-2018-01">
+</a>
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg" alt="fullstackfest-2018-02">
+</a>
+
 ## Day 2
 
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
@@ -119,3 +131,15 @@ Two nice talks on our power as developers to shape the world. Let's do this righ
 Rating: :star: :star: :star: :star:
 
 Beth Haubert [@haubertdashery](https://twitter.com/haubertdashery), Awesome to see how passioned shed hacked her way around to generated a cat meow song from songs using. Was realy fun to see!
+
+### Everything in sketchnotes..
+
+A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for creating these sketchnotes!
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg" alt="fullstackfest-2018-03">
+</a>
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04">
+</a>
