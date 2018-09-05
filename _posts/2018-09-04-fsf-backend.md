@@ -73,11 +73,10 @@ Silvia Puglisi, [@nopressure](https://twitter.com/nopressure) Respect for Silvia
 ## Day 2
 
 ### Observability for Emerging Infra: What Got You Here Won't Get You There
-Rating:
+Rating: :star: :star: :star: :star:
 
-Charity Majors
-Cool shirt, "I test in prod".
-
+Charity Majors [@mipsytipsy](@https://twitter.com/mipsytipsy)
+I very good talk on how to look at current systems. In the current era, you cannot simply say: "Our application is up.." What does that mean? What's up? Move away from the known-unknowns which can be monitored with dashboards, but look at the real problems users experience. Focus on the unknown-unknowns and make sure you can react and analyse your applications fast. Don't aggregate data, because you will lose important details about problems. Come up with good sampling strategies. Cool shirt, "I test in prod".
 
 ### Do you need a Service Mesh?
 Rating:
