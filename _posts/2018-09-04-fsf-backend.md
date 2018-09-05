@@ -93,19 +93,19 @@ Matt Turner
 ### HTTP and JSON for your gRPC Services
 Rating: :star: :star: :star: :star:
 
-Michael Hamrah [@mhamrah](https://twitter.com/mhamrah), gRPCed all the things. First feeling was Oh no we go to do again CORBA, and there are similairities between gRPC and CORBA. In this talk Michael explained how you can build high performance application and left the all the plumbing code to the gRPC framweork. Just simply define an interface via IDL and only take care of the real business code. It was also nice to see how you can combine gRPC via [rejoiner](https://github.com/google/rejoiner) with GraphQL. Slides are available [here](https://speakerdeck.com/mhamrah/grpc-all-the-things)
+Michael Hamrah ([@mhamrah](https://twitter.com/mhamrah)) gRPCed all the things. First feeling was Oh no we go to do again CORBA, and there are similairities between gRPC and CORBA. In this talk Michael explained how you can build high performance application and left the all the plumbing code to the gRPC framweork. Just simply define an interface via IDL and only take care of the real business code. It was also nice to see how you can combine gRPC via [rejoiner](https://github.com/google/rejoiner) with GraphQL. Slides are available [here](https://speakerdeck.com/mhamrah/grpc-all-the-things)
 
 
 ### Software Engineering - A philosophical activity
 Rating: :star: :star: :star: :star:
 
-Tom Enden [@tom_enden](https://twitter.com/tom_enden). Did you know that Plato invented OOP and the Prototype pattern is inspired by Nominalism which also dates back to Plato. Tom showed the parallels between philosophy and software engineering. According the pragmatic programmer we should learn at least one language every year. Since different languages solved things in different ways. And Tractatus says the limits of my language means the limit of the world. So looking on philosophy we can inspire our selves for new ideas.
+Tom Enden ([@tom_enden](https://twitter.com/tom_enden)): Did you know that Plato invented OOP and the Prototype pattern is inspired by Nominalism which also dates back to Plato. Tom showed the parallels between philosophy and software engineering. According the pragmatic programmer we should learn at least one language every year. Since different languages solved things in different ways. And Tractatus says the limits of my language means the limit of the world. So looking on philosophy we can inspire our selves for new ideas.
 
 
 ### Take a (Client) Hint!
 Rating: :star: :star: :star: :star:
 
-Jeremy Wagner [@malchata](https://twitter.com/malchata), explained nicely the power of client hints. Having a fast internet and reliable internet connection is still not common. For example a survey by Pew Research shows that one-third of American adults do not subscribe to any internet access faster than dial-up at their home. So building responsive clients on slow or unreliable networks still counts. Client hints comes in different types. By opting in (header `ACCEPT-CH`) a client can inform that it understands client hints, Device hints enables for example responsive images and netwrok hints can inform the server about the speed of the network of the client. The slides are [here](https://jlwagner.net/talks/take-a-client-hint/) available.
+Jeremy Wagner ([@malchata](https://twitter.com/malchata)) explained nicely the power of client hints. Having a fast internet and reliable internet connection is still not common. For example a survey by Pew Research shows that one-third of American adults do not subscribe to any internet access faster than dial-up at their home. So building responsive clients on slow or unreliable networks still counts. Client hints comes in different types. By opting in (header `ACCEPT-CH`) a client can inform that it understands client hints, Device hints enables for example responsive images and netwrok hints can inform the server about the speed of the network of the client. The slides are [here](https://jlwagner.net/talks/take-a-client-hint/) available.
 
 
 ### Lost in transaction? Strategies to deal with (in-)consistency in distributed systems
