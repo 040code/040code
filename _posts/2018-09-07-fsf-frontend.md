@@ -4,7 +4,7 @@ title:      "Full Stack Fest 2018"
 subtitle:   "Frontend days"
 date:       2018-09-05
 authors:    [jeroen, niek]
-header-img: "assets/2018-09_fullstackfest/kanaal_nre.jpg"
+header-img: "assets/2018-09_fullstackfest/building.jpg"
 tags:       []
 comments:   true
 ---
