@@ -21,7 +21,7 @@ First of all we would like to thank [Reginald Braithwaite](https://twitter.com/r
 ## Day one
 
 ### Building peer-to-peer apps with the Beaker Browser
-By Tara Vancil
+By [Tara Vancil](dat://taravancil.com/about/)
 ### To push, or not to push?! - The future of HTTP/2 server push
 By Patrick Hamann
 ### The Future of Front-End Performance
