@@ -152,4 +152,7 @@ A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for 
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg" alt="fullstackfest-2018-05" width="100%">
 </a>
