@@ -21,7 +21,10 @@ First of all we would like to thank [Reginald Braithwaite](https://twitter.com/r
 ## Day one
 
 ### Building peer-to-peer apps with the Beaker Browser
-By [Tara Vancil](dat://taravancil.com/about/)
+rating: :star: :star: :star: :star:
+
+[Tara Vancil](dat://taravancil.com/about/), during the backend days we already are informed about the lack of freedom is our social networks, and how this issue could be solved with decentralized social networks. Tara showed that the web has the same problem. Do you remember Geocities? Yepz thoses sites are gone. And deploying or customizing web apps is still hard. Would it not be great we can fix it just in the browser the app we loved the most. Tara showed how easy you can run, customize and deploy a decentralized web app.
+
 
 ### To push, or not to push?! - The future of HTTP/2 server push
 By Patrick Hamann
