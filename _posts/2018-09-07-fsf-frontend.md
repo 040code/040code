@@ -23,7 +23,7 @@ First of all we would like to thank [Reginald Braithwaite](https://twitter.com/r
 ### Building peer-to-peer apps with the Beaker Browser
 rating: :star: :star: :star: :star:
 
-[Tara Vancil](dat://taravancil.com/about/), during the backend days we already are informed about the lack of freedom is our social networks, and how this issue could be solved with decentralized social networks. Tara showed that the web has the same problem. Do you remember Geocities? Yepz thoses sites are gone. And deploying or customizing web apps is still hard. Would it not be great we can fix it just in the browser the app we loved the most. Tara showed how easy you can run, customize and deploy a decentralized web app.
+[Tara Vancil](dat://taravancil.com/about/), during the backend days we already are informed about the lack of freedom is our social networks, and how this could be solved with decentralized social networks. Tara showed that the web has the same problem. Do you remember Geocities? Yepz thoses sites are gone. And deploying or customizing web apps is still hard. Would it not be great we can fix it just in the browser the app we loved the most. Tara showed how easy you can run, customize and deploy a decentralized web app.
 
 
 ### To push, or not to push?! - The future of HTTP/2 server push
@@ -42,8 +42,14 @@ By LeRenzo Malcom
 By David Khourshid
 ### A Front-end dev's hobbyist approach into Machine Learning
 By Susanna Wong
+
 ### Building a Modern Memex
-By Andrew Louis
+rating: :star: :star: :star: :star: :star:
+
+Andrew Louis [@hyfen](https://twitter.com/hyfen), Inmagine you can manage all your data with a single device.... An idea that goes back to the 1945 when Vanneva Bush discribed the [Memex](https://en.wikipedia.org/wiki/Memex). Andrew build his own Memex and demo the awesome combination fo all the data he collected over the years. Absolutely crazy to see that he is able to search back in time which podcast he was listing when driving from A to B. To be able to combine all your data from Google, Spotifiy, Maps, Whatsapp and so on you probably need a complex system. But Andrew handles it all just with Grails, VueJS and Postgres. And how cool it is all [open source](https://hyfen.net/memex/).
+
+
+
 
 
 ### Everything in sketchnotes..
