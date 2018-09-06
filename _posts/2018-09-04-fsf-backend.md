@@ -108,7 +108,7 @@ Michael Hamrah ([@mhamrah](https://twitter.com/mhamrah)) gRPCed all the things. 
 ### Software Engineering - A philosophical activity
 Rating: :star: :star: :star: :star:
 
-Tom Enden ([@tom_enden](https://twitter.com/tom_enden)): Did you know that Plato invented OOP and the Prototype pattern is inspired by Nominalism which also dates back to Plato. Tom showed the parallels between philosophy and software engineering. According the pragmatic programmer we should learn at least one language every year. Since different languages solved things in different ways. And Tractatus says the limits of my language means the limit of the world. So looking on philosophy we can inspire our selves for new ideas.
+Tom Enden ([@tom_enden](https://twitter.com/tom_enden)): Did you know that Plato invented OOP and the Prototype pattern is inspired by Nominalism which also dates back to Plato. Tom showed the parallels between philosophy and software engineering. According the pragmatic programmer we should learn at least one language every year. Since different languages solved things in different ways. And Tractatus says the limits of my language means the limit of the world. So looking on philosophy we can inspire our selves for new ideas. [The slides](https://www.slideshare.net/TomEnden/software-engineering-as-a-philosophical-activity)
 
 
 ### Take a (Client) Hint!
