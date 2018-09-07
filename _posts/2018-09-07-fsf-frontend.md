@@ -56,11 +56,11 @@ Andrew Louis [@hyfen](https://twitter.com/hyfen), Inmagine you can manage all yo
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg" alt="fullstackfest-2018-01" width="100%">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
 </a>
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg" alt="fullstackfest-2018-02" width="100%">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg" alt="fullstackfest-2018-05" width="100%">
 </a>
 
 
