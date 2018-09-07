@@ -89,8 +89,36 @@ Review, measure performance
 By Timothy Clifford
 ### Dynamic CSS: Layouts & Beyond
 By Miriam Suzanne
+
+### Lightning talks
+
+1
+first one: @EleanorClarinet
+Nice corrolation between learning music and learning to code.
+Don't be a "Mozart pianist", be a musician
+Don't be a "React developer", be an engineer
+
+2
+Isac. Rocket fuel for Ember.js and javascript teams.
+Splanky about jazz shows in Smalls NYC.
+
+3
+2013 it was already possible to do a lot of reactive stuff with imba.io
+
+4
+Robert Nickel about Mob Programming
+
+5
+Andreaverlicchie.eu
+Better navigation in markup
+
+6
+Berkay --> Sharing
+How to share components between multiple react projects
+
+
 ### WebXR, if X = how?
-By Diego González and Indira Knight
+By Diego González and Indira Knight  @diekus
 
 
 ### Everything in sketchnotes..
