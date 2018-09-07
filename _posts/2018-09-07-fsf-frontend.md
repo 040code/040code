@@ -68,12 +68,23 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
 
 ### Accessibility vs latest Web APIs. Can’t we just get along?
 By Mauricio Palma
+
 ### The Web Authentication API - Imagine a World Without Passwords
 By Suby Raman
+
 ### Killing the checkout or: How I learned to stop worrying and love Payment Request
 By Krystian Czesak
+
 ### A Real World PWA
 By Zack Argyle
+
+Progressive web apps
+Reduce -> make it light, webpack bundle analyser, https://www.npmjs.com/package/webpack-bundle-analyzer, html is also too big.
+Reuse -> caching, server workers, (cache via worker is faster then browser cache),
+Review, measure performance
+
+
+
 ### Purifying Typescript
 By Timothy Clifford
 ### Dynamic CSS: Layouts & Beyond
