@@ -27,7 +27,12 @@ rating: :star: :star: :star: :star:
 
 
 ### To push, or not to push?! - The future of HTTP/2 server push
-By Patrick Hamann
+rating: :star: :star: :star: :star:
+
+Patrick Hamann [#patrickhamann](https://twitter.com/patrickhamann), resource loading is still hard, performance in the browser is tightly copuled to latency connection costs are high and scipt execution is expensive. Patrick explained how to use resources wisely, make a difference between critical resourses, resourse in the users viewport and non critical. By using preload, push and async push together with a strategy of critical resource a hugh step can be made for a high performing web app. See the slides [here](https://noti.st/patrickhamann/9GvEed/to-push-or-not-to-push)
+
+
+
 
 ### The Future of Front-End Performance
 By Sia Karamalegos
