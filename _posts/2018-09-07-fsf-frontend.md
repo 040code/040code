@@ -89,9 +89,15 @@ Review, measure performance
 By Timothy Clifford
 ### Dynamic CSS: Layouts & Beyond
 By Miriam Suzanne
+
+https://alistapart.com/article/dao
+historical overview : HTML -> TABLE + FONT > CSS > Major gird -> compass saas
+
+
+
 ### WebXR, if X = how?
 By Diego González and Indira Knight
-
+https://samsunginter.net/fsf-xr/
 
 ### Everything in sketchnotes..
 
