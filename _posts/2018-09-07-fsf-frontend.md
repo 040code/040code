@@ -43,8 +43,14 @@ https://github.com/siakaramalegos/sia_speaks
 By Serg Hospodarets
 ### Unity + HTML5 = Isomorphic Game Engine?
 By LeRenzo Malcom
+
 ### State of the Art Web User Interfaces with State Machines
-By David Khourshid
+rating: :star: :star: :star: :star: :star:
+
+By David Khourshid, the front end is complex, it is difficult to understand, difficult to read, contain bugs, hard to enhance and new features make it even worse. Waht if we model our front end as an finite state machine (FSM). Nothing new in Computer Science, states machines are already introduces in “automata theory”, Specifying a the front end action (flow) in a state machine increase the predictability and even make it possible to automate testing. Just calculate you the shortest path via Dijkstra algoritm. David showed his open source framework xstate which is available on [GitHub](https://github.com/davidkpiano/xstate#readme) and [npm](https://www.npmjs.com/package/xstate). Slides are are [here](https://slides.com/davidkhourshid/statecharts-fsf) available
+
+
+
 ### A Front-end dev's hobbyist approach into Machine Learning
 By Susanna Wong
 
