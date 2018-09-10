@@ -41,6 +41,7 @@ https://github.com/siakaramalegos/sia_speaks
 
 ### Native JavaScript modules- import {Browsers, NodeJs}; export {production};
 By Serg Hospodarets
+
 ### Unity + HTML5 = Isomorphic Game Engine?
 By LeRenzo Malcom
 
@@ -95,9 +96,9 @@ Reuse -> caching, server workers, (cache via worker is faster then browser cache
 Review, measure performance
 
 
-
 ### Purifying Typescript
 By Timothy Clifford
+
 ### Dynamic CSS: Layouts & Beyond
 By Miriam Suzanne
 
