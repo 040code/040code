@@ -45,7 +45,10 @@ Apps become bigger and bigger. Make sure you check your apps on size / speed by 
 By Serg Hospodarets
 
 ### Unity + HTML5 = Isomorphic Game Engine?
-By LeRenzo Malcom
+rating: :star: :star: :star: :star:
+
+Lerenzo Malcom [@lerenzom](https://twitter.com/lerenzom), did great job to show he combine the world of Unity and the browser. Last year A-Frame was a big topic that address the same solution space but Lerenzo showed how to combine Unity in the browser instead of A-Frame. After discussing why unity and not A-Fram he spend attention how to setup bi-directional messaging, and finally gives some WebGL examples. Sorry we are not that AR/VR boys but with this talk Lerenzo did an awesome job, please see the slides (including animations) [here](https://docs.google.com/presentation/d/1LTNFqURDAeDYZTD3cjpZ3XMQoD8rDNm1Z4LEDuKo64o/edit)
+
 
 ### State of the Art Web User Interfaces with State Machines
 rating: :star: :star: :star: :star: :star:
