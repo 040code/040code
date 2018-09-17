@@ -18,6 +18,7 @@ In this quite short blog we just summarizing briefly the talks and **our opinion
 
 First of all we would like to thank [Reginald Braithwaite](https://twitter.com/raganwald) for hosting the sessions.
 
+
 ## Day one
 
 ### Building peer-to-peer apps with the Beaker Browser
@@ -150,3 +151,10 @@ A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
 </a>
+
+
+## Thanks to Codegram
+
+We would like to conclude our post with a big applaus for [codegram](https://www.codegram.com/), the Full Stack Fest was awesome again. Please never change the single track philosophy. And did we already mentioned the food is the best we ever had on a conference.
+
+<iframe width="901" height="380" src="https://www.youtube.com/embed/YIRvXmJyRxQ?list=PLe9psSNJBf75O6abYvvjxhm36_QU9H-f2" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
