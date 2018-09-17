@@ -100,7 +100,11 @@ Zack Argyle, [@ZackArgyle](https://twitter.com/ZackArgyle) stared with the story
 
 
 ### Purifying Typescript
-By Timothy Clifford
+rating: :star: :star: :star: :star:
+
+Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool to see that we can do functional programming with JavaScript a language written in 10 days back in 1995 an nowadays the most populari language. We really liked the talk and clear examples how to program functional with TypeScript. Maybe the talk was little to much basic introduction to functional programming, but Timothy succeeds in his mission statement: "Understand how to apply functional programming techniques with TypeScript". [Slides](https://github.com/timothyclifford/purifying-typescript/raw/master/Functional%20Typescript%20-%20Tim%20Clifford.pdf) and [code](https://github.com/timothyclifford/purifying-typescript) are shared via GitHub.
+
+
 
 ### Dynamic CSS: Layouts & Beyond
 By Miriam Suzanne
