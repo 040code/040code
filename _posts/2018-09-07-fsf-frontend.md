@@ -32,12 +32,14 @@ rating: :star: :star: :star: :star:
 Patrick Hamann [#patrickhamann](https://twitter.com/patrickhamann), resource loading is still hard, performance in the browser is tightly copuled to latency connection costs are high and scipt execution is expensive. Patrick explained how to use resources wisely, make a difference between critical resourses, resourse in the users viewport and non critical. By using preload, push and async push together with a strategy of critical resource a hugh step can be made for a high performing web app. See the slides [here](https://noti.st/patrickhamann/9GvEed/to-push-or-not-to-push)
 
 
-
-
 ### The Future of Front-End Performance
-By Sia Karamalegos
+rating: :star: :star: :star: :star:
 
-https://github.com/siakaramalegos/sia_speaks
+By [Sia Karamalegos](https://twitter.com/thegreengreek)
+
+A great talk on performance of the front-end. How much impact does it has on your business. Staggering numbers were shown about AliExpress load time reducing and how that correlates to an increase conversion for new customers.
+Apps become bigger and bigger. Make sure you check your apps on size / speed by using tools like [webpagetest.org](https://webpagetest.org). Optimize your images. Most of the web are images, but the most expensive bytes are javascript. Prioritize the code your shipping.
+[Slides](https://speakerdeck.com/siakaramalegos/the-future-of-front-end-performance) and [more info](https://github.com/siakaramalegos/sia_speaks) are available.
 
 ### Native JavaScript modules- import {Browsers, NodeJs}; export {production};
 By Serg Hospodarets
@@ -132,6 +134,7 @@ How to share components between multiple react projects
 ### WebXR, if X = how?
 By Diego González and Indira Knight  @diekus
 
+https://samsunginter.net/fsf-xr/
 
 ### Everything in sketchnotes..
 
