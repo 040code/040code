@@ -2,14 +2,14 @@
 layout:     post
 title:      "GraphQL + Spring Boot"
 subtitle:   "Queries, mutations and subscription in Java"
-date:       2018-02-14
+date:       2018-09-09
 authors:     [niek]
 header-img: "assets/2018-02-14-service-discovery/holstlaan-dommel.jpg"
 tags: [graphql, spring, java]
 ---
 
 ### Introduction
-Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring boot is one of the well known frameworks to build your micro services in Java so time to asses how easy or hard it will be to implement a GraphQL service. In this post I will go beyond a too simple hello world example but I will be able to implement all requirements for a production ready service. I will showcase all major features in GraphQL.
+Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring boot is one of the well known frameworks to build your micro services in Jav. Time to assess how easy or hard it will be to implement a GraphQL service. In this post I will go beyond a too simple hello world example but I will be able to implement all requirements for a production ready service. I will showcase all major features in GraphQL.
 
 GraphQL is API is based on three main concept. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.
 
@@ -22,6 +22,8 @@ Notes and authors
 
 
 ### Create a simple Note Service
+First we create a simple Spring JPA services, to store the Notes and the Authors of type Person. We define a Entity class for Person and Note. For readeability all imports and Lomkok annotation are ommitted. Please see the sources on github for a complete example.
+
 ```java
 @Entity
 public class Person {
@@ -48,6 +50,9 @@ public class Note {
     private Person author;
 }
 ```
+
+Next we define two spring JPA repositories to store the entities above.
+
 ```java
 @Repository
 public interface PersonRepository extends CrudRepository<Person, Long> {
@@ -63,6 +68,9 @@ public interface NoteRepository extends CrudRepository<Note, Long> {
     List<Note> findAll();
 }
 ```
+
+Finally we define the services interface which we will use to implement the GrapqhQL queries, 
+
 ```java
 
 @Service
