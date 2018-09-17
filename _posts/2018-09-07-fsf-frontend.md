@@ -154,4 +154,8 @@ A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for 
 
 We would like to conclude our post with a big applaus for [codegram](https://www.codegram.com/), the Full Stack Fest was awesome again. Please never change the single track philosophy. And did we already mentioned the food is the best we ever had on a conference.
 
-<iframe width="901" height="380" src="https://www.youtube.com/embed/YIRvXmJyRxQ?list=PLe9psSNJBf75O6abYvvjxhm36_QU9H-f2" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<div style="position:relative; width:100%; height:0px; padding-bottom:56.25%;">
+    <iframe  style="position:absolute; left:0; top:0; width:100%; height:100%" src="https://www.youtube.com/embed/YIRvXmJyRxQ?list=PLe9psSNJBf75O6abYvvjxhm36_QU9H-f2?rel=0"     
+      frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
+</div>
