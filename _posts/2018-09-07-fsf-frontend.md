@@ -94,12 +94,9 @@ By Suby Raman
 By Krystian Czesak
 
 ### A Real World PWA
-By Zack Argyle
+Rating: :star: :star: :star: :star:
 
-Progressive web apps
-Reduce -> make it light, webpack bundle analyser, https://www.npmjs.com/package/webpack-bundle-analyzer, html is also too big.
-Reuse -> caching, server workers, (cache via worker is faster then browser cache),
-Review, measure performance
+Zack Argyle, [@ZackArgyle](https://twitter.com/ZackArgyle) stared with the story of Pinterest and what will happen with your uses once you decide to make a blocking page and only support a app. Smoothly continuing with the story how important it is to have a reactive app and what that means. A progressive web app is according to Zack: "A site that utilizes progressive enhancements, meaning that modern browsers will get a better experience than older browsers". He explained how he used the principle of the 3R's to build a progressive app. By Reduce, make it light. Use for example [the webpack analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer). Reuse, caching, server workers. Cache via a worker is faster then the browser cache. And Review, measure performance! Slides are available [here](https://speakerdeck.com/zackargyle/a-real-world-pwa)
 
 
 ### Purifying Typescript
