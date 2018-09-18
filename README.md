@@ -8,8 +8,8 @@ docker run -d --name blog -p 4000:4000 -w /srv/jekyll -v $(pwd):/srv/jekyll \
 ```
 
 or use the start script:
-``` fish
-source bin/start.fish
+``` bash
+./bin/start.fish
 ```
 
 # Branches
