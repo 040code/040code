@@ -49,7 +49,10 @@ rating: :star: :star: :star: :star:
 
 By [Serg Hospodarets](https://twitter.com/malyw)
 
-Great news for modern JavaScript development. Most browsers now support Native JavaScript modules. Now we can use
+Great news for modern JavaScript development. Most browsers now support Native JavaScript modules ESM. This will change our way we are bundling our JavaScript using Webpack, Rollup and other bundlers. It's also available in node and the extensions is called Micheal Jackson Solution aka .mjs
+Dynamically loading javascript modules in combination with HTTP/2 can save a lot of load time.
+[Simular slides](https://slides.com/malyw/native-js-modules)
+
 
 ### Unity + HTML5 = Isomorphic Game Engine?
 rating: :star: :star: :star: :star:
