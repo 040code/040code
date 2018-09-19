@@ -128,7 +128,7 @@ Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool 
 ### Dynamic CSS: Layouts & Beyond
 rating: :star: :star: :star: :star:
 
-This talk by -Tara Vancil-, I mean Miriam Suzanne ([@mirisuzanne](https://twitter.com/mirisuzanne)), was really fantastic. She integrated lots of photos from previous talks on the same day. But not only that was remarkable. Het knowledge on CSS is outstanding. She showed us the history of how we used to do CSS, from tables to SASS, to flexbox and Houdini. But all of these methods needed some wicked tricks to work in some cases. Now there is something new and this is promising. CSS Grid. This is the future of layouts, so take a look at this. In the slides you will see several examples of how to use it. F.e. [https://gridbyexample.com/](https://gridbyexample.com/)
+This talk by -Tara Vancil-, I mean Miriam Suzanne ([@mirisuzanne](https://twitter.com/mirisuzanne)), was really fantastic. She integrated lots of photos from previous talks on the same day. But not only that was remarkable. The knowledge on CSS is outstanding. She showed us the history of how we used to do CSS, from tables to SASS, to flexbox and Houdini. But all of these methods needed some wicked tricks to work in some cases. Now there is something new and this is promising. CSS Grid. This is the future of layouts, so take a look at this. In the slides you will see several examples of how to use it. F.e. [https://gridbyexample.com/](https://gridbyexample.com/)
 
 [Slides](http://talks.oddbird.net/dynamic-css/fullstack18/)
 
