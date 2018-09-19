@@ -2,7 +2,7 @@
 layout:     post
 title:      "Full Stack Fest 2018"
 subtitle:   "Frontend days"
-date:       2018-09-05
+date:       2018-09-18
 authors:    [jeroen, niek]
 header-img: "assets/2018-09_fullstackfest/building.jpg"
 tags:       [fullstack]
