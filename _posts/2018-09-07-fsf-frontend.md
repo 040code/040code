@@ -46,7 +46,10 @@ Apps become bigger and bigger. Make sure you check your apps on size / speed by 
 
 ### Native JavaScript modules- import {Browsers, NodeJs}; export {production};
 rating: :star: :star: :star: :star:
+
 By [Serg Hospodarets](https://twitter.com/malyw)
+
+Great news for modern JavaScript development. Most browsers now support Native JavaScript modules. Now we can use
 
 ### Unity + HTML5 = Isomorphic Game Engine?
 rating: :star: :star: :star: :star:
@@ -75,13 +78,12 @@ Andrew Louis [@hyfen](https://twitter.com/hyfen), Inmagine you can manage all yo
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
 
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
-</a>
-
-<a href="#">
     <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg" alt="fullstackfest-2018-05" width="100%">
 </a>
 
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-06.jpg" alt="fullstackfest-2018-06" width="100%">
+</a>
 
 ## Day 2
 
@@ -151,19 +153,6 @@ How to share components between multiple react projects
 rating: :star: :star:
 
 [Diego González](https://twitter.com/diekus) and Indira Knight introduced Extended reality, XR or should we say AR + VR in the browser. Physical and virtual worlds are merging, XR is coming to the browser on and the browser is coming to XR devices. In the demos the frameworks ((A-Frame && ThreeJS) || BabylonJS) && WebGl where demo'd in the browser, both in a 2d and 3d view. For more details see the [slides](https://www.slideshare.net/DiegoGonzlezZiga/webxr-if-x-how) for more referneces.
-
-
-### Everything in sketchnotes..
-
-A big shoutout to Christin Westermann [@_c16n_](https://twitter.com/_c16n_) for creating these sketchnotes!
-
-<a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg" alt="fullstackfest-2018-03" width="100%">
-</a>
-
-<a href="#">
-    <img src="{{ site.baseurl }}/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg" alt="fullstackfest-2018-04" width="100%">
-</a>
 
 
 ## Thanks to Codegram
