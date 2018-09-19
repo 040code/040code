@@ -102,6 +102,7 @@ Mauricio Palma ([@palmaswell](https://twitter.com/palmaswell)) showed passioned 
 
 ### The Web Authentication API - Imagine a World Without Passwords
 rating: :star: :star: :star:
+
 By Suby Raman ([@subyraman](https://twitter.com/@subyraman))
 
 Passwords were invited for a good reason. The world has changed and unfortunately, passwords are not sufficiently secure enough anymore. There are a lot of problems attached to the concept of passwords. The Web Authentication API allows us to authenticate our users using public key cryptography. This prevents malicious users to gain access to your data even if they have the public key. Modern computers have dedicated hardware to performce authentication, like touchID, faceID, camera's, usb-tokens. This can now be used in our webapplications. This is very much in line with what we are want to achieve in our own [project](https://github.com/philips-software/cogito).
@@ -124,11 +125,10 @@ rating: :star: :star: :star: :star:
 
 Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool to see that we can do functional programming with JavaScript a language written in 10 days back in 1995 an nowadays the most populari language. We really liked the talk and clear examples how to program functional with TypeScript. Maybe the talk was little to much basic introduction to functional programming, but Timothy succeeds in his mission statement: "Understand how to apply functional programming techniques with TypeScript". [Slides](https://github.com/timothyclifford/purifying-typescript/raw/master/Functional%20Typescript%20-%20Tim%20Clifford.pdf) and [code](https://github.com/timothyclifford/purifying-typescript) are shared via GitHub.
 
-
-
 ### Dynamic CSS: Layouts & Beyond
 rating: :star: :star: :star: :star:
-By Miriam Suzanne ([@mirisuzanne](https://twitter.com/mirisuzanne))
+
+This talk by -Tara Vancil-, I mean Miriam Suzanne ([@mirisuzanne](https://twitter.com/mirisuzanne)), was really fantastic. She integrated lots of photos from previous talks on the same day. But not only that was remarkable. Het knowledge on CSS is outstanding. She showed us the history of how we used to do CSS, from tables to SASS, to flexbox and Houdini. But all of these methods needed some wicked tricks to work in some cases. Now there is something new and this is promising. CSS Grid. This is the future of layouts, so take a look at this. In the slides you will see several examples of how to use it. F.e. [https://gridbyexample.com/](https://gridbyexample.com/)
 
 [Slides](http://talks.oddbird.net/dynamic-css/fullstack18/)
 
