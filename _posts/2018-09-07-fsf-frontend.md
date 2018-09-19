@@ -5,7 +5,7 @@ subtitle:   "Frontend days"
 date:       2018-09-05
 authors:    [jeroen, niek]
 header-img: "assets/2018-09_fullstackfest/building.jpg"
-tags:       []
+tags:       [fullstack]
 comments:   true
 ---
 
@@ -14,7 +14,9 @@ comments:   true
 This week we (Jeroen, Niek, Gertjan, Eric and Kike) are enjoying [Full Stack Fest 2018 Barcelona](https://2018.fullstackfest.com/),
 a week-long full stack development conference with a focus on solving current problems with new & inspiring perspectives.
 
-In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
+This conference is split up in two parts. The first two days were focussed on Backend development. You can read our post about it [here](https://040code.github.io/2018/09/05/fsf-backend/)
+
+In this quite short blog we just summarizing briefly the talks for the second part, the front-end part. It's  **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
 First of all we would like to thank [Reginald Braithwaite](https://twitter.com/raganwald) for hosting the sessions.
 
@@ -43,7 +45,8 @@ Apps become bigger and bigger. Make sure you check your apps on size / speed by 
 [Slides](https://speakerdeck.com/siakaramalegos/the-future-of-front-end-performance) and [more info](https://github.com/siakaramalegos/sia_speaks) are available.
 
 ### Native JavaScript modules- import {Browsers, NodeJs}; export {production};
-By Serg Hospodarets
+rating: :star: :star: :star: :star:
+By [Serg Hospodarets](https://twitter.com/malyw)
 
 ### Unity + HTML5 = Isomorphic Game Engine?
 rating: :star: :star: :star: :star:
@@ -64,11 +67,9 @@ By Susanna Wong
 ### Building a Modern Memex
 rating: :star: :star: :star: :star: :star:
 
-Andrew Louis [@hyfen](https://twitter.com/hyfen), Inmagine you can manage all your data with a single device.... An idea that goes back to the 1945 when Vanneva Bush discribed the [Memex](https://en.wikipedia.org/wiki/Memex). Andrew build his own Memex and demo the awesome combination fo all the data he collected over the years. Absolutely crazy to see that he is able to search back in time which podcast he was listing when driving from A to B. To be able to combine all your data from Google, Spotifiy, Maps, Whatsapp and so on you probably need a complex system. But Andrew handles it all just with Grails, VueJS and Postgres. And how cool it is all [open source](https://hyfen.net/memex/).
+Andrew Louis [@hyfen](https://twitter.com/hyfen), Inmagine you can manage all your data with a single device.... An idea that goes back to the 1945 when Vanneva Bush discribed the [Memex](https://en.wikipedia.org/wiki/Memex). Andrew build his own Memex and demo the awesome combination fo all the data he collected over the years. Absolutely crazy to see that he is able to search back in time which podcast he was listing when driving from A to B. To be able to combine all your data from Google, Spotifiy, Maps, Whatsapp and so on you probably need a complex system. But Andrew handles it all just with Rails, Ember, Electron, Node and Postgres. And how cool it is all [open source](https://hyfen.net/memex/).
 
-
-
-
+[Slides](https://speakerdeck.com/hyfen/building-a-modern-memex) are here.
 
 ### Everything in sketchnotes..
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
@@ -88,10 +89,14 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
 By Mauricio Palma
 
 ### The Web Authentication API - Imagine a World Without Passwords
-By Suby Raman
+By Suby Raman ([@subyraman](https://twitter.com/@subyraman))
+
+[Slides](https://bit.ly/suby-fsf)
 
 ### Killing the checkout or: How I learned to stop worrying and love Payment Request
 By Krystian Czesak
+
+[Slides](https://speakerdeck.com/krystosterone/killing-the-checkout-or-how-i-learned-to-stop-worrying-and-love-payment-request)
 
 ### A Real World PWA
 Rating: :star: :star: :star: :star:
@@ -107,7 +112,10 @@ Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool 
 
 
 ### Dynamic CSS: Layouts & Beyond
-By Miriam Suzanne
+rating: :star: :star: :star: :star:
+By Miriam Suzanne ([@mirisuzanne](https://twitter.com/mirisuzanne))
+
+[Slides](http://talks.oddbird.net/dynamic-css/fullstack18/)
 
 ### Lightning talks
 
@@ -117,6 +125,8 @@ Nice corrolation between learning music and learning to code.
 Don't be a "Mozart pianist", be a musician
 Don't be a "React developer", be an engineer
 
+[Slides](https://docs.google.com/presentation/d/1Al7AUbzCwFW7qxi69DiWcpxbcKQOV29uxUDrbnhJD6c) 
+
 2
 Isac. Rocket fuel for Ember.js and javascript teams.
 Splanky about jazz shows in Smalls NYC.
@@ -125,7 +135,8 @@ Splanky about jazz shows in Smalls NYC.
 2013 it was already possible to do a lot of reactive stuff with imba.io
 
 4
-Robert Nickel about Mob Programming
+Robert Nickel about Mob Programming.
+We love Mob Programming, but it's hard. See [slides](https://docs.google.com/presentation/d/1HwfNfWzRSPMSIrTi41yRaRPme3xdI6dD18vwxi2kfJo/edit#slide=id.g40d1a107b1_0_138)
 
 5
 Andreaverlicchie.eu
