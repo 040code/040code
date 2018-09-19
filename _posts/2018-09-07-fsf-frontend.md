@@ -88,7 +88,12 @@ A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) fo
 ## Day 2
 
 ### Accessibility vs latest Web APIs. Can’t we just get along?
-By Mauricio Palma
+rating: :star: :star:
+
+Mauricio Palma ([@palmaswell](https://twitter.com/palmaswell)) showed passioned how important it is to make the web accessible for everyone, also for the ones with a disability. For example hew show cased how to use the Google speech API. A quote to remember from Maricio: "If we use our own abilities as a baseline, we make things that are easy for some people to use, but difficult for everyone."
+
+
+
 
 ### The Web Authentication API - Imagine a World Without Passwords
 By Suby Raman ([@subyraman](https://twitter.com/@subyraman))
@@ -127,7 +132,7 @@ Nice corrolation between learning music and learning to code.
 Don't be a "Mozart pianist", be a musician
 Don't be a "React developer", be an engineer
 
-[Slides](https://docs.google.com/presentation/d/1Al7AUbzCwFW7qxi69DiWcpxbcKQOV29uxUDrbnhJD6c) 
+[Slides](https://docs.google.com/presentation/d/1Al7AUbzCwFW7qxi69DiWcpxbcKQOV29uxUDrbnhJD6c)
 
 2
 Isac. Rocket fuel for Ember.js and javascript teams.
