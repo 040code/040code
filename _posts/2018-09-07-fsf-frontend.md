@@ -98,8 +98,6 @@ rating: :star: :star:
 Mauricio Palma ([@palmaswell](https://twitter.com/palmaswell)) showed passioned how important it is to make the web accessible for everyone, also for the ones with a disability. For example hew show cased how to use the Google speech API. A quote to remember from Maricio: "If we use our own abilities as a baseline, we make things that are easy for some people to use, but difficult for everyone."
 
 
-
-
 ### The Web Authentication API - Imagine a World Without Passwords
 rating: :star: :star: :star:
 
@@ -110,7 +108,9 @@ Passwords were invited for a good reason. The world has changed and unfortunatel
 [Slides](https://bit.ly/suby-fsf)
 
 ### Killing the checkout or: How I learned to stop worrying and love Payment Request
-By Krystian Czesak
+rating: :star: :star: :star:
+
+As member of the W3C Web Payments Working Group, Krystian Czesak ([@krystostrerone](https://www.twitter.com/@krystostrerone)), is heavily involved in setting a web standard on Payment Requests. The Response code 402 Payment Required is already there for a long time, but is never implemented. Lots of attempts are made, but none of them succeeded till now.. Currently the checkout procedure on most applications is not so user friendly. The Web Payments is initiated to improve this user experience. All modern browsers support it. All information about you is stored in your browser and not on each page. There's an API available to use that information, so the user only has to add the information once and it can be used in every application. Chrome even supports Interledger. The presentation has a lot of information how to implement a client for this. See the slides for more info.
 
 [Slides](https://speakerdeck.com/krystosterone/killing-the-checkout-or-how-i-learned-to-stop-worrying-and-love-payment-request)
 
