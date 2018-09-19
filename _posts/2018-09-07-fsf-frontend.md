@@ -70,6 +70,8 @@ By David Khourshid, the front end is complex, it is difficult to understand, dif
 ### A Front-end dev's hobbyist approach into Machine Learning
 By Susanna Wong
 
+Machine Learning is hard. It's almost impossible to explain this in just one talk. Especially when you combine it with all kind of background information. We were very impressed by the architecture of the buildings, but unfortunately the talk was too much out of our reach.
+
 ### Building a Modern Memex
 rating: :star: :star: :star: :star: :star:
 
