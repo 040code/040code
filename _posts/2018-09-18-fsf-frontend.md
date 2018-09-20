@@ -32,7 +32,7 @@ rating: :star: :star: :star: :star:
 ### To push, or not to push?! - The future of HTTP/2 server push
 rating: :star: :star: :star: :star:
 
-Patrick Hamann [@patrickhamann](https://twitter.com/patrickhamann), resource loading is still hard, performance in the browser is tightly copuled to latency connection costs are high and scipt execution is expensive. Patrick explained how to use resources wisely, make a difference between critical resourses. resourses in the users viewport, and non critical resources. By using preload, push and async push together with a strategy of critical resource a hugh step can be made for a high performing web app. See the slides [here](https://noti.st/patrickhamann/9GvEed/to-push-or-not-to-push)
+Patrick Hamann [@patrickhamann](https://twitter.com/patrickhamann), resource loading is still hard, performance in the browser is tightly coupled to latency, connection costs are high, and scipt execution is expensive. Patrick explained how to use resources wisely, make a difference between critical resources. resources in the users viewport, and non critical resources. By using preload, push and async push together with a strategy of critical resource a hugh step can be made for a high performing web app. See the slides [here](https://noti.st/patrickhamann/9GvEed/to-push-or-not-to-push)
 
 
 ### The Future of Front-End Performance
@@ -53,7 +53,7 @@ Dynamically loading javascript modules in combination with HTTP/2 can save a lot
 ### Unity + HTML5 = Isomorphic Game Engine?
 rating: :star: :star: :star: :star:
 
-Lerenzo Malcom [@lerenzom](https://twitter.com/lerenzom), did great job to show he combine the world of Unity and the browser. Last year A-Frame was a big topic that address the same solution space but Lerenzo showed how to combine Unity in the browser instead of A-Frame. After discussing why unity and not A-Fram he spend attention how to setup bi-directional messaging, and finally gives some WebGL examples. Sorry we are not that AR/VR boys but with this talk Lerenzo did an awesome job, please see the slides (including animations) [here](https://docs.google.com/presentation/d/1LTNFqURDAeDYZTD3cjpZ3XMQoD8rDNm1Z4LEDuKo64o/edit)
+Lerenzo Malcom [@lerenzom](https://twitter.com/lerenzom), showed how to combine the world of Unity and the browser. Last year A-Frame was a big topic that address the same solution space but Lerenzo showed how to combine Unity in the browser instead of A-Frame. After discussing why unity and not A-Fram he spend attention how to setup bi-directional messaging, and finally gives some WebGL examples. Sorry we are not that AR/VR boys but with this talk Lerenzo did an awesome job, please see the slides (including animations) [here](https://docs.google.com/presentation/d/1LTNFqURDAeDYZTD3cjpZ3XMQoD8rDNm1Z4LEDuKo64o/edit)
 
 
 ### State of the Art Web User Interfaces with State Machines
@@ -69,9 +69,7 @@ By David Khourshid, the front end is complex, it is difficult to understand, dif
 ### Building a Modern Memex
 rating: :star: :star: :star: :star: :star:
 
-Andrew Louis [@hyfen](https://twitter.com/hyfen), Imagine you can manage all your data with a single device.... An idea that goes back to the 1945 when Vanneva Bush discribed the [Memex](https://en.wikipedia.org/wiki/Memex). Andrew build his own Memex and demo the awesome combination fo all the data he collected over the years. Absolutely crazy to see that he is able to search back in time which podcast he was listing when driving from A to B. To be able to combine all your data from Google, Spotifiy, Maps, Whatsapp and so on, probably you need a complex system. But Andrew handles it all just with Rails, Ember, Electron, Node and Postgres. And how cool it is all [open source](https://hyfen.net/memex/).
-
-[Slides](https://speakerdeck.com/hyfen/building-a-modern-memex) are here.
+Andrew Louis [@hyfen](https://twitter.com/hyfen), Imagine you can manage all your data with a single device.... An idea that goes back to the 1945 when Vanneva Bush discribed the [Memex](https://en.wikipedia.org/wiki/Memex). Andrew build his own Memex and demo the awesome combination fo all the data he collected over the years. Absolutely crazy to see that he is able to search back in time which podcast he was listing when driving from A to B. To be able to combine all your data from Google, Spotifiy, Maps, Whatsapp and so on, probably you need a complex system. But Andrew handles it all just with Rails, Ember, Electron, Node and Postgres. And how cool it is all [open source](https://hyfen.net/memex/). [Slides](https://speakerdeck.com/hyfen/building-a-modern-memex) are here.
 
 ### Everything in sketchnotes..
 A big shoutout to Christin Westermann ([@_c16n_](https://twitter.com/_c16n_)) for creating these sketchnotes!
@@ -114,7 +112,7 @@ Zack Argyle, [@ZackArgyle](https://twitter.com/ZackArgyle) stared with the story
 ### Purifying Typescript
 rating: :star: :star: :star: :star:
 
-Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool to see that we can do functional programming with JavaScript a language written in 10 days back in 1995 an nowadays the most populari language. We really liked the talk and clear examples how to program functional with TypeScript. Maybe the talk was little to much basic introduction to functional programming, but Timothy succeeds in his mission statement: "Understand how to apply functional programming techniques with TypeScript". [Slides](https://github.com/timothyclifford/purifying-typescript/raw/master/Functional%20Typescript%20-%20Tim%20Clifford.pdf) and [code](https://github.com/timothyclifford/purifying-typescript) are shared via GitHub.
+Timothy Clifford, [@timothyclifford](https://twitter.com/timothyclifford). Cool to see that we can do functional programming with JavaScript a language written in 10 days back in 1995 an nowadays the most populair language. We really liked the talk and clear examples how to program functional with TypeScript in JavaScript. Maybe the talk was little to much basic introduction to functional programming, but Timothy succeeds in his mission statement: "Understand how to apply functional programming techniques with TypeScript". [Slides](https://github.com/timothyclifford/purifying-typescript/raw/master/Functional%20Typescript%20-%20Tim%20Clifford.pdf) and [code](https://github.com/timothyclifford/purifying-typescript) are shared via GitHub.
 
 ### Dynamic CSS: Layouts & Beyond
 rating: :star: :star: :star: :star:
@@ -154,7 +152,7 @@ How to share components between multiple react projects
 ### WebXR, if X = how?
 rating: :star: :star:
 
-[Diego González](https://twitter.com/diekus) and Indira Knight introduced Extended reality, XR or should we say AR + VR in the browser. Physical and virtual worlds are merging, XR is coming to the browser on and the browser is coming to XR devices. The frameworks ((A-Frame && ThreeJS) \|\| BabylonJS) && WebGl where demoed in the browser, both in a 2d and 3d view. For more details see the [slides](https://www.slideshare.net/DiegoGonzlezZiga/webxr-if-x-how) for more referneces.
+[Diego González](https://twitter.com/diekus) and Indira Knight introduced Extended reality, XR or should we say AR + VR in the browser. Physical and virtual worlds are merging, XR is coming to the browser, and the browser is coming to XR devices. The frameworks ((A-Frame && ThreeJS) \|\| BabylonJS) && WebGl where demoed in the browser, both in a 2d and 3d view. For more details see the [slides](https://www.slideshare.net/DiegoGonzlezZiga/webxr-if-x-how) for more referneces.
 
 
 ## Thanks to Codegram
