@@ -152,7 +152,7 @@ How to share components between multiple react projects
 ### WebXR, if X = how?
 rating: :star: :star:
 
-[Diego González](https://twitter.com/diekus) and Indira Knight introduced Extended reality, XR or should we say AR + VR in the browser. Physical and virtual worlds are merging, XR is coming to the browser, and the browser is coming to XR devices. The frameworks ((A-Frame && ThreeJS) \|\| BabylonJS) && WebGl where demoed in the browser, both in a 2d and 3d view. For more details see the [slides](https://www.slideshare.net/DiegoGonzlezZiga/webxr-if-x-how) for more referneces.
+[Diego González](https://twitter.com/diekus) and Indira Knight introduced Extended reality, XR or should we say AR + VR in the browser. Physical and virtual worlds are merging, XR is coming to the browser, and the browser is coming to XR devices. The frameworks ((A-Frame && ThreeJS) \|\| BabylonJS) && WebGl where demoed in the browser, both in a 2d and 3d view. For more details see the [slides](https://www.slideshare.net/DiegoGonzlezZiga/webxr-if-x-how) for more references.
 
 
 ## Thanks to Codegram
