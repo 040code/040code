@@ -16,6 +16,8 @@ a week-long full stack development conference with a focus on solving current pr
 
 In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
+This conference is split up in two parts. The first two days were focussed on Frontend development. You can read our post about it [here](https://040code.github.io/2018/09/18/fsf-frontend/)
+
 First of all we would like to thank [Luca Marchesini](https://twitter.com/xbill82) for hosting the sessions.
 
 ## Day one
