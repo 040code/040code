@@ -16,6 +16,8 @@ a week-long full stack development conference with a focus on solving current pr
 
 In this quite short blog we just summarizing briefly the talks and **our opinion** about the talks. We have rated all talks, the rating is subjective as well.
 
+This conference is split up in two parts. The first two days were focussed on Frontend development. You can read our post about it [here](https://040code.github.io/2018/09/18/fsf-frontend/)
+
 First of all we would like to thank [Luca Marchesini](https://twitter.com/xbill82) for hosting the sessions.
 
 ## Day one
@@ -23,7 +25,7 @@ First of all we would like to thank [Luca Marchesini](https://twitter.com/xbill8
 ### Reinvent the social web
 Rating: :star: :star: :star: :star:
 
-André Staltz ([@andrestaltz](https://twitter.com/andrestaltz)) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks sunch as [scuttlebutt](https://www.scuttlebutt.nz/).
+André Staltz ([@andrestaltz](https://twitter.com/andrestaltz)) explained the problems we have with the current generation of social networks. Are the realy open, free, innovative? Can we trust and respect people in the network. He explained passionated how we can change the future with decentralized networks such as [scuttlebutt](https://www.scuttlebutt.nz/).
 
 
 ### Open Gateway - Decentralized IoT
