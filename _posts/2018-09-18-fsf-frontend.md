@@ -97,7 +97,7 @@ rating: :star: :star: :star:
 
 By Suby Raman ([@subyraman](https://twitter.com/@subyraman))
 
-Passwords were invited for a good reason. The world has changed and unfortunately, passwords are not sufficiently secure enough anymore. There are a lot of problems attached to the concept of passwords. The Web Authentication API allows us to authenticate our users using public key cryptography. This prevents malicious users to gain access to your data even if they have the public key. Modern computers have dedicated hardware to perform authentication, like touchID, faceID, camera's, usb-tokens. This can now be used in our webapplications. This is very much in line with what we are want to achieve in our own [project](https://github.com/philips-software/cogito). [Slides](https://bit.ly/suby-fsf)
+Passwords were invented for a good reason. The world has changed and unfortunately, passwords are not sufficiently secure enough anymore. There are a lot of problems attached to the concept of passwords. The Web Authentication API allows us to authenticate our users using public key cryptography. This prevents malicious users to gain access to your data even if they have the public key. Modern computers have dedicated hardware to perform authentication, like touchID, faceID, camera's, usb-tokens. This can now be used in our webapplications. This is very much in line with what we are want to achieve in our own [project](https://github.com/philips-software/cogito). [Slides](https://bit.ly/suby-fsf)
 
 
 ### Killing the checkout or: How I learned to stop worrying and love Payment Request
