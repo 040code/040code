@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-09-20T20:47:16+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Full Stack Fest 2018</title><link href="https://040code.github.io//2018/09/18/fsf-frontend/" rel="alternate" type="text/html" title="Full Stack Fest 2018" /><published>2018-09-18T00:00:00+00:00</published><updated>2018-09-18T00:00:00+00:00</updated><id>https://040code.github.io//2018/09/18/fsf-frontend</id><content type="html" xml:base="https://040code.github.io//2018/09/18/fsf-frontend/">&lt;h1 id=&quot;full-stack-fest-2018&quot;&gt;Full Stack Fest 2018&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.4">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2018-09-21T09:44:33+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Full Stack Fest 2018</title><link href="https://040code.github.io//2018/09/18/fsf-frontend/" rel="alternate" type="text/html" title="Full Stack Fest 2018" /><published>2018-09-18T00:00:00+00:00</published><updated>2018-09-18T00:00:00+00:00</updated><id>https://040code.github.io//2018/09/18/fsf-frontend</id><content type="html" xml:base="https://040code.github.io//2018/09/18/fsf-frontend/">&lt;h1 id=&quot;full-stack-fest-2018&quot;&gt;Full Stack Fest 2018&lt;/h1&gt;
 
 &lt;p&gt;This week we (Jeroen, Niek, Gertjan, Eric and Kike) are enjoying &lt;a href=&quot;https://2018.fullstackfest.com/&quot;&gt;Full Stack Fest 2018 Barcelona&lt;/a&gt;,
 a week-long full stack development conference with a focus on solving current problems with new &amp;amp; inspiring perspectives.&lt;/p&gt;
@@ -56,13 +56,9 @@ Dynamically loading javascript modules in combination with HTTP/2 can save a lot
 &lt;h3 id=&quot;everything-in-sketchnotes&quot;&gt;Everything in sketchnotes..&lt;/h3&gt;
 &lt;p&gt;A big shoutout to Christin Westermann (&lt;a href=&quot;https://twitter.com/_c16n_&quot;&gt;@&lt;em&gt;c16n&lt;/em&gt;&lt;/a&gt;) for creating these sketchnotes!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg&quot; alt=&quot;fullstackfest-2018-05&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg&quot; alt=&quot;fullstackfest-2018-05&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-06.jpg&quot; alt=&quot;fullstackfest-2018-06&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-06.jpg&quot; alt=&quot;fullstackfest-2018-06&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;day-2&quot;&gt;Day 2&lt;/h2&gt;
 
@@ -200,13 +196,9 @@ A good overview of the magical world of Crypto. If you want to learn more about 
 &lt;h3 id=&quot;everything-in-sketchnotes&quot;&gt;Everything in sketchnotes..&lt;/h3&gt;
 &lt;p&gt;A big shoutout to Christin Westermann (&lt;a href=&quot;https://twitter.com/_c16n_&quot;&gt;@&lt;em&gt;c16n&lt;/em&gt;&lt;/a&gt;) for creating these sketchnotes!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg&quot; alt=&quot;fullstackfest-2018-01&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-01.jpg&quot; alt=&quot;fullstackfest-2018-01&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg&quot; alt=&quot;fullstackfest-2018-02&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-02.jpg&quot; alt=&quot;fullstackfest-2018-02&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;day-2&quot;&gt;Day 2&lt;/h2&gt;
 
@@ -262,16 +254,11 @@ These kind of problems can be solved by using a BPMN product like Camunda. Syste
 
 &lt;p&gt;A big shoutout to Christin Westermann &lt;a href=&quot;https://twitter.com/_c16n_&quot;&gt;@&lt;em&gt;c16n&lt;/em&gt;&lt;/a&gt; for creating these sketchnotes!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg&quot; alt=&quot;fullstackfest-2018-03&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-03.jpg&quot; alt=&quot;fullstackfest-2018-03&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg&quot; alt=&quot;fullstackfest-2018-04&quot; width=&quot;100%&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-04.jpg&quot; alt=&quot;fullstackfest-2018-04&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg&quot; alt=&quot;fullstackfest-2018-05&quot; width=&quot;100%&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-09-04-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-09-18-fsf-frontend.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="iot" /><category term="cloud" /><category term="fullstack" /><category term="microservices" /><category term="security" /><summary type="html">Full Stack Fest 2018</summary></entry><entry><title type="html">Maze Generation</title><link href="https://040code.github.io//2018/08/22/mazes/" rel="alternate" type="text/html" title="Maze Generation" /><published>2018-08-22T00:00:00+00:00</published><updated>2018-08-22T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/22/mazes</id><content type="html" xml:base="https://040code.github.io//2018/08/22/mazes/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/2018-09_fullstackfest/fullstackfest-2018-05.jpg&quot; alt=&quot;fullstackfest-2018-05&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Jeroen&quot;, &quot;last_name&quot;=&gt;&quot;Knoops&quot;, &quot;github&quot;=&gt;&quot;JeroenKnoops&quot;, &quot;twitter&quot;=&gt;&quot;johnnybusca&quot;, &quot;linkedin&quot;=&gt;&quot;jeroenknoops&quot;, &quot;permalink&quot;=&gt;&quot;/author/jeroen/&quot;, &quot;header-img&quot;=&gt;&quot;img/vanmoll.jpg&quot;, &quot;avatar&quot;=&gt;&quot;jeroen.png&quot;, &quot;email&quot;=&gt;&quot;jeroen.knoops@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson.&quot;, &quot;posts&quot;=&gt;[#&lt;Jekyll::Document _posts/2017-09-06-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-09-08-fsf-fontend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2017-10-01-micro-hack-zappa-io.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-08-08-brew-some-code.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-09-04-fsf-backend.md collection=posts&gt;, #&lt;Jekyll::Document _posts/2018-09-18-fsf-frontend.md collection=posts&gt;]}</name><email>jeroen.knoops@gmail.com</email></author><category term="iot" /><category term="cloud" /><category term="fullstack" /><category term="microservices" /><category term="security" /><summary type="html">Full Stack Fest 2018</summary></entry><entry><title type="html">Maze Generation</title><link href="https://040code.github.io//2018/08/22/mazes/" rel="alternate" type="text/html" title="Maze Generation" /><published>2018-08-22T00:00:00+00:00</published><updated>2018-08-22T00:00:00+00:00</updated><id>https://040code.github.io//2018/08/22/mazes</id><content type="html" xml:base="https://040code.github.io//2018/08/22/mazes/">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;During my summer holiday, in between long walks and nice food &amp;amp; drinks, I felt
 like writing some code for fun. Unfortunately, I didn’t bring my laptop.
