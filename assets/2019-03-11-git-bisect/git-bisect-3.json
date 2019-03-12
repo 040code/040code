@@ -1,0 +1,978 @@
+{
+  "version": 1,
+  "width": 120,
+  "height": 40,
+  "duration": 40.412544,
+  "command": null,
+  "title": null,
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/usr/local/bin/fish"
+  },
+  "stdout": [
+    [
+      0.418127,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b]1337;ShellIntegrationVersion=6;shell=fish\u0007"
+    ],
+    [
+      0.00862,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.019985,
+      "\u001b]1337;SetUserVar=gitBranch=bWFzdGVy\u0007"
+    ],
+    [
+      0.009087,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.003139,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b["
+    ],
+    [
+      2.6e-05,
+      "30m\u001b(B\u001b[m"
+    ],
+    [
+      0.003391,
+      "Welcome to fish, the friendly interactive shell\r\nType \u001b[32mhelp\u001b[30m\u001b(B\u001b[m for instructions on how to use fish\r\n"
+    ],
+    [
+      0.021202,
+      "\u001b[?2004h"
+    ],
+    [
+      0.11873,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000173,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      0.002873,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m master \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      0.648265,
+      "g"
+    ],
+    [
+      0.000125,
+      "\b\u001b[31m\u001b[1mg\u001b(B\u001b[m"
+    ],
+    [
+      0.003097,
+      "\u001b[38;2;85;85;85mit bisect reset\u001b[15D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.100641,
+      "\u001b[31m\u001b[1mi\u001b(B\u001b[m\u001b[38;2;85;85;85mt bisect reset\u001b[14D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.095879,
+      "\u001b[31m\u001b[1mt\u001b(B\u001b[m\u001b[38;2;85;85;85m bisect reset\u001b[13D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000233,
+      "\b\b\b\u001b[38;2;0;95;215mgit\u001b[38;2;85;85;85m bisect reset\u001b[13D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.119694,
+      "\u001b[38;2;0;95;215m \u001b[38;2;85;85;85mbisect reset\u001b[12D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000281,
+      "\b \u001b[38;2;85;85;85mbisect reset\u001b[12D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.135766,
+      "b\u001b[38;2;85;85;85misect reset\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000416,
+      "\b\u001b[38;2;0;175;255mb\u001b[38;2;85;85;85misect reset\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.111602,
+      "\u001b[38;2;0;175;255mi\u001b[38;2;85;85;85msect reset\u001b[10D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.14417,
+      "\u001b[38;2;0;175;255ms\u001b[38;2;85;85;85mect reset\u001b[9D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.175972,
+      "\u001b[38;2;0;175;255me\u001b[38;2;85;85;85mct reset\b\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.639679,
+      "\u001b[38;2;0;175;255mc\u001b[38;2;85;85;85mt reset\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.256281,
+      "\u001b[38;2;0;175;255mt\u001b[38;2;85;85;85m reset\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.111873,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85mreset\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000293,
+      "\b \u001b[38;2;85;85;85mreset\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.359868,
+      "s\u001b[K"
+    ],
+    [
+      0.000266,
+      "\u001b[38;2;85;85;85mtart\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      4.2e-05,
+      "\b\u001b[38;2;0;175;255m\u001b[4ms\u001b[38;2;85;85;85m\u001b[24mtart\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.327726,
+      "\u001b[38;2;0;175;255m\u001b[4mt\u001b[38;2;85;85;85m\u001b[24mart\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000367,
+      "\b\b\u001b[38;2;0;175;255mst\u001b[38;2;85;85;85mart\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.151602,
+      "\u001b[38;2;0;175;255ma\u001b[38;2;85;85;85mrt\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.095828,
+      "\u001b[38;2;0;175;255mr\u001b[38;2;85;85;85mt\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.248048,
+      "\u001b[38;2;0;175;255mt\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.200175,
+      "\r\n\u001b[30m\u001b(B"
+    ],
+    [
+      5.2e-05,
+      "\u001b[m"
+    ],
+    [
+      0.000127,
+      "\u001b[?2004l"
+    ],
+    [
+      0.000331,
+      "\u001b]133;C;\u0007"
+    ],
+    [
+      0.000315,
+      "\u001b]0;git  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m"
+    ],
+    [
+      3.9e-05,
+      "\u001b(B\u001b[m\r"
+    ],
+    [
+      0.106487,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.01952,
+      "\u001b]1337;SetUserVar=gitBranch=bWFzdGVy\u0007"
+    ],
+    [
+      0.008724,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.008088,
+      "\u001b[?2004h"
+    ],
+    [
+      0.10055,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.00017,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      4.1e-05,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m master \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      0.619568,
+      "g"
+    ],
+    [
+      0.000156,
+      "\b\u001b[31m\u001b[1mg\u001b(B\u001b[m"
+    ],
+    [
+      0.000187,
+      "\u001b[38;2;85;85;85mit bisect start\u001b[15D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.143182,
+      "\u001b[31m\u001b[1mi\u001b(B\u001b[m\u001b[38;2;85;85;85mt bisect start\u001b[14D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.135544,
+      "\u001b[31m\u001b[1mt\u001b(B\u001b[m\u001b[38;2;85;85;85m bisect start\u001b[13D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000173,
+      "\b\b\b\u001b[38;2;0;95;215mgit\u001b[38;2;85;85;85m bisect start\u001b[13D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.184904,
+      "\u001b[38;2;0;95;215m \u001b[38;2;85;85;85mbisect start\u001b[12D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000189,
+      "\b \u001b[38;2;85;85;85mbisect start\u001b[12D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.119657,
+      "b\u001b[38;2;85;85;85misect start\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000327,
+      "\b\u001b[38;2;0;175;255mb\u001b[38;2;85;85;85misect start\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.471762,
+      "\u001b[38;2;0;175;255mi\u001b[38;2;85;85;85msect start\u001b[10D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.143995,
+      "\u001b[38;2;0;175;255ms\u001b[38;2;85;85;85mect start\u001b[9D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.135849,
+      "\u001b[38;2;0;175;255me\u001b[38;2;85;85;85mct start\b\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.168031,
+      "\u001b[38;2;0;175;255mc\u001b[38;2;85;85;85mt start\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.192144,
+      "\u001b[38;2;0;175;255mt\u001b[38;2;85;85;85m start\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.103902,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85mstart\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000356,
+      "\b \u001b[38;2;85;85;85mstart\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.103645,
+      "b\u001b[K"
+    ],
+    [
+      0.00025,
+      "\u001b[38;2;85;85;85mad\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      6.1e-05,
+      "\b\u001b[38;2;0;175;255mb\u001b[38;2;85;85;85mad\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.159685,
+      "\u001b[38;2;0;175;255ma\u001b[38;2;85;85;85md\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.175948,
+      "\u001b[38;2;0;175;255md\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.424036,
+      "\r\n\u001b[30m\u001b"
+    ],
+    [
+      4.3e-05,
+      "(B\u001b[m"
+    ],
+    [
+      0.000146,
+      "\u001b[?2004l"
+    ],
+    [
+      0.00028,
+      "\u001b]133;C;\u0007"
+    ],
+    [
+      0.000325,
+      "\u001b]0;git  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b("
+    ],
+    [
+      3.9e-05,
+      "B\u001b[m\r"
+    ],
+    [
+      0.099862,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.019806,
+      "\u001b]1337;SetUserVar=gitBranch=bWFzdGVy\u0007"
+    ],
+    [
+      0.009249,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.008464,
+      "\u001b[?2004h"
+    ],
+    [
+      0.101368,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000153,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      2.3e-05,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m master \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      0.883287,
+      "g"
+    ],
+    [
+      5.8e-05,
+      "\b\u001b[31m\u001b[1mg\u001b(B\u001b[m"
+    ],
+    [
+      0.000131,
+      "\u001b[38;2;85;85;85mit bisect bad\u001b[13D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.132846,
+      "\u001b[31m\u001b[1mi\u001b(B\u001b[m\u001b[38;2;85;85;85mt bisect bad\u001b[12D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.207153,
+      "\u001b[31m\u001b[1mt\u001b(B\u001b[m\u001b[38;2;85;85;85m bisect bad\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000193,
+      "\b\b\b\u001b[38;2;0;95;215mgit\u001b[38;2;85;85;85m bisect bad\u001b[11D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.240698,
+      "\u001b[38;2;0;95;215m \u001b[38;2;85;85;85mbisect bad\u001b[10D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.00017,
+      "\b \u001b[38;2;85;85;85mbisect bad\u001b[10D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.3519,
+      "b\u001b[38;2;85;85;85misect bad\u001b[9D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000344,
+      "\b\u001b[38;2;0;175;255mb\u001b[38;2;85;85;85misect bad\u001b[9D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.134682,
+      "\u001b[38;2;0;175;255mi\u001b[38;2;85;85;85msect bad\b\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.392817,
+      "\u001b[38;2;0;175;255ms\u001b[38;2;85;85;85mect bad\b\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.143523,
+      "\u001b[38;2;0;175;255me\u001b[38;2;85;85;85mct bad\b\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.183637,
+      "\u001b[38;2;0;175;255mc\u001b[38;2;85;85;85mt bad\b\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.208822,
+      "\u001b[38;2;0;175;255mt\u001b[38;2;85;85;85m bad\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.144084,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85mbad\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000349,
+      "\b \u001b[38;2;85;85;85mbad\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.183773,
+      "g\u001b[K"
+    ],
+    [
+      0.000235,
+      "\b\u001b[38;2;0;175;255mg\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000632,
+      "\u001b[38;2;85;85;85mood 1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[38D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.135282,
+      "\u001b[38;2;0;175;255mo\u001b[38;2;85;85;85mod 1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[37D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.151837,
+      "\u001b[38;2;0;175;255mo\u001b[38;2;85;85;85md 1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[36D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.128091,
+      "\u001b[38;2;0;175;255md\u001b[38;2;85;85;85m 1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[35D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.383228,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85m1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[34D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000258,
+      "\b \u001b[38;2;85;85;85m1090beb1f166825b4c8e7dfc34e2e0cd2…\u001b[34D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      6.501964,
+      "\u001b[16D\u001b[K\r\n\u001b[38;2;0;95;215mgit\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mbisect\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mgood\u001b[30m\u001b(B\u001b[m 030b72500f08774b685c59c3e5ddd64afce432f1"
+    ],
+    [
+      0.10721,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m\r"
+    ],
+    [
+      0.000287,
+      "\u001b[A\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m master \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K\r\n\u001b[38;2;0;95;215mgit\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mbisect\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mgood\u001b[30m\u001b(B\u001b[m 030b72500f08774b685c59c3e5ddd64afce432f1\u001b[K"
+    ],
+    [
+      0.000174,
+      "\u001b[40D\u001b[38;2;0;175;255m030b72500f08774b685c59c3e5ddd64afce432f1\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.847024,
+      "\r\n\u001b[30m\u001b(B\u001b"
+    ],
+    [
+      4.2e-05,
+      "[m"
+    ],
+    [
+      0.000192,
+      "\u001b[?2004l"
+    ],
+    [
+      0.000194,
+      "\u001b]133;C;\u0007"
+    ],
+    [
+      0.000215,
+      "\u001b]0;git  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B"
+    ],
+    [
+      2.6e-05,
+      "\u001b[m\r"
+    ],
+    [
+      0.105225,
+      "Bisecting: 3 revisions left to test after this (roughly 2 steps)\r\n"
+    ],
+    [
+      0.014752,
+      "[d619b4d7d3fadde5db7a347d1308378f831bd02a] Adds function 'division'\r\n"
+    ],
+    [
+      0.001852,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.026434,
+      "\u001b]1337;SetUserVar=gitBranch=KG5vIGJyYW5jaCwgYmlzZWN0IHN0YXJ0ZWQgb24gbWFzdGVyKQ==\u0007"
+    ],
+    [
+      0.010271,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.010854,
+      "\u001b[?2004h"
+    ],
+    [
+      0.111054,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000152,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      5.1e-05,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m ⚓ d619b4d \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      1.678686,
+      "g"
+    ],
+    [
+      0.000125,
+      "\b\u001b[31m\u001b[1mg\u001b(B\u001b[m"
+    ],
+    [
+      0.000468,
+      "\u001b[38;2;85;85;85mit bisect good 030b72500f08774b685c59c3e5ddd6…\u001b[46D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.070727,
+      "\u001b[31m\u001b[1mi\u001b(B\u001b[m\u001b[38;2;85;85;85mt bisect good 030b72500f08774b685c59c3e5ddd6…\u001b[45D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.152899,
+      "\u001b[31m\u001b[1mt\u001b(B\u001b[m\u001b[38;2;85;85;85m bisect good 030b72500f08774b685c59c3e5ddd6…\u001b[44D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000281,
+      "\b\b\b\u001b[38;2;0;95;215mgit\u001b[38;2;85;85;85m bisect good 030b72500f08774b685c59c3e5ddd6…\u001b[44D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.055688,
+      "\u001b[38;2;0;95;215m \u001b[38;2;85;85;85mbisect good 030b72500f08774b685c59c3e5ddd6…\u001b[43D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000405,
+      "\b \u001b[38;2;85;85;85mbisect good 030b72500f08774b685c59c3e5ddd6…\u001b[43D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.190606,
+      "b\u001b[38;2;85;85;85misect good 030b72500f08774b685c59c3e5ddd6…\u001b[42D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000281,
+      "\b\u001b[38;2;0;175;255mb\u001b[38;2;85;85;85misect good 030b72500f08774b685c59c3e5ddd6…\u001b[42D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.31272,
+      "\u001b[38;2;0;175;255me\u001b[30m\u001b(B\u001b[m\u001b[K"
+    ],
+    [
+      0.399796,
+      "\b\u001b[K"
+    ],
+    [
+      0.207998,
+      "\u001b[38;2;0;175;255mi\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000544,
+      "\u001b[38;2;85;85;85msect good 030b72500f08774b685c59c3e5ddd6…\u001b[41D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.079677,
+      "\u001b[38;2;0;175;255ms\u001b[38;2;85;85;85mect good 030b72500f08774b685c59c3e5ddd6…\u001b[40D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.239868,
+      "\u001b[38;2;0;175;255me\u001b[38;2;85;85;85mct good 030b72500f08774b685c59c3e5ddd6…\u001b[39D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.199878,
+      "\u001b[38;2;0;175;255mc\u001b[38;2;85;85;85mt good 030b72500f08774b685c59c3e5ddd6…\u001b[38D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.240304,
+      "\u001b[38;2;0;175;255mt\u001b[38;2;85;85;85m good 030b72500f08774b685c59c3e5ddd6…\u001b[37D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.095881,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85mgood 030b72500f08774b685c59c3e5ddd6…\u001b[36D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000372,
+      "\b \u001b[38;2;85;85;85mgood 030b72500f08774b685c59c3e5ddd6…\u001b[36D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.111618,
+      "r\u001b[K"
+    ],
+    [
+      0.000287,
+      "\u001b[38;2;85;85;85meset\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000156,
+      "\b\u001b[38;2;0;175;255m\u001b[4mr\u001b[38;2;85;85;85m\u001b[24meset\b\b\b\b\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.08756,
+      "\u001b[38;2;0;175;255m\u001b[4mu\u001b[30m\u001b(B\u001b[m\u001b[K"
+    ],
+    [
+      0.000251,
+      "\b\b\u001b[38;2;0;175;255mru\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000454,
+      "\u001b[38;2;85;85;85mn cargo test --test bug\u001b[23D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.239368,
+      "\u001b[38;2;0;175;255mn\u001b[38;2;85;85;85m cargo test --test bug\u001b[22D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.127997,
+      "\u001b[38;2;0;175;255m \u001b[38;2;85;85;85mcargo test --test bug\u001b[21D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000395,
+      "\b \u001b[38;2;85;85;85mcargo test --test bug\u001b[21D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.32761,
+      "c\u001b[38;2;85;85;85margo test --test bug\u001b[20D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000362,
+      "\b\u001b[38;2;0;175;255m\u001b[4mc\u001b[38;2;85;85;85m\u001b[24margo test --test bug\u001b[20D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.207692,
+      "\u001b[38;2;0;175;255m\u001b[4ma\u001b[38;2;85;85;85m\u001b[24mrgo test --test bug\u001b[19D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.999907,
+      "\u001b[38;2;0;175;255m\u001b[4mrgo test --test bug\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000357,
+      "\u001b[21D\u001b[38;2;0;175;255mcargo\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mtest\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255m--test\u001b[30m\u001b(B\u001b[m \u001b[38;2;0;175;255mbug\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      1.079667,
+      "\r\n\u001b[3"
+    ],
+    [
+      4.2e-05,
+      "0m\u001b(B\u001b[m"
+    ],
+    [
+      0.000144,
+      "\u001b[?2004l"
+    ],
+    [
+      0.000308,
+      "\u001b]133;C;\u0007"
+    ],
+    [
+      0.000316,
+      "\u001b]0;git  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b("
+    ],
+    [
+      3.9e-05,
+      "B\u001b[m\r"
+    ],
+    [
+      0.091631,
+      "running cargo test --test bug"
+    ],
+    [
+      0.000681,
+      "\r\n"
+    ],
+    [
+      0.087229,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m   Compiling\u001b[0m example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)\r\n"
+    ],
+    [
+      0.583223,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m    Finished\u001b[0m dev [unoptimized + debuginfo] target(s) in 0.58 secs\r\n"
+    ],
+    [
+      0.002684,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m     Running\u001b[0m target/debug/deps/bug-6262d8198d8b39aa\r\n"
+    ],
+    [
+      0.018648,
+      "\r\nrunning 1 test\r\n"
+    ],
+    [
+      0.000382,
+      "test test_substract ... \u001b[31mFAILED\u001b(B\u001b[m\r\n\r\nfailures:\r\n"
+    ],
+    [
+      2.7e-05,
+      "\r\n---- test_substract stdout ----\r\n\tthread 'test_substract' panicked at 'assertion failed: `(left == right)`\r\n  left: `16`,\r\n right: `6`', tests/bug.rs:6:5\r\nnote: Run with `RUST_BACKTRACE=1` for a backtrace.\r\n\r\n\r\nfailures:\r\n    test_substract\r\n\r\ntest result: \u001b[31mFAILED\u001b(B\u001b[m. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out\r\n\r\n"
+    ],
+    [
+      0.00041,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[31merror:\u001b[0m test failed, to rerun pass '--test bug'\r\n"
+    ],
+    [
+      0.071252,
+      "Bisecting: 1 revision left to test after this (roughly 1 step)\r\n[2a5a0578f44883d360287fc771c9d1dd7cff4cd6] Adds readme.md\r\n"
+    ],
+    [
+      0.021566,
+      "running cargo test --test bug"
+    ],
+    [
+      0.000736,
+      "\r\n"
+    ],
+    [
+      0.085458,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m   Compiling\u001b[0m example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)\r\n"
+    ],
+    [
+      0.597263,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m    Finished\u001b[0m dev [unoptimized + debuginfo] target(s) in 0.59 secs\r\n"
+    ],
+    [
+      0.002546,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m     Running\u001b[0m target/debug/deps/bug-6262d8198d8b39aa\r\n"
+    ],
+    [
+      0.019673,
+      "\r\nrunning 1 test\r\n"
+    ],
+    [
+      0.000277,
+      "test test_substract ... \u001b[32mok\u001b(B\u001b[m\r\n"
+    ],
+    [
+      2.4e-05,
+      "\r\ntest result: \u001b[32mok\u001b(B\u001b[m. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out\r\n\r\n"
+    ],
+    [
+      0.076164,
+      "Bisecting: 0 revisions left to test after this (roughly 0 steps)\r\n[abc4c40d4a06711bab5039a2896db3f67d8ddd0e] Adds function 'multiply' with a runnable example in the documentation\r\n"
+    ],
+    [
+      0.023309,
+      "running cargo test --test bug"
+    ],
+    [
+      0.000657,
+      "\r\n"
+    ],
+    [
+      0.085952,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m   Compiling\u001b[0m example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)\r\n"
+    ],
+    [
+      0.589826,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m    Finished\u001b[0m dev [unoptimized + debuginfo] target(s) in 0.58 secs\r\n"
+    ],
+    [
+      0.002549,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[32m     Running\u001b[0m target/debug/deps/bug-6262d8198d8b39aa\r\n"
+    ],
+    [
+      0.016959,
+      "\r\nrunning 1 test\r\n"
+    ],
+    [
+      0.000368,
+      "test test_substract ... \u001b[31mFAILED\u001b(B\u001b[m\r\n\r\nfailures:\r\n\r\n"
+    ],
+    [
+      2.8e-05,
+      "---- test_substract stdout ----\r\n\tthread 'test_substract' panicked at 'assertion failed: `(left == right)`\r\n  left: `16`,\r\n right: `6`', tests/bug.rs:6:5\r\nnote: Run with `RUST_BACKTRACE=1` for a backtrace.\r\n\r\n\r\nfailures:\r\n    test_substract\r\n\r\ntest result: \u001b[31mFAILED\u001b(B\u001b[m. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out\r\n\r\n"
+    ],
+    [
+      0.000382,
+      "\u001b[0m\u001b[0m\u001b[1m\u001b[31merror:\u001b[0m test failed, to rerun pass '--test bug'\r\n"
+    ],
+    [
+      0.072749,
+      "abc4c40d4a06711bab5039a2896db3f67d8ddd0e is the first bad commit\r\ncommit abc4c40d4a06711bab5039a2896db3f67d8ddd0e\r\nAuthor: Jeroen Knoops <jeroen.knoops@gmail.com>\r\nDate:   Sun Aug 12 17:03:29 2018 +0200\r\n\r\n    Adds function 'multiply' with a runnable example in the documentation\r\n\r\n:040000 040000 27cde4ec60027b8faffb1e97f3cb42022e80187b 34e8c57493a1b137f34fe45bf5ec555888ad8c3b M\tsrc\r\n"
+    ],
+    [
+      0.004705,
+      "bisect run success\r\n"
+    ],
+    [
+      0.000767,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.022896,
+      "\u001b]1337;SetUserVar=gitBranch=KG5vIGJyYW5jaCwgYmlzZWN0IHN0YXJ0ZWQgb24gbWFzdGVyKQ==\u0007"
+    ],
+    [
+      0.007355,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.009596,
+      "\u001b[?2004h"
+    ],
+    [
+      0.111855,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000152,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      8.3e-05,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m ⚓ abc4c40 \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      3.536433,
+      "g"
+    ],
+    [
+      0.000141,
+      "\b\u001b[31m\u001b[1mg\u001b(B\u001b[m"
+    ],
+    [
+      0.000303,
+      "\u001b[38;2;85;85;85mit bisect run cargo test --test bug\u001b[35D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.103389,
+      "\u001b[31m\u001b[1mi\u001b(B\u001b[m\u001b[38;2;85;85;85mt bisect run cargo test --test bug\u001b[34D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.103605,
+      "\u001b[31m\u001b[1mt\u001b(B\u001b[m\u001b[38;2;85;85;85m bisect run cargo test --test bug\u001b[33D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.00035,
+      "\b\b\b\u001b[38;2;0;95;215mgit\u001b[38;2;85;85;85m bisect run cargo test --test bug\u001b[33D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.111243,
+      "\u001b[38;2;0;95;215m \u001b[38;2;85;85;85mbisect run cargo test --test bug\u001b[32D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000314,
+      "\b \u001b[38;2;85;85;85mbisect run cargo test --test bug\u001b[32D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      1.723307,
+      "\b\u001b[K"
+    ],
+    [
+      0.295709,
+      "\u001b[38;2;0;95;215m \u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      4.2e-05,
+      "\b "
+    ],
+    [
+      0.000336,
+      "\u001b[38;2;85;85;85mbisect run cargo test --test bug\u001b[32D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.102466,
+      "l\u001b[K"
+    ],
+    [
+      0.000122,
+      "\b\u001b[38;2;0;175;255ml\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.00061,
+      "\u001b[38;2;85;85;85mog --show-signature\u001b[19D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.255336,
+      "\u001b[38;2;0;175;255mo\u001b[38;2;85;85;85mg --show-signature\u001b[18D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.087825,
+      "\u001b[38;2;0;175;255mg\u001b[38;2;85;85;85m --show-signature\u001b[17D\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.949938,
+      "\u001b[K\r\n"
+    ],
+    [
+      4.4e-05,
+      "\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000218,
+      "\u001b[?2004l"
+    ],
+    [
+      0.000339,
+      "\u001b]133;C;\u0007"
+    ],
+    [
+      0.000495,
+      "\u001b]0;git  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b("
+    ],
+    [
+      3.9e-05,
+      "B\u001b[m\r"
+    ],
+    [
+      0.012737,
+      "\u001b[?1h\u001b=\r"
+    ],
+    [
+      0.000204,
+      "\u001b[33mcommit abc4c40d4a06711bab5039a2896db3f67d8ddd0e\u001b[m\u001b[33m (\u001b[m\u001b[1;36mHEAD\u001b[m\u001b[33m, \u001b[m\u001b[mrefs/bisect/bad\u001b[m\u001b[33m)\u001b[m\u001b[m\r\nAuthor: Jeroen Knoops <jeroen.knoops@gmail.com>\u001b[m\r\nDate:   Sun Aug 12 17:03:29 2018 +0200\u001b[m\r\n\u001b[m\r\n    Adds function 'multiply' with a runnable example in the documentation\u001b[m\r\n\u001b[m\r\n\u001b[33mcommit 2a5a0578f44883d360287fc771c9d1dd7cff4cd6\u001b[m\u001b[33m (\u001b[m\u001b[mrefs/bisect/good-2a5a0578f44883d360287fc771c9d1dd7cff4cd6\u001b[m\u001b[33m)\u001b[m\u001b[m\r\nAuthor: Jeroen Knoops <jeroen.knoops@gmail.com>\u001b[m\r\nDate:   Sun Aug 12 17:01:27 2018 +0200\u001b[m\r\n\u001b[m\r\n    Adds readme.md\u001b[m\r\n\u001b[m\r\n\u001b[33mcommit 3d75d3da596b4fced7c4e91b17c20b2b61d2c8c5\u001b[m\u001b[m\r\nAuthor: Jeroen Knoops <jeroen.knoops@gmail.com>\u001b[m\r\nDate:   Sun Aug 12 16:59:58 2018 +0200\u001b[m\r\n\u001b[m\r\n    Adds travis-ci pipeline\u001b[m\r\n\u001b[m\r\n\u001b[33mcommit 030b72500f08774b685c59c3e5ddd64afce432f1\u001b[m\u001b[33m (\u001b[m\u001b[mrefs/bisect/good-030b72500f08774b685c59c3e5ddd64afce432f1\u001b[m\u001b[33m)\u001b[m\u001b[m\r\nAuthor: Jeroen Knoops <jeroen.knoops@gmail.com>\u001b[m\r\nDate:   Sun Aug 12 16:58:49 2018 +0200\u001b[m\r\n\u001b[m\r\n    Adds"
+    ],
+    [
+      5.4e-05,
+      " functions 'add' and 'substract'\u001b[m\r\n\r\u001b[K\u001b[?1l\u001b>"
+    ],
+    [
+      0.001379,
+      "\u001b]1337;RemoteHost=software-concepts@MACC02R81RHG8WM\u0007\u001b]1337;CurrentDir=/Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007"
+    ],
+    [
+      0.024077,
+      "\u001b]1337;SetUserVar=gitBranch=KG5vIGJyYW5jaCwgYmlzZWN0IHN0YXJ0ZWQgb24gbWFzdGVyKQ==\u0007"
+    ],
+    [
+      0.007413,
+      "\u001b]1337;SetUserVar=gitRemote=Z2l0QGdpdGh1Yi5jb206SmVyb2VuS25vb3BzL3J1c3QtZXhhbXBsZS5naXQ=\u0007"
+    ],
+    [
+      0.0076,
+      "\u001b[?2004h"
+    ],
+    [
+      0.108081,
+      "\u001b]0;fish  /Users/software-concepts/workspace/jeroen.knoops/rust-example\u0007\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000187,
+      "\u001b[38;5;237m⏎\u001b(B\u001b[m                                                                                                                       \r⏎ \r\u001b[2K"
+    ],
+    [
+      3e-05,
+      "\u001b]133;D;0\u0007\u001b]133;A\u0007\u001b[1m\u001b[37m\u001b[42m[I]\u001b[30m\u001b(B\u001b[m \u001b[38;5;15m\u001b[48;5;31m ~ \u001b[48;5;237m\u001b[38;5;31m\u001b[38;5;250m\u001b[48;5;237m workspace \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m jeroen.knoops \u001b[48;5;237m\u001b[38;5;244m\u001b[38;5;250m\u001b[48;5;237m rust-example \u001b[48;5;161m\u001b[38;5;237m\u001b[38;5;15m\u001b[48;5;161m ⚓ abc4c40 \u001b[48;5;52m\u001b[38;5;161m\u001b[38;5;15m\u001b[48;5;52m ❓ \u001b[48;5;236m\u001b[38;5;52m\u001b[38;5;15m\u001b[48;5;236m $ \u001b[0m\u001b[38;5;236m\u001b[0m \u001b]133;B\u0007\u001b[K"
+    ],
+    [
+      3.207496,
+      "\r\n\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      4.1e-05,
+      "\u001b[30m\u001b(B\u001b[m"
+    ],
+    [
+      0.000164,
+      "\u001b[?2004l"
+    ]
+  ]
+}

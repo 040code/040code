@@ -2,10 +2,11 @@
 layout:     post
 title:      "Git Bisect"
 subtitle:   "Find the bug-introducing commit with Git Bisect"
-date:       2018-08-12
+date:       2019-03-12
 authors:    [jeroen]
-header-img: "assets/2018-08-13-git-bisect/vanmoll-brew.jpg"
+header-img: "assets/2019-03-11-git-bisect/background.png"
 tags:       ["git"]
+enable_asciinema: 1
 ---
 
 I want to tell you a little story about what happened to me a few days ago.
@@ -43,13 +44,14 @@ abc4c40 - Jeroen Knoops, Sun Aug 12 17:03:29 2018 +0200 : Adds function 'multipl
 It starts with adding two functions, adding travis-ci, add some documentation, more functions, some refactoring... everything you expect from a 'real' project.
 
 Of course it has some tests and I've tested everything manually before I commit... But for some reason at the end, the `substract` function is not working anymore..
-Oeps, I've tested it manually, but for some reason I've forgot to add a 
+Whoops.. I've tested it manually, but for some reason I've forgot to add a test for it..
 
+## Let's create a test 
 
+We're creating a test in `/tests/bug.rs` to show the bug.
+We will use this test to check in which commit the bug was introduced.
 
-Create test in `/tests/bug.rs`
-
-```
+```rust
 extern crate example;
 use example::*;
 
@@ -59,24 +61,56 @@ fn test_substract() {
 }
 ```
 
-Run this test only.
-```
+Now try to run this test in isolation with the following command:
+```bash
 cargo test --test bug
 ```
 
-Test on master: https://asciinema.org/a/4q7AMN03KVoX9jSzZRlujuM69
+Test on `master` should fail:
+<asciinema-player src="{{ site.baseurl }}/assets/2019-03-11-git-bisect/git-bisect-1.json"
+  cols="166" rows="18">
+</asciinema-player>
 
+Test on first commit (`030b725`) should not fail:
+<asciinema-player src="{{ site.baseurl }}/assets/2019-03-11-git-bisect/git-bisect-2.json"
+  cols="166" rows="18">
+</asciinema-player>
 
-Test on first commit: https://asciinema.org/a/BMe7Q3EfXfhyNlpVw8sI6c7yV
+Somewhere in between it start not working anymore.. Let's use `git bisect` to find that.
 
-```
+## Git bisect
+We go back to the `master` with the added test.
+
+We start the bisect procedure:
+
+```bash
 git bisect start
+```
+
+We tell bisect that the current version is *bad*:
+```bash
 git bisect bad
+```
+
+Now we tell bisect the commit of a known working version:
+```bash
 git bisect good 030b72500f08774b685c59c3e5ddd64afce432f1
+```
+
+We tell bisect to look when the bug appears:
+```bash
 git bisect run cargo test --test bug
 ```
 
-https://asciinema.org/a/o3LgoxXPp7WVQbhNMk628Lz4p
+After the test, reset the HEAD to the first place.
+```bash
+git bisect reset 
+```
+
+Let's see this in action:
+<asciinema-player src="{{ site.baseurl }}/assets/2019-03-11-git-bisect/git-bisect-3.json"
+  cols="166" rows="18">
+</asciinema-player>
 
 What did just happen?
 
@@ -178,4 +212,25 @@ Date:   Sun Aug 12 16:58:49 2018 +0200
 ```
 
 Commit which introduced the bug:
-https://github.com/JeroenKnoops/rust-example/commit/abc4c40d4a06711bab5039a2896db3f67d8ddd0e
+<a href="https://github.com/JeroenKnoops/rust-example/commit/abc4c40d4a06711bab5039a2896db3f67d8ddd0e">
+  https://github.com/JeroenKnoops/rust-example/commit/abc4c40d4a06711bab5039a2896db3f67d8ddd0e
+</a>
+
+<a href="#">
+    <img src="{{ site.baseurl }}/assets/2019-03-11-git-bisect/git-bisect-gitx.png" alt="gitx">
+</a>
+
+## Results
+
+When implementing `multiply`, I've accidentally broken the `substract` function.
+Git bisect will also add refs so you can which commits have been tested.
+
+## Conclusion
+
+This was a very simple test / bug to find. By doing a `git blame` on the line, we would found the same
+error, but this is not always the case.
+Imagine a website which overtime became very slow. Try to create a test which measures the performance of a certain
+page. This test should fail when the performance is below a certain threshold. This can be a complete end-to-end test.
+Now you will find the exact place where the introduction of a small stupid javascript library caused a big performance
+problem.
+
