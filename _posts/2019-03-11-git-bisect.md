@@ -2,7 +2,7 @@
 layout:     post
 title:      "Git Bisect"
 subtitle:   "Find the bug-introducing commit with Git Bisect"
-date:       2019-03-12
+date:       2019-03-13
 authors:    [jeroen]
 header-img: "assets/2019-03-11-git-bisect/background.png"
 tags:       ["git", "rust"]
