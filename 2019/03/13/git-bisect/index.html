@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Git Bisect - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2019/03/13/git-bisect/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/asciinema-player.css" />
+    <script src="/js/asciinema-player.js"></script>
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2019-03-11-git-bisect/background.png')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Git Bisect</h1>
+                    
+                    <h2 class="subheading">Find the bug-introducing commit with Git Bisect</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/jeroen/">
+                            Jeroen Knoops
+                          </a>
+                          
+                      
+                      on 2019-03-13</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/git/">Git</a><a class="badge " href="/blog/tag/rust/">Rust</a>
+
+
+				<p>I want to tell you a little story about what happened to me a few days ago.
+I went to the office and a colleague of mine was not very happy. This is strange because I work for a very nice company.. What happened? I asked him what was wrong. It turned out that he updated a lot of dependencies and some code for a certain service. And now the SonarQube reporting was not working anymore with a very strange message: HTTP Error 502 Bad gateway..</p>
+
+<p>I decided to help him, because we don’t work alone and especially when you’re stuck (and frustrated) at something it’s best to include other human beings.</p>
+
+<p>Since there we’re already several commits done I’ve decided to use <code class="highlighter-rouge">git bisect</code> to find the bug-introducing commit.</p>
+
+<p>I’ve noticed that it was new to my colleague so let’s write a blog post about it.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>In order to follow the instructions, you need the following things:</p>
+<ul>
+  <li><a href="https://git-scm.com/downloads">Git</a> - Duh… This blog is about Git!</li>
+  <li><a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">Rust &amp; Cargo</a> - The best language ever I’m NOT using in my daily work.</li>
+  <li>Clone <a href="https://github.com/JeroenKnoops/rust-example">https://github.com/JeroenKnoops/rust-example</a>. This is an example codebase with a bug we want to find.</li>
+</ul>
+
+<h2 id="rust-example">Rust example</h2>
+<p>The rust-example is very simple. It’s a rust library with four functions namely: <code class="highlighter-rouge">add</code>, <code class="highlighter-rouge">substract</code>, <code class="highlighter-rouge">multiply</code> and <code class="highlighter-rouge">division</code>. By no means this should ever be used in real systems, this repo only exists as example for this blog post. It has 9 commits.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git log --pretty=format:"%h - %an, %ad : %s"
+4d7f719 - Jeroen Knoops, Sun Aug 12 17:10:07 2018 +0200 : Adds link to blog post on git bisect
+380d12e - Jeroen Knoops, Sun Aug 12 17:09:04 2018 +0200 : Refactors tests in seperate directory
+1ae37e1 - Jeroen Knoops, Sun Aug 12 17:07:32 2018 +0200 : Adds edge cases for division
+0580aec - Jeroen Knoops, Sun Aug 12 17:06:41 2018 +0200 : Adds information on how to run tests and create the documentation
+d619b4d - Jeroen Knoops, Sun Aug 12 17:04:50 2018 +0200 : Adds function 'division'
+abc4c40 - Jeroen Knoops, Sun Aug 12 17:03:29 2018 +0200 : Adds function 'multiply' with a runnable example in the documentation
+2a5a057 - Jeroen Knoops, Sun Aug 12 17:01:27 2018 +0200 : Adds readme.md
+3d75d3d - Jeroen Knoops, Sun Aug 12 16:59:58 2018 +0200 : Adds travis-ci pipeline
+030b725 - Jeroen Knoops, Sun Aug 12 16:58:49 2018 +0200 : Adds functions 'add' and 'substract'
+</code></pre></div></div>
+
+<p>It starts with adding two functions, adding travis-ci, add some documentation, more functions, some refactoring… everything you expect from a ‘real’ project.</p>
+
+<p>Of course it has some tests and I’ve tested everything manually before I commit… But for some reason at the end, the <code class="highlighter-rouge">substract</code> function is not working anymore..
+Whoops.. I’ve tested it manually, but for some reason I’ve forgot to add a test for it..</p>
+
+<h2 id="lets-create-a-test">Let’s create a test</h2>
+
+<p>We’re creating a test in <code class="highlighter-rouge">/tests/bug.rs</code> to show the bug.
+We will use this test to check in which commit the bug was introduced.</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">extern</span> <span class="n">crate</span> <span class="n">example</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">example</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
+
+<span class="nd">#[test]</span>
+<span class="k">fn</span> <span class="nf">test_substract</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nd">assert_eq!</span><span class="p">(</span><span class="nf">substract</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">6</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now try to run this test in isolation with the following command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cargo <span class="nb">test</span> <span class="nt">--test</span> bug
+</code></pre></div></div>
+
+<p>Test on <code class="highlighter-rouge">master</code> should fail:</p>
+<asciinema-player src="/assets/2019-03-11-git-bisect/git-bisect-1.json" cols="166" rows="18">
+</asciinema-player>
+
+<p>Test on first commit (<code class="highlighter-rouge">030b725</code>) should not fail:</p>
+<asciinema-player src="/assets/2019-03-11-git-bisect/git-bisect-2.json" cols="166" rows="18">
+</asciinema-player>
+
+<p>Somewhere in between it start not working anymore.. Let’s use <code class="highlighter-rouge">git bisect</code> to find that.</p>
+
+<h2 id="git-bisect">Git bisect</h2>
+<p>We go back to the <code class="highlighter-rouge">master</code> with the added test.</p>
+
+<p>We start the bisect procedure:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect start
+</code></pre></div></div>
+
+<p>We tell bisect that the current version is <em>bad</em>:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect bad
+</code></pre></div></div>
+
+<p>Now we tell bisect the commit of a known working version:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect good 030b72500f08774b685c59c3e5ddd64afce432f1
+</code></pre></div></div>
+
+<p>We tell bisect to look when the bug appears:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect run cargo <span class="nb">test</span> <span class="nt">--test</span> bug
+</code></pre></div></div>
+
+<p>After the test, reset the HEAD to the first place.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git bisect reset 
+</code></pre></div></div>
+
+<p>Let’s see this in action:</p>
+<asciinema-player src="/assets/2019-03-11-git-bisect/git-bisect-3.json" cols="166" rows="18">
+</asciinema-player>
+
+<p>What did just happen?</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> git bisect run cargo test --test bug
+running cargo test --test bug
+   Compiling example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.58 secs
+     Running target/debug/deps/bug-6262d8198d8b39aa
+
+running 1 test
+test test_substract ... FAILED
+
+failures:
+
+---- test_substract stdout ----
+	thread 'test_substract' panicked at 'assertion failed: `(left == right)`
+  left: `16`,
+ right: `6`', tests/bug.rs:6:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    test_substract
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+
+error: test failed, to rerun pass '--test bug'
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[2a5a0578f44883d360287fc771c9d1dd7cff4cd6] Adds readme.md
+running cargo test --test bug
+   Compiling example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.59 secs
+     Running target/debug/deps/bug-6262d8198d8b39aa
+
+running 1 test
+test test_substract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[abc4c40d4a06711bab5039a2896db3f67d8ddd0e] Adds function 'multiply' with a runnable example in the documentation
+running cargo test --test bug
+   Compiling example v0.1.0 (file:///Users/software-concepts/workspace/jeroen.knoops/rust-example)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.58 secs
+     Running target/debug/deps/bug-6262d8198d8b39aa
+
+running 1 test
+test test_substract ... FAILED
+
+failures:
+
+---- test_substract stdout ----
+	thread 'test_substract' panicked at 'assertion failed: `(left == right)`
+  left: `16`,
+ right: `6`', tests/bug.rs:6:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    test_substract
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
+
+error: test failed, to rerun pass '--test bug'
+abc4c40d4a06711bab5039a2896db3f67d8ddd0e is the first bad commit
+commit abc4c40d4a06711bab5039a2896db3f67d8ddd0e
+Author: Jeroen Knoops &lt;jeroen.knoops@gmail.com&gt;
+Date:   Sun Aug 12 17:03:29 2018 +0200
+
+    Adds function 'multiply' with a runnable example in the documentation
+
+:040000 040000 27cde4ec60027b8faffb1e97f3cb42022e80187b 34e8c57493a1b137f34fe45bf5ec555888ad8c3b M	src
+bisect run success
+[I]  ~  workspace  jeroen.knoops  rust-example  ⚓ abc4c40  ❓  $  git log
+commit abc4c40d4a06711bab5039a2896db3f67d8ddd0e (HEAD, refs/bisect/bad)
+Author: Jeroen Knoops &lt;jeroen.knoops@gmail.com&gt;
+Date:   Sun Aug 12 17:03:29 2018 +0200
+
+    Adds function 'multiply' with a runnable example in the documentation
+
+commit 2a5a0578f44883d360287fc771c9d1dd7cff4cd6 (refs/bisect/good-2a5a0578f44883d360287fc771c9d1dd7cff4cd6)
+Author: Jeroen Knoops &lt;jeroen.knoops@gmail.com&gt;
+Date:   Sun Aug 12 17:01:27 2018 +0200
+
+    Adds readme.md
+
+commit 3d75d3da596b4fced7c4e91b17c20b2b61d2c8c5
+Author: Jeroen Knoops &lt;jeroen.knoops@gmail.com&gt;
+Date:   Sun Aug 12 16:59:58 2018 +0200
+
+    Adds travis-ci pipeline
+
+commit 030b72500f08774b685c59c3e5ddd64afce432f1 (refs/bisect/good-030b72500f08774b685c59c3e5ddd64afce432f1)
+Author: Jeroen Knoops &lt;jeroen.knoops@gmail.com&gt;
+Date:   Sun Aug 12 16:58:49 2018 +0200
+
+    Adds functions 'add' and 'substract'
+</code></pre></div></div>
+
+<p>Commit which introduced the bug:
+<a href="https://github.com/JeroenKnoops/rust-example/commit/abc4c40d4a06711bab5039a2896db3f67d8ddd0e">
+  https://github.com/JeroenKnoops/rust-example/commit/abc4c40d4a06711bab5039a2896db3f67d8ddd0e
+</a></p>
+
+<p><a href="#">
+    <img src="/assets/2019-03-11-git-bisect/git-bisect-gitx.png" alt="gitx" />
+</a></p>
+
+<h2 id="results">Results</h2>
+
+<p>When implementing <code class="highlighter-rouge">multiply</code>, I’ve accidentally broken the <code class="highlighter-rouge">substract</code> function.
+Git bisect will also add refs so you can which commits have been tested.</p>
+
+<p>The correct implementation would be:</p>
+
+<div class="language-rust highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">pub</span> <span class="k">fn</span> <span class="nf">substract</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">i32</span> <span class="p">{</span>
+    <span class="n">a</span> <span class="err">-</span> <span class="n">b</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The test we’ve written to find the bug can be renamed and also added to prevent this from happening again.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This was a very simple test / bug to find. By doing a <code class="highlighter-rouge">git blame</code> on the line, we would found the same
+error, but this is not always the case.
+Imagine a website which overtime became very slow. Try to create a test which measures the performance of a certain
+page. This test should fail when the performance is below a certain threshold. This can be a complete end-to-end test.
+Now you will find the exact place where the introduction of a small stupid javascript library caused a big performance
+problem.</p>
+
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/09/18/fsf-frontend/" data-toggle="tooltip" data-placement="top" title="Full Stack Fest 2018">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>

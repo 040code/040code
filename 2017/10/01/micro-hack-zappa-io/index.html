@@ -178,7 +178,7 @@ Store your AWS secrets in your <code class="highlighter-rouge">.aws</code> direc
 
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/&lt;string:str&gt;'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">"GET"</span><span class="p">])</span>
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s">'/&lt;string:str&gt;'</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s">"GET"</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">reverse_str</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     
@@ -360,7 +360,7 @@ Look at <a href="https://github.com/Miserlou/Zappa">https://github.com/Miserlou/
                     
                     
                 </ul> -->
-                <p class="copyright text-muted">Copyright &copy; 040 Code 2018</p>
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2019</p>
             </div>
         </div>
     </div>
