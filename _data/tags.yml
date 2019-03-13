@@ -94,3 +94,6 @@ brew:
 git:
   slug: git
   name: Git
+rust:
+  slug: rust
+  name: Rust

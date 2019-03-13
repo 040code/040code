@@ -5,7 +5,7 @@ subtitle:   "Find the bug-introducing commit with Git Bisect"
 date:       2019-03-12
 authors:    [jeroen]
 header-img: "assets/2019-03-11-git-bisect/background.png"
-tags:       ["git"]
+tags:       ["git", "rust"]
 enable_asciinema: 1
 ---
 
@@ -26,7 +26,7 @@ In order to follow the instructions, you need the following things:
 - Clone [https://github.com/JeroenKnoops/rust-example](https://github.com/JeroenKnoops/rust-example). This is an example codebase with a bug we want to find.
 
 ## Rust example
-The rust-example is very simple. It's a rust library with four functions namely: `add`, `substract`, `multiply` and `division`. By no means this should every be used in real systems, this repo only exists as example for this blog post. It has 9 commits. 
+The rust-example is very simple. It's a rust library with four functions namely: `add`, `substract`, `multiply` and `division`. By no means this should ever be used in real systems, this repo only exists as example for this blog post. It has 9 commits. 
 
 ```
 $ git log --pretty=format:"%h - %an, %ad : %s"
@@ -224,6 +224,16 @@ Commit which introduced the bug:
 
 When implementing `multiply`, I've accidentally broken the `substract` function.
 Git bisect will also add refs so you can which commits have been tested.
+
+The correct implementation would be:
+
+```rust
+pub fn substract(a: i32, b: i32) -> i32 {
+    a - b
+}
+```
+
+The test we've written to find the bug can be renamed and also added to prevent this from happening again.
 
 ## Conclusion
 
