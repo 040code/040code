@@ -91,3 +91,9 @@ mac:
 brew:
   slug: brew
   name: HomeBrew
+git:
+  slug: git
+  name: Git
+rust:
+  slug: rust
+  name: Rust
