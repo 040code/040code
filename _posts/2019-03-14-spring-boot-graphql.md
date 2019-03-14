@@ -2,7 +2,7 @@
 layout:     post
 title:      "GraphQL + Spring Boot"
 subtitle:   "Queries, mutations and subscription in Java"
-date:       2019-03-13
+date:       2019-03-14
 authors:     [niek]
 header-img: "assets/2019-03-14_spring-boot-graphql/glow-lichttoren.jpg"
 tags: [graphql, spring, java]
