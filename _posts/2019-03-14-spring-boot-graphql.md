@@ -9,18 +9,18 @@ tags: [graphql, spring, java]
 ---
 
 ### Introduction
-Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.
+Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how [GraphQL](https://graphql.org/) works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.
 
-[GraphQL](https://graphql.org/) is API is based on tree main concepts. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.
+GraphQL is API is based on three main concepts. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. A major difference with REST is that wit a query you can specify excatly what you expect or want from the backend. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.
 
 ### Java, Spring and GraphQL.
-For implementing a GraphQL service you have tow choices. Either schema first, or code first. So similar concepts as we used with SOA XML services. When starting with code you have to write more plumbing code but you have more freedom. And on the other side starting of the schema reduce all the plumbing code and gives a faster start.
+For implementing a GraphQL service you have two choices. Either schema first, or code first. So similar concepts as we used with SOA XML services. When starting with code you have to write more plumbing code, but you have more freedom. And on the other side starting of the schema reduce all the plumbing code and gives a faster start.
 
-In this example we will write first our GraphQL schema and match this with the code. Be aware a small mistake can result in some cryptic stack traces. Starting from a schema will not result in generated coded, you still have to write the matching code yourself. For the Java implementation we will use the libraries from [graphql-java-kickstart](https://github.com/graphql-java-kickstart).
+In this blog we first create a simple JPA enabled Spring Boot service. Then we add step-by-step GraphQL features to the service. We start from the schema and show which small additions you have to do to our application. Starting from a schema will not result in generated coded, you still have to write the matching code yourself. For the Java implementation we will use the libraries from [graphql-java-kickstart](https://github.com/graphql-java-kickstart).
 
 
 ### Sample Model and API
-For simplicity we use in this blog a simple domain model. Consisting of two classes. A person and notes, a person can have multiple notes. And a note always have one person.
+For simplicity we use in this blog a simple domain model. Consisting of two classes. A person and notes, a person can have multiple notes. And a note always has one author, a person.
 
 <a href="#">
     <img src="{{ site.baseurl }}/assets/2019-03-14_spring-boot-graphql/model.png"
@@ -77,7 +77,7 @@ public interface NoteRepository extends CrudRepository<Note, Long> {
 }
 ```
 
-Finally we define the services interface which we will use to implement the GraphQL queries,
+Finally, we define the services interface which we will use to implement the GraphQL queries,
 
 ```java
 
@@ -95,9 +95,8 @@ public interface NotesService {
 
 So that is all to create a simple service with basic JPA (persistence) capacity. Time to focus on adding GraphQL to our service.
 
-
 ### Implement a query
-As base library we use `graphql-java-tools` this library requires a GraphQL schema to implment GrahpQL. The first step is to define a schema for our queries. The schema defines our GraphQL root, for now only the query. Next the queries we will implement and the types we use. We define two queries. The first one to look op a note and the second one to find all notes based on a filter. Next we define the types. As you can see a Note has a relation to a Person object. By querying for a note we can get immediately the authors name for example.
+As base library we use `graphql-java-tools` this library requires a GraphQL schema to implement GrahpQL. The first step is to define a schema for our queries. The schema defines our GraphQL root, for now only the query. Next the queries we will implement and the types we use. We define two queries. The first one to look op a note and the second one to find all notes based on a filter. Next, we define the types. As you can see a Note has a relation to a Person object. By querying for a note we can get immediately the authors name for example.
 
 ```graphql
 schema {
@@ -128,7 +127,7 @@ type Person {
 ```
 
 ### Implement Mutation
-We have now a first basic GraphQL schema. The last step is to connect the schema to the Note Service. GraphQL java tools expects for each query a resolver function. Therefore we need to implement `GraphQLQueryResolver` from graphql-tools.
+We have now defined a first version of a GraphQL schema. The second step is to connect the schema to the Note Service. GraphQL java tools expects for each query, a resolver function. Therefore, we need to implement `GraphQLQueryResolver` from graphql-tools.
 
 
 ```java
@@ -151,9 +150,7 @@ public class Query implements GraphQLQueryResolver {
 }
 ```
 
-This is all we have to do to be able to handle the queries as specified in the schema. We can now start the the spring boot application and open http://locahost:8080/graphiql and query form some. We can now start the application and execute some queries, but since we have now way to add data, the result will always be empty.
-
-Only being able to query is useless. We need a way to add notes to the system. In GraphQL you mutate data via a mutation. In the next step we add a mutation to the schema and update the code for executing the mutation.
+This is all, we have to do to be able to handle the queries as specified in the schema. We can now start the spring boot application and open http://locahost:8080/graphiql and query form some. Graphiql is a simple IDE to execute GraphQL queries. A much richer tool to play with your queries is [GraphQL Playground](https://github.com/prisma/graphql-playground). Actually no fun yet, we can only execute queries without getting any result. We simply have an empty system. We need a way to add notes to the system. In GraphQL you mutate data via a mutation. In the next step we add a mutation to the schema and update the code for executing the mutation.
 
 In the schema we add the mutation to the root and add a mutation to add a note to the `Mutation` type. Quite similar to defining the query above. For the input we define an input object for both Note and Person.
 
@@ -180,7 +177,7 @@ input InputNote {
 }
 ```
 
-Similar to implementing the query we have to implement an interface and declare methods for the mutation. Mutations have to be implemented in a class implementing the interface GraphQLMutationResolver. In this implementation we defined for the input objects converters to convert the GraphQL imput object to domain objects that can be consumed by the service.
+Similar to implementing the query we have to implement an interface and declare methods for the mutation. Mutations have to be implemented in a class implementing the interface GraphQLMutationResolver. In this implementation we defined for the input objects converters to convert the GraphQL input object to domain objects that can be consumed by the service.
 
 ```java
 @Component
@@ -230,7 +227,7 @@ Add some more notes and experiment with the query. All standard features will wo
 
 ### Implement Subscriptions.
 
-Another cool feature is the subscriptions. With a subscription you can subscribe to updates via a websucket. The same philosophy is followed for the subscription. You will gat your data in same structure as specified in the subsription call.
+Another cool feature is the subscriptions. With a subscription you can subscribe to updates via a websocket. The same philosophy is followed for the subscription. You will gat your data in same structure as specified in the subscription call.
 
 To add subscription to our Java implements, we update the schema and add code to handle updates. To add a subscription for new notes we update the GraphQL schema first. Again update schema root and add the subscription, define the available subscriptions and add the required types.
 
@@ -255,7 +252,7 @@ type NoteUpdate {
 }
 ```
 
-In our Java code we use RxJava to handle the events for subscriptions.
+And once again we have to implement a resolver, this time we implement the `GraphQLSubscriptionResolver`.
 
 ```java
 @Component
@@ -282,7 +279,7 @@ public Note save(Note note) {
 }
 ```
 
-The `notePublisher` is responsible to update messages via a WebScoket so the subscribers get the update. For the implementation check out the GitHub repo. Time to test the subscription. An easy way to test is topen the GrapiQL editor on two screens. Invoke in the first one the subscription and in the the second one add a note. You will see you get an update of the new note on the first screen.
+The `notePublisher` is responsible to update messages via a WebScoket so the subscribers get the update. For the implementation check out the GitHub repo. Time to test the subscription. An easy way to test is topen the GraphiQL editor on two screens. Invoke in the first one the subscription and in the second one add a note. You will see you get an update of the new note on the first screen.
 
 ```
 subscription {
@@ -341,4 +338,6 @@ That is all, of course you should add some assert to check the content as well. 
 
 ### Some thoughts
 
-The example above shows how you can enable your Spring Boot service with a GraphQL API. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to creat a fluent and understandable API.
+The example above shows how you can enable your Spring Boot service with a GraphQL API. Adding a GraphQL layer to your existing (siimple) service is fairly easy with the tools. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to create a fluent and understandable API.
+
+If a java based approach is in that case the best way to go, I don't know yet. In that case it could be interesting to dive into [Rejoiner](https://github.com/google/rejoiner).
