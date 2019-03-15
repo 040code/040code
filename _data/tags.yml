@@ -97,3 +97,6 @@ git:
 rust:
   slug: rust
   name: Rust
+xp:
+  slug: xp
+  name: Extreme Programming
