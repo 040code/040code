@@ -33,3 +33,16 @@ jeroen:
   email: jeroen.knoops@gmail.com
   bio: "Jeroen Knoops is a full stack developer. He has worked in corporate environments for many years. He also had the pleasure to work for a small tech startup. All of his work is driven by innovation.\n\n
 Some keywords: Akai MPC, Urfaust, Richard Dawkins, Zed Shaw, TB-303, Erik Satie, Kapsalon, The Apemen, Piano, Hans Rosling, Haus Arafna, Apple ][, BRNS, Ravi Shankar, Lego geen playmobil, TR-909, Netflix, Tuscany, Kraftwerk, Quadrupel, Frikandel Speciaal, avdi, Moonlizards, Sandi Metz, Pixies, Strijp, Henrik Kniberg, Hazes, Public Enemy, Tesla, Funkmaster Flex, Hakan Forss, Bruce Willis, GitHub, Tony Touch, Hef, Mobb Deep, Funkdoobiest, good food, Noah's ark, Turing, Sugababes, VPRO's DutchMasters, Drums, Jet Li, Craft Beers, Synths, Bowling, La Musica della Mafia, UDS, Unsequenced, Christopher Hitchens, Slapshot en David Anderson."
+stefan:
+  first_name: Stefan
+  last_name: van den Oord
+  github: svdo
+  linkedin: stefanvandenoord
+  permalink: /author/stefan/
+  header-img: img/graphiti.jpeg
+  avatar: stefan.png
+  bio: "I love software development. I'm a generalist and I like learning
+       new things all the time. I particulary enjoy using extreme programming,
+       including practices like pair programming, test-driven design, etc. I
+       also enjoy teaching others about it, for example at conferences,
+       or using coding dojos."
