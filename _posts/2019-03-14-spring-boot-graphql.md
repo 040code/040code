@@ -8,6 +8,7 @@ header-img: "assets/2019-03-14_spring-boot-graphql/glow-lichttoren.jpg"
 tags: [graphql, spring, java]
 ---
 
+
 ### Introduction
 Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how [GraphQL](https://graphql.org/) works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.
 
