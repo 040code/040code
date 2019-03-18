@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>Mob Programming - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2019/03/15/mob-programming/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+    <link rel="stylesheet" type="text/css" href="/css/asciinema-player.css" />
+    <script src="/js/asciinema-player.js"></script>
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/stefan/">Stefan van den Oord</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2019-03-15-mob-programming/background.jpeg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Mob Programming</h1>
+                    
+                    <h2 class="subheading">Learnings of a workshop</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/stefan/">
+                            Stefan van den Oord
+                          </a>
+                          
+                      
+                      on 2019-03-15</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/xp/">Extreme Programming</a>
+
+
+				<p><em>This blog was originally posted on <a href="https://gist.github.com/svdo/0519c26fec9899b9b2c081c1c3d37ff6#file-blog-post-mob-programming-md">Feb 25, 2019</a>.</em></p>
+
+<blockquote>
+  <p>Last week I was lucky to be able to attend a workshop about “mob programming”, given by Woody Zuill. As somebody who considers himself “agile” (in the original sense of the word) and who is a proponent of extreme programming, I liked it a lot. In this article I’m sharing some of my findings and learnings.</p>
+</blockquote>
+
+<h1 id="mob-programming">Mob Programming</h1>
+
+<p>Simply put, it means that the entire team is working on a single computer, all together at the same time. As an outsider, you might see a few big screens next to each other, and team members sitting next to each other facing those screens. One person is behind the keyboard, and the others are looking at the screens. One of them seems to have a special role, because he is telling the person behind the keyboard what to do.</p>
+
+<p>Looking a bit closer, you notice that one person is not really looking at the screens very much, but paying close attention to what the rest are doing. He notices you and quietly comes over to you. He introduces himself as the team’s coach.</p>
+
+<p><em>You:</em> This looks interesting, can you explain what is going on here?</p>
+
+<p><em>Coach:</em> Sure! This team is learning mob programming. They have been at it for a while now and are approaching the point where they don’t need me anymore. They understand how to do it and why they are doing it. They are learning how to improve on this by themselves.</p>
+
+<p><em>You:</em> So why are they doing it?</p>
+
+<p><em>Coach:</em> There are two important reasons. The first is that the team wanted to learn to work together more effectively. They want to have a common understanding of things like architecture, coding standards, and code quality. Before they started working this way, they were in trouble. They were working on a project that was already a year late, and they didn’t know how to make the drastic improvements that were needed. When I was hired, I noticed that cycle times for bug fixes where sky-high: it took forever for a bug that was reported to be fixed. When I looked into the code base and I was not very enthusiastic about the quality. When asking about this to the individual team members, they reacted very differently. Some didn’t feel there was a problem. Others did, but they found they couldn’t address it because the rest of the team “just doesn’t get it”. There clearly was an issue with the team’s ability to operate <em>as a team</em> instead of just a bunch of individuals.</p>
+
+<p><em>You:</em> I have seen situations like that myself occasionally. Has it improved?</p>
+
+<p><em>Coach:</em> Oh yes, it can be difficult still sometimes, but they have learned to discuss such issues with each other. They have learned to raise such issues, and they have learned to do that in a respectful manner.</p>
+
+<p><em>You:</em> How did that happen?</p>
+
+<p><em>Coach:</em> I let them play.</p>
+
+<p><em>You:</em> Come again?</p>
+
+<p><em>Coach:</em> Let me ask you a question: what is the most important prerequisite for learning?</p>
+
+<p><em>You:</em> That’s easy. We have known forever; that’s why we don’t allow bullying at schools, for example. It is <em>security</em>, the knowing that it’s ok to be wrong, to make mistakes.</p>
+
+<p><em>Coach:</em> Indeed! So that’s what we did. Every Friday afternoon, we’d have a coding dojo together, where we practiced coding kata’s. The word “dojo” comes from martial arts: a place where you practice. A “kata” is a series of made-up exercises designed to help you learn something in a safe situation. And we found that it was so much easier to discuss code quality with each other when we didn’t have the pressure of “work” attached to it! Nowadays, instead of using Friday afternoons for this, we start every day with a coding dojo of an hour. Through this, we have learned to treat each other with kindness, consideration, and respect.</p>
+
+<p><em>You:</em> That sounds like it might not only be effective, but also fun! So you mentioned that there are two reasons for doing mob programming. What’s the other one?</p>
+
+<p><em>Coach:</em> The second reason is even more important than the first one. What harms project progress more than anything else?</p>
+
+<p><em>You:</em> Ehh…</p>
+
+<p><em>Coach:</em> <em>(gives encouraging look)</em></p>
+
+<p><em>You:</em> Well…</p>
+
+<p><em>Coach:</em> Exactly, delays! Waiting time, queues, inventory! This is all very well known from <em>lean manufacturing</em>. It is common sense that keeping people busy while waiting for important answers is counter-productive. It’s not about being busy, it is about getting the most important thing done as fast as possible. A waiting time of an hour probably costs at least two hours because of context switching. It’s all about <em>flow</em>. Mob programming is a multi-discipline approach. Everybody who is needed should be present, including designers, testers, product owner. And if key people cannot be present, they have to make sure that they are otherwise available and get back to questions within minutes. Unless the project is not important of course, but then you should probably find something else to do.</p>
+
+<p><em>You:</em> Right. It’s surprising how much <em>lean</em> is common sense in one discipline, and how novel it appears to be in software engineering.</p>
+
+<p><em>Coach:</em> And it gets better. Because “flow” has another meaning, from the field of psychology. When you’re “in flow”, you are highly concentrated, you forget distractions, every ounce of your mental powers is used to solve the problem at hand. One of the original goals of pair programming was to improve flow: when one of the pair needs to step away for a moment, the other continues. When the first returns, she can get right back into flow again. Mob programming reinforces this even more.</p>
+
+<h2 id="the-workshop">The Workshop</h2>
+
+<p>So that was what the workshop was about: why do it, and how to do it. There was a hands-on coding dojo of a few hours that was designed to get a flavour of what you need to learn as a team to be more effective. I won’t spoil it for you, but to me it struck a good balance between fun and “suffering” (being confronted with things that you didn’t know you were doing ineffectively).</p>
+
+<p>Focussing on <em>flow</em> feels like a good idea. When you do that as a team, you can come up with strategies to deal with problems like managers trying to interrupt too often, for example. But also things that need studying can interrupt your flow; you might create a list of study topics to park these things on, and have a dedicated hour of learning every day for those topics (coding dojo!).</p>
+
+<p>There is so much more to talk about. For example, the roles of mob programming and the underlying principle: <em>all ideas must go from somebody’s head into the computer through somebody else’s hands</em>.</p>
+
+<p>Want to learn more? Hire Woody Zuill and/or buy his book “Mob Programming – A Whole Team Approach”. Like what you read? Contact me and let’s see how we can leverage this!</p>
+
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/03/13/git-bisect/" data-toggle="tooltip" data-placement="top" title="Git Bisect">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
