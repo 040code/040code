@@ -339,6 +339,6 @@ That is all, of course you should add some assert to check the content as well. 
 
 ### Some thoughts
 
-The example above shows how you can enable your Spring Boot service with a GraphQL API. Adding a GraphQL layer to your existing (siimple) service is fairly easy with the tools. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to create a fluent and understandable API.
+The example above shows how you can enable your Spring Boot service with a GraphQL API. Adding a GraphQL layer to your existing (simple) service is fairly easy with the tools. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to create a fluent and understandable API.
 
 If a java based approach is in that case the best way to go, I don't know yet. In that case it could be interesting to dive into [Rejoiner](https://github.com/google/rejoiner).
