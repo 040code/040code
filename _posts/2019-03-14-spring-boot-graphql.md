@@ -99,7 +99,7 @@ So that is all to create a simple service with basic JPA (persistence) capacity.
 ### Implement a query
 As base library we use `graphql-java-tools` this library requires a GraphQL schema to implement GrahpQL. The first step is to define a schema for our queries. The schema defines our GraphQL root, for now only the query. Next the queries we will implement and the types we use. We define two queries. The first one to look op a note and the second one to find all notes based on a filter. Next, we define the types. As you can see a Note has a relation to a Person object. By querying for a note we can get immediately the authors name for example.
 
-```graphql
+```
 schema {
     query: Query,
 }
@@ -291,7 +291,7 @@ subscription {
 }
 ```
 <a href="#">
-    <img src="{{ site.baseurl }}/assets/2019-03-14_spring-boot-graphql/subscription-graphiql.pn"
+    <img src="{{ site.baseurl }}/assets/2019-03-14_spring-boot-graphql/subscription-graphiql.png"
     alt="Query example">
 </a>
 
