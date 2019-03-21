@@ -1,4 +1,309 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2019-03-18T14:23:24+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">Mob Programming</title><link href="https://040code.github.io//2019/03/15/mob-programming/" rel="alternate" type="text/html" title="Mob Programming" /><published>2019-03-15T00:00:00+00:00</published><updated>2019-03-15T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/15/mob-programming</id><content type="html" xml:base="https://040code.github.io//2019/03/15/mob-programming/">&lt;p&gt;&lt;em&gt;This blog was originally posted on &lt;a href=&quot;https://gist.github.com/svdo/0519c26fec9899b9b2c081c1c3d37ff6#file-blog-post-mob-programming-md&quot;&gt;Feb 25, 2019&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2019-03-21T09:20:55+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">GraphQL + Spring Boot</title><link href="https://040code.github.io//2019/03/21/spring-boot-graphql/" rel="alternate" type="text/html" title="GraphQL + Spring Boot" /><published>2019-03-21T00:00:00+00:00</published><updated>2019-03-21T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/21/spring-boot-graphql</id><content type="html" xml:base="https://040code.github.io//2019/03/21/spring-boot-graphql/">&lt;h3 id=&quot;introduction&quot;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how &lt;a href=&quot;https://graphql.org/&quot;&gt;GraphQL&lt;/a&gt; works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.&lt;/p&gt;
+
+&lt;p&gt;GraphQL is API is based on three main concepts. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. A major difference with REST is that wit a query you can specify excatly what you expect or want from the backend. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.&lt;/p&gt;
+
+&lt;h3 id=&quot;java-spring-and-graphql&quot;&gt;Java, Spring and GraphQL.&lt;/h3&gt;
+&lt;p&gt;For implementing a GraphQL service you have two choices. Either schema first, or code first. So similar concepts as we used with SOA XML services. When starting with code you have to write more plumbing code, but you have more freedom. And on the other side starting of the schema reduce all the plumbing code and gives a faster start.&lt;/p&gt;
+
+&lt;p&gt;In this blog we first create a simple JPA enabled Spring Boot service. Then we add step-by-step GraphQL features to the service. We start from the schema and show which small additions you have to do to our application. Starting from a schema will not result in generated coded, you still have to write the matching code yourself. For the Java implementation we will use the libraries from &lt;a href=&quot;https://github.com/graphql-java-kickstart&quot;&gt;graphql-java-kickstart&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;sample-model-and-api&quot;&gt;Sample Model and API&lt;/h3&gt;
+&lt;p&gt;For simplicity we use in this blog a simple domain model. Consisting of two classes. A person and notes, a person can have multiple notes. And a note always has one author, a person.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2019-03-21_spring-boot-graphql/model.png&quot; alt=&quot;Model&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;create-a-simple-note-service&quot;&gt;Create a simple Note Service&lt;/h3&gt;
+&lt;p&gt;First we create a simple Spring JPA services, to store the Notes and the Authors of type Person. The implementation will be straightforward. We create an entity class for Person and Note. Fore readability the imports and other plumbing is omitted. See &lt;a href=&quot;https://github.com/npalm/blog-graphql-spring-service&quot;&gt;GitHub&lt;/a&gt; for a complete implementation.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Entity&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Id&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@GeneratedValue&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Column&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Entity&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Id&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@GeneratedValue&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ZonedDateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;createdOn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@ManyToOne&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FetchType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EAGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next we define two spring JPA repositories to store the entities above in our database.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Repository&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonRepository&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CrudRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Repository&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NoteRepository&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CrudRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we define the services interface which we will use to implement the GraphQL queries,&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NotesService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Optional&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So that is all to create a simple service with basic JPA (persistence) capacity. Time to focus on adding GraphQL to our service.&lt;/p&gt;
+
+&lt;h3 id=&quot;implement-a-query&quot;&gt;Implement a query&lt;/h3&gt;
+&lt;p&gt;As base library we use &lt;code class=&quot;highlighter-rouge&quot;&gt;graphql-java-tools&lt;/code&gt; this library requires a GraphQL schema to implement GrahpQL. The first step is to define a schema for our queries. The schema defines our GraphQL root, for now only the query. Next the queries we will implement and the types we use. We define two queries. The first one to look op a note and the second one to find all notes based on a filter. Next, we define the types. As you can see a Note has a relation to a Person object. By querying for a note we can get immediately the authors name for example.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;schema {
+    query: Query,
+}
+
+type Query {
+    note(id: Long!): Note
+    notes: [Note]
+}
+
+# Object to represent a note
+type Note {
+    id: ID!
+    note: String
+    createdOn : String
+    author: Person
+}
+
+# Object to represent a note
+type Person {
+    id: ID!
+    name: String
+    email: String
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;implement-mutation&quot;&gt;Implement Mutation&lt;/h3&gt;
+&lt;p&gt;We have now defined a first version of a GraphQL schema. The second step is to connect the schema to the Note Service. GraphQL java tools expects for each query, a resolver function. Therefore, we need to implement &lt;code class=&quot;highlighter-rouge&quot;&gt;GraphQLQueryResolver&lt;/code&gt; from graphql-tools.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GraphQLQueryResolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NotesService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NotesService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;notesService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Optional&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;notes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is all, we have to do to be able to handle the queries as specified in the schema. We can now start the spring boot application and open http://locahost:8080/graphiql and query form some. Graphiql is a simple IDE to execute GraphQL queries. A much richer tool to play with your queries is &lt;a href=&quot;https://github.com/prisma/graphql-playground&quot;&gt;GraphQL Playground&lt;/a&gt;. Actually no fun yet, we can only execute queries without getting any result. We simply have an empty system. We need a way to add notes to the system. In GraphQL you mutate data via a mutation. In the next step we add a mutation to the schema and update the code for executing the mutation.&lt;/p&gt;
+
+&lt;p&gt;In the schema we add the mutation to the root and add a mutation to add a note to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Mutation&lt;/code&gt; type. Quite similar to defining the query above. For the input we define an input object for both Note and Person.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+schema {
+    ...
+    mutation: Mutation
+}
+
+type Mutation {
+    addNote(note: InputNote!, author: InputPerson!): Note
+}
+
+# Input type for the author of the note
+input InputPerson {
+    name: String!
+    email: String
+}
+
+# Input type for a new Note
+input InputNote {
+    note: String!
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Similar to implementing the query we have to implement an interface and declare methods for the mutation. Mutations have to be implemented in a class implementing the interface GraphQLMutationResolver. In this implementation we defined for the input objects converters to convert the GraphQL input object to domain objects that can be consumed by the service.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Mutation&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GraphQLMutationResolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addNote&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InputNote&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InputPerson&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;notesService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InputNote&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;convert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s test the service. Build and start the service &lt;code class=&quot;highlighter-rouge&quot;&gt;/gradlew clean bootRun&lt;/code&gt; and open &lt;a href=&quot;http://localhost:8080/graphiql&quot;&gt;http://localhost:8080/graphiql&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mutation {
+  addNote(note: {note: &quot;Hello World&quot;},
+    author: {name: &quot;John Doe&quot;, email: &quot;no-reply@jonn.doe&quot;}) {
+    id
+  }
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And query for all available notes. This should result only in the note above.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;notes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;createdOn&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2019-03-21_spring-boot-graphql/query-graphiql.png&quot; alt=&quot;Query example&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Add some more notes and experiment with the query. All standard features will work such as aliases, fragement and variables.&lt;/p&gt;
+
+&lt;h3 id=&quot;implement-subscriptions&quot;&gt;Implement Subscriptions.&lt;/h3&gt;
+
+&lt;p&gt;Another cool feature is the subscriptions. With a subscription you can subscribe to updates via a websocket. The same philosophy is followed for the subscription. You will gat your data in same structure as specified in the subscription call.&lt;/p&gt;
+
+&lt;p&gt;To add subscription to our Java implements, we update the schema and add code to handle updates. To add a subscription for new notes we update the GraphQL schema first. Again update schema root and add the subscription, define the available subscriptions and add the required types.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;schema {
+    ...
+    subscription : Subscription
+}
+
+type Subscription {
+    # Subscribe to all new comments
+    notes: NoteUpdate!
+}
+
+type NoteUpdate {
+    # The note text
+    note : String
+    # The name of the author
+    authorName : String
+    # Time when the note was received
+    createdOn : String
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And once again we have to implement a resolver, this time we implement the &lt;code class=&quot;highlighter-rouge&quot;&gt;GraphQLSubscriptionResolver&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Subscription&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GraphQLSubscriptionResolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CommentPublisher&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commentPublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Subscription&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CommentPublisher&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commentPublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commentPublisher&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commentPublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;Publisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NoteUpdate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;notes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commentPublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Note&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;note&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;notePublisher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;publish&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savedNoed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;notePublisher&lt;/code&gt; is responsible to update messages via a WebScoket so the subscribers get the update. For the implementation check out the GitHub repo. Time to test the subscription. An easy way to test is topen the GraphiQL editor on two screens. Invoke in the first one the subscription and in the second one add a note. You will see you get an update of the new note on the first screen.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;subscription {
+  notes {
+    note
+    authorName
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
+    &lt;img src=&quot;/assets/2019-03-21_spring-boot-graphql/subscription-graphiql.png&quot; alt=&quot;Query example&quot; /&gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;testing&quot;&gt;Testing&lt;/h3&gt;
+&lt;p&gt;Another nice feature provided by &lt;a href=&quot;https://github.com/graphql-java-kickstart/graphql-spring-boot&quot;&gt;graphql-spring-boot&lt;/a&gt; is the test utils. Testing your GraphQL queries becomes really simple. The library provide a &lt;code class=&quot;highlighter-rouge&quot;&gt;GraphQLTestTemplate&lt;/code&gt; which makes it easy to invoke the GraphQL endpoint by with a query. The result is the JSON object. Let’s have a quick look on some code. First define the query in &lt;code class=&quot;highlighter-rouge&quot;&gt;queries/find-notes.graphql&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;query FindNotes {
+  notes {
+    id
+    note
+    createdOn
+    author {
+      name
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now create a test.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RunWith&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SpringRunner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@SpringBootTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;webEnvironment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SpringBootTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;WebEnvironment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;RANDOM_PORT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GraphQLNoteTest&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GraphQLBaseTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GraphQLTestTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;graphQLTestTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;findNotes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;GraphQLResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findResponse&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;graphQLTestTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;perform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;queries/find-notes.graphql&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;assertTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;findResponse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isOk&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;// asserts to check the content&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That is all, of course you should add some assert to check the content as well. For more details check out the &lt;a href=&quot;https://github.com/npalm/blog-graphql-spring-service&quot;&gt;GitHub&lt;/a&gt; repo of this blog.&lt;/p&gt;
+
+&lt;h3 id=&quot;some-thoughts&quot;&gt;Some thoughts&lt;/h3&gt;
+
+&lt;p&gt;The example above shows how you can enable your Spring Boot service with a GraphQL API. Adding a GraphQL layer to your existing (simple) service is fairly easy with the tools. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to create a fluent and understandable API.&lt;/p&gt;
+
+&lt;p&gt;If a java based approach is in that case the best way to go, I don’t know yet. In that case it could be interesting to dive into &lt;a href=&quot;https://github.com/google/rejoiner&quot;&gt;Rejoiner&lt;/a&gt;.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/noodle_niek.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;}</name><email>dev.npalm@gmail.com</email></author><category term="graphql" /><category term="spring" /><category term="java" /><summary type="html">Introduction Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how GraphQL works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.</summary></entry><entry><title type="html">Mob Programming</title><link href="https://040code.github.io//2019/03/15/mob-programming/" rel="alternate" type="text/html" title="Mob Programming" /><published>2019-03-15T00:00:00+00:00</published><updated>2019-03-15T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/15/mob-programming</id><content type="html" xml:base="https://040code.github.io//2019/03/15/mob-programming/">&lt;p&gt;&lt;em&gt;This blog was originally posted on &lt;a href=&quot;https://gist.github.com/svdo/0519c26fec9899b9b2c081c1c3d37ff6#file-blog-post-mob-programming-md&quot;&gt;Feb 25, 2019&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;Last week I was lucky to be able to attend a workshop about “mob programming”, given by Woody Zuill. As somebody who considers himself “agile” (in the original sense of the word) and who is a proponent of extreme programming, I liked it a lot. In this article I’m sharing some of my findings and learnings.&lt;/p&gt;
@@ -1554,362 +1859,4 @@ paper&lt;/a&gt;&lt;/li&gt;
     non-secure-port: ${EXTERNAL_PORT}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;With this approach the discovery agent becomes obsolete and we can retrieve the information for discovery through standard Amazon features. The example I have described in this post is just one way to implement service discovery in ECS, many alternatives are available.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/noodle_niek.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="spring" /><category term="docker" /><summary type="html">Last year I wrote a post how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the ECS agent 1.15 to retrieve container meta data in the container. This feature makes the discovery agent obsolete.</summary></entry><entry><title type="html">MicroHack Fargate</title><link href="https://040code.github.io//2018/01/30/fargate_with_terraform/" rel="alternate" type="text/html" title="MicroHack Fargate" /><published>2018-01-30T00:00:00+00:00</published><updated>2018-01-30T00:00:00+00:00</updated><id>https://040code.github.io//2018/01/30/fargate_with_terraform</id><content type="html" xml:base="https://040code.github.io//2018/01/30/fargate_with_terraform/">&lt;p&gt;Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in &lt;code class=&quot;highlighter-rouge&quot;&gt;us-east-1&lt;/code&gt;, see also the &lt;a href=&quot;https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/&quot;&gt;list&lt;/a&gt; of supported regions. Later in December Fargate also become available in &lt;a href=&quot;https://www.terraform.io/&quot;&gt;Terraform&lt;/a&gt; so time to see how it works.&lt;/p&gt;
-
-&lt;p&gt;In this post I will show how to deploy containers to Fargate using Terraform. As example docker image I will use the blog itself. The complete example in available on &lt;a href=&quot;https://github.com/npalm/blog_terraform_aws_fargate&quot;&gt;GitHub&lt;/a&gt;. First I show how you can deploy a container using Terraform to Fargate. In case you would like to experiment with AWS console instead of Terraform you should be able to execute the same steps direct in AWS. Only the VPC part could be a bit tricky, but even that part can be skipped and replaced with the default VPC. In that case you don’t have private subnets available.&lt;/p&gt;
-
-&lt;p&gt;Finally I will discuss how a deployment with Fargate in ECS compares to a deployment with EC2 in ECS. And show what steps have to be taken to move the deployment from Fargate to EC2 instances.&lt;/p&gt;
-
-&lt;h2 id=&quot;prerequisites&quot;&gt;Prerequisites&lt;/h2&gt;
-&lt;p&gt;Before you start you need to have programmatically access to an AWS account and Terraform (0.11+) installed. The tool &lt;a href=&quot;http://brewformulas.org/Tfenv&quot;&gt;tfenv&lt;/a&gt; let you manage multiple terraform version on your system.&lt;/p&gt;
-
-&lt;h2 id=&quot;deploy-serverless-containers-on-fargate&quot;&gt;Deploy serverless containers on Fargate&lt;/h2&gt;
-&lt;p&gt;Before we can create our containers, we have to create a few infrastructural components. For this example we create an own VPC including public and private subnets. An ECS cluster for our containers, and a CloudWatch log group for centralized logging. The diagram below shows an abstract view of the deployment we are going to create, this view contains two in instead of the 3 availability zones we use.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate-diagram.png&quot; alt=&quot;Fargate&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;We start with defining the VPC, we choose &lt;code class=&quot;highlighter-rouge&quot;&gt;us-east-1&lt;/code&gt; since Fargate is only available in this region. In the blog post &lt;a href=&quot;/2017/06/18/terraform-aws-vpc/&quot;&gt;Coding a VPC in Terraform&lt;/a&gt; you find more details about how this VPC module is structured.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;provider &quot;aws&quot; {
-  region  = &quot;us-east-1&quot;
-  version = &quot;1.7.1&quot;
-}
-
-provider &quot;template&quot; {
-  version = &quot;1.0&quot;
-}
-
-module &quot;vpc&quot; {
-  source  = &quot;npalm/vpc/aws&quot; // https://registry.terraform.io/modules/npalm/vpc/aws
-  version = &quot;1.1.0&quot;
-
-  environment = &quot;blog&quot;
-  aws_region  = &quot;us-east-1&quot;
-
-  create_private_hosted_zone = &quot;false&quot;
-
-  // us-east-1 is the only region that supports Fargate
-  availability_zones = {
-    us-east-1 = [&quot;us-east-1a&quot;, &quot;us-east-1b&quot;, &quot;us-east-1c&quot;]
-  }
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Next we define the ECS cluster, and CloudWatch log group. Since we will deploy to Fargate we don’t have to attache EC2 instances to our cluster.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_ecs_cluster&quot; &quot;cluster&quot; {
-  name = &quot;blog-ecs-cluster&quot;
-}
-
-resource &quot;aws_cloudwatch_log_group&quot; &quot;log_group&quot; {
-  name = &quot;blog&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Now the first part is defined we execute a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; and inpect the results.&lt;/p&gt;
-
-&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-1.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
-&lt;/asciinema-player&gt;
-
-&lt;p&gt;The next step is to deploy the docker image with the blog. In ECS you deploy a docker container with a task. And your task will be managed by a service. First we create the task definition which contains the container deployment definition as well. Fargate is using &lt;a href=&quot;https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html&quot;&gt;awsvpc as networking mode&lt;/a&gt;, in this mode each task definiton gets its own private ip address. This network mode requires a role for the task execution. In case you create your definition through the Amazon console a service linked role will be created for you. We will create this role also via code.&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;data &quot;aws_iam_policy_document&quot; &quot;ecs_tasks_execution_role&quot; {
-  statement {
-    actions = [&quot;sts:AssumeRole&quot;]
-
-    principals {
-      type        = &quot;Service&quot;
-      identifiers = [&quot;ecs-tasks.amazonaws.com&quot;]
-    }
-  }
-}
-
-resource &quot;aws_iam_role&quot; &quot;ecs_tasks_execution_role&quot; {
-  name               = &quot;blog-ecs-task-execution-role&quot;
-  assume_role_policy = &quot;${data.aws_iam_policy_document.ecs_tasks_execution_role.json}&quot;
-}
-
-resource &quot;aws_iam_role_policy_attachment&quot; &quot;ecs_tasks_execution_role&quot; {
-  role       = &quot;${aws_iam_role.ecs_tasks_execution_role.name}&quot;
-  policy_arn = &quot;arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy&quot;
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We have defined the execution rol for the task, next we define the task definion. This task definition consist of two parts. First we define a container definition via a &lt;code class=&quot;highlighter-rouge&quot;&gt;template_file&lt;/code&gt;. In this container definition you see container port 80 is mapped to host port 80, the task will get its own private IP. And after that we define the task definition self. The following settings are required for a task that will run in Fargate: requires_compatibilities, network_mode, cpu and memory.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;data &quot;template_file&quot; &quot;blog&quot; {
-  template = &amp;lt;&amp;lt;EOF
-  [
-    {
-      &quot;essential&quot;: true,
-      &quot;image&quot;: &quot;npalm/040code.github.io:latest&quot;,
-      &quot;name&quot;: &quot;blog&quot;,
-      &quot;portMappings&quot;: [
-        {
-          &quot;hostPort&quot;: 80,
-          &quot;protocol&quot;: &quot;tcp&quot;,
-          &quot;containerPort&quot;: 80
-        }
-      ],
-      &quot;logConfiguration&quot;: {
-        &quot;logDriver&quot;: &quot;awslogs&quot;,
-        &quot;options&quot;: {
-          &quot;awslogs-group&quot;: &quot;blog&quot;,
-          &quot;awslogs-region&quot;: &quot;us-east-1&quot;,
-          &quot;awslogs-stream-prefix&quot;: &quot;040code&quot;
-        }
-      }
-    }
-  ]
-
-  EOF
-}
-
-resource &quot;aws_ecs_task_definition&quot; &quot;task&quot; {
-  family                   = &quot;blog-blog&quot;
-  container_definitions    = &quot;${data.template_file.blog.rendered}&quot;
-  network_mode             = &quot;awsvpc&quot;
-  cpu                      = &quot;256&quot;
-  memory                   = &quot;512&quot;
-  requires_compatibilities = [&quot;FARGATE&quot;]
-  execution_role_arn       = &quot;${aws_iam_role.ecs_tasks_execution_role.arn}&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Time to verify the code is working by executing a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;&lt;/p&gt;
-
-&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-2.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.0&quot;&gt;
-&lt;/asciinema-player&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/container-definition.png&quot; alt=&quot;Fargate&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;We have still nothing running but you can already see the different parts in de AWS console. We have now a VPC, CloudWatch log group, ECS cluster and task definition available. The next logical step in de AWS console would be to create the service, and find out at the latest step that you need to create a load balancer first. So in code we will define the load balancer first. The load balancer will route traffic via HTTP to the container.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_security_group&quot; &quot;alb_sg&quot; {
-  name   = &quot;blog-blog-alb-sg&quot;
-  vpc_id = &quot;${module.vpc.vpc_id}&quot;
-
-  ingress {
-    protocol    = &quot;tcp&quot;
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = [&quot;0.0.0.0/0&quot;]
-  }
-
-  egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = &quot;-1&quot;
-
-    cidr_blocks = [&quot;0.0.0.0/0&quot;]
-  }
-}
-
-resource &quot;aws_alb&quot; &quot;main&quot; {
-  internal        = &quot;false&quot;
-  subnets         = [&quot;${module.vpc.public_subnets}&quot;]
-  security_groups = [&quot;${aws_security_group.alb_sg.id}&quot;]
-}
-
-resource &quot;aws_alb_listener&quot; &quot;main&quot; {
-  load_balancer_arn = &quot;${aws_alb.main.id}&quot;
-  port              = 80
-  protocol          = &quot;HTTP&quot;
-
-  default_action {
-    target_group_arn = &quot;${aws_alb_target_group.main.id}&quot;
-    type             = &quot;forward&quot;
-  }
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We connect a target group to the load balancer. The same target group will be used later in the service, the service can register itself to the target group with the actual IP address once up and running. For the target group we have to specify the target type &lt;code class=&quot;highlighter-rouge&quot;&gt;ip&lt;/code&gt; and not &lt;code class=&quot;highlighter-rouge&quot;&gt;instance&lt;/code&gt; since containers running in Fargate will get their own IP. Actually this not Fargate but &lt;code class=&quot;highlighter-rouge&quot;&gt;awsvpc&lt;/code&gt; behavior.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_alb_target_group&quot; &quot;main&quot; {
-  port        = &quot;80&quot;
-  protocol    = &quot;HTTP&quot;
-  vpc_id      = &quot;${module.vpc.vpc_id}&quot;
-  target_type = &quot;ip&quot;
-}
-
-output &quot;blog_url&quot; {
-  value = &quot;http://${aws_alb.main.dns_name}&quot;
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Again we verify our new code by executing a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt;.&lt;/p&gt;
-
-&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-3.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
-&lt;/asciinema-player&gt;
-
-&lt;p&gt;We are almost there, next we define the service. A task running in in network mode &lt;code class=&quot;highlighter-rouge&quot;&gt;awsvpc&lt;/code&gt;, requires a service that defines a network configuration. In the networking configuration we define a security group to control access to our containers, and we define the subnets in which the containers are hosted.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;resource &quot;aws_security_group&quot; &quot;awsvpc_sg&quot; {
-  name   = &quot;blog-awsvpc-cluster-sg&quot;
-  vpc_id = &quot;${module.vpc.vpc_id}&quot;
-
-  ingress {
-    protocol  = &quot;tcp&quot;
-    from_port = 0
-    to_port   = 65535
-
-    cidr_blocks = [
-      &quot;${module.vpc.vpc_cidr}&quot;,
-    ]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = &quot;tcp&quot;
-    cidr_blocks = [&quot;0.0.0.0/0&quot;]
-  }
-
-  tags {
-    Name        = &quot;blog-ecs-cluster-sg&quot;
-    Environment = &quot;blog&quot;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;The last resource to create is the service. In the service we connect the task, load balancer and security group together. By setting the launch type to &lt;code class=&quot;highlighter-rouge&quot;&gt;FARGATE&lt;/code&gt; we tell Amazon to deploy the container to Fargate.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-resource &quot;aws_ecs_service&quot; &quot;service&quot; {
-  name            = &quot;blog&quot;
-  cluster         = &quot;${aws_ecs_cluster.cluster.id}&quot;
-  task_definition = &quot;${aws_ecs_task_definition.task.arn}&quot;
-  desired_count   = 1
-
-  load_balancer = {
-    target_group_arn = &quot;${aws_alb_target_group.main.arn}&quot;
-    container_name   = &quot;blog&quot;
-    container_port   = 80
-  }
-
-  launch_type = &quot;FARGATE&quot;
-
-  network_configuration {
-    security_groups = [&quot;${aws_security_group.awsvpc_sg.id}&quot;]
-    subnets         = [&quot;${module.vpc.private_subnets}&quot;]
-  }
-
-  depends_on = [&quot;aws_alb_listener.main&quot;]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;That is the last part of coding, run &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; and inspect the result.&lt;/p&gt;
-
-&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-terraform-4.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
-&lt;/asciinema-player&gt;
-
-&lt;p&gt;That is all, we have now our blog running as serverless container in AWS Fargate.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate.png&quot; alt=&quot;Fargate&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;mixing-ec2-and-fargate-on-ecs&quot;&gt;Mixing EC2 and Fargate on ECS&lt;/h2&gt;
-&lt;p&gt;Great we have now our container running in ECS with Fargate but what if we would like to move the container to a dedicated EC2 instances in ECS. Or what if we need that are not available in in Fargate, such as a volume mount? How difficult would it be to move our containers to an ECS cluster with dedicated EC2 instances? Time to do an experiment to see how difficult is is.&lt;/p&gt;
-
-&lt;p&gt;First we refactor the above code to some &lt;a href=&quot;https://github.com/npalm/terraform-aws-ecs-service&quot;&gt;generic ecs service modules&lt;/a&gt; to be able to define our services with just a few lines of code. This module replaces all code of defining the load balancer, service and task. It still requires a VPC, ECS cluster, CloudWatch logging group, awsvpc security group and execution role. In the code you see a similar deployment of the blog but now with a generic ECS service module.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;locals {
-  fg_container_name = &quot;blog&quot;
-  fg_container_port = &quot;80&quot;
-}
-
-data &quot;template_file&quot; &quot;blog&quot; {
-  template = &quot;${file(&quot;${path.root}/task-definition/blog.json&quot;)}&quot;
-
-  vars {
-    container_name   = &quot;${local.fg_container_name}&quot;
-    container_port   = &quot;${local.fg_container_port}&quot;
-    log_group_name   = &quot;${aws_cloudwatch_log_group.log_group.name}&quot;
-    log_group_region = &quot;${var.aws_region}&quot;
-    log_group_prefix = &quot;blog&quot;
-  }
-}
-
-module &quot;blog-fg&quot; {
-  source = &quot;npalm/ecs-service/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-service/aws
-
-  service_launch_type  = &quot;FARGATE&quot;
-  service_name          = &quot;${local.fg_container_name}&quot;
-
-  vpc_id       = &quot;${module.vpc.vpc_id}&quot;
-  vpc_cidr     = &quot;${module.vpc.vpc_cidr}&quot;
-  lb_subnetids = &quot;${module.vpc.public_subnets}&quot;
-  ecs_cluster_id = &quot;${aws_ecs_cluster.cluster.id}&quot;
-  lb_internal = false
-
-  task_definition = &quot;${data.template_file.blog.rendered}&quot;
-  task_cpu        = &quot;256&quot;
-  task_memory     = &quot;512&quot;
-
-  awsvpc_task_execution_role_arn = &quot;${aws_iam_role.ecs_tasks_execution_role.arn}&quot;
-  awsvpc_service_security_groups = [&quot;${aws_security_group.awsvpc_sg.id}&quot;]
-  awsvpc_service_subnetids       = &quot;${module.vpc.private_subnets}&quot;
-
-  lb_target_group = {
-    container_name = &quot;${local.fg_container_name}&quot;
-    container_port = &quot;${local.fg_container_port}&quot;
-  }
-
-  lb_listener = {
-    port     = 80
-    protocol = &quot;HTTP&quot;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We still have our container not running in ECS on EC2 instances. For that we first have to create EC2 instances that will be attached to the same ECS cluster. For more details about create the EC2 instances see the &lt;a href=&quot;https://github.com/npalm/terraform-aws-ecs-instances&quot;&gt;ecs instance repo&lt;/a&gt; on GitHub.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;locals {
-  key_name = &quot;blog&quot;
-  environment = &quot;dev&quot;
-}
-
-resource &quot;aws_key_pair&quot; &quot;key&quot; {
-  key_name   = &quot;${local.key_name}&quot;
-  public_key = &quot;${file(&quot;id_rsa&quot;)}&quot;
-}
-
-module &quot;ecs_instances&quot; {
-  source  = &quot;npalm/ecs-instances/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-instances/aws
-
-  ecs_cluster_name = &quot;${aws_ecs_cluster.cluster.name}&quot;
-  aws_region       = &quot;${local.aws_region}&quot;
-  environment      = &quot;${local.environment}&quot;
-  key_name         = &quot;${local.key_name}&quot;
-  vpc_id           = &quot;${module.vpc.vpc_id}&quot;
-  vpc_cidr         = &quot;${module.vpc.vpc_cidr}&quot;
-  subnets          = &quot;${module.vpc.private_subnets}&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Now we have our EC2 instances available we only have to copy the the blog module above and change the launch type to &lt;code class=&quot;highlighter-rouge&quot;&gt;EC2&lt;/code&gt;, and our container will be deployed to a dedicated EC2 instance.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-module &quot;blog-ec&quot; {
-  source = &quot;npalm/ecs-service/aws&quot; // https://registry.terraform.io/modules/npalm/ecs-service/aws
-
-  service_launch_type  = &quot;FARGATE&quot;
-  service_name          = &quot;blog-ec2&quot;
-
-  ... SAME AS ABOVE ...
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;That is all, all sample code is available at &lt;a href=&quot;https://github.com/npalm/blog_terraform_aws_fargate&quot;&gt;GitHub&lt;/a&gt; see subdir &lt;code class=&quot;highlighter-rouge&quot;&gt;fargate-ec2&lt;/code&gt;. Time to run a &lt;code class=&quot;highlighter-rouge&quot;&gt;terraform apply&lt;/code&gt; to see if it works.&lt;/p&gt;
-
-&lt;asciinema-player src=&quot;/assets/2018-01-30-fargate_with_terraform/asciinema/fargate-ec2.json&quot; cols=&quot;166&quot; rows=&quot;15&quot; autoplay=&quot;true&quot; loop=&quot;true&quot; speed=&quot;1.5&quot;&gt;
-&lt;/asciinema-player&gt;
-
-&lt;p&gt;In the output you will find the two endpoint links to the blogs. After a few minutes both links will be active. You can also see the service running on the Amazon console, simply navigate to the ECS console and select the cluster. You should see now one service on Fargate and the second one on EC2.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-01-30-fargate_with_terraform/img/ecs-fargate-2.png&quot; alt=&quot;Fargate&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/noodle_niek.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="terraform" /><category term="docker" /><category term="microhack" /><summary type="html">Last December at the AWS re:invent, AWS announced the new container service platform Fargate. Fargate is integrated to ECS. The key difference is that Fargate does not require you to have EC2 instances running to host your containers, which means we have serverless containers. A drawback is that Fargate is not globally available yet, today Fargate is only available in us-east-1, see also the list of supported regions. Later in December Fargate also become available in Terraform so time to see how it works.</summary></entry></feed>
+&lt;p&gt;With this approach the discovery agent becomes obsolete and we can retrieve the information for discovery through standard Amazon features. The example I have described in this post is just one way to implement service discovery in ECS, many alternatives are available.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/noodle_niek.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="spring" /><category term="docker" /><summary type="html">Last year I wrote a post how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the ECS agent 1.15 to retrieve container meta data in the container. This feature makes the discovery agent obsolete.</summary></entry></feed>

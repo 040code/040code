@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>GraphQL + Spring Boot - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2019/03/21/spring-boot-graphql/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/stefan/">Stefan van den Oord</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2019-03-21_spring-boot-graphql/glow-lichttoren.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>GraphQL + Spring Boot</h1>
+                    
+                    <h2 class="subheading">Queries, mutations and subscription in Java</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/niek/">
+                            Niek Palm
+                          </a>
+                          
+                      
+                      on 2019-03-21</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/graphql/">GraphQL</a><a class="badge " href="/blog/tag/spring/">Spring Framework</a><a class="badge " href="/blog/tag/java/">Java</a>
+
+
+				<h3 id="introduction">Introduction</h3>
+<p>Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how <a href="https://graphql.org/">GraphQL</a> works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.</p>
+
+<p>GraphQL is API is based on three main concepts. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. A major difference with REST is that wit a query you can specify excatly what you expect or want from the backend. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.</p>
+
+<h3 id="java-spring-and-graphql">Java, Spring and GraphQL.</h3>
+<p>For implementing a GraphQL service you have two choices. Either schema first, or code first. So similar concepts as we used with SOA XML services. When starting with code you have to write more plumbing code, but you have more freedom. And on the other side starting of the schema reduce all the plumbing code and gives a faster start.</p>
+
+<p>In this blog we first create a simple JPA enabled Spring Boot service. Then we add step-by-step GraphQL features to the service. We start from the schema and show which small additions you have to do to our application. Starting from a schema will not result in generated coded, you still have to write the matching code yourself. For the Java implementation we will use the libraries from <a href="https://github.com/graphql-java-kickstart">graphql-java-kickstart</a>.</p>
+
+<h3 id="sample-model-and-api">Sample Model and API</h3>
+<p>For simplicity we use in this blog a simple domain model. Consisting of two classes. A person and notes, a person can have multiple notes. And a note always has one author, a person.</p>
+
+<p><a href="#">
+    <img src="/assets/2019-03-21_spring-boot-graphql/model.png" alt="Model" />
+</a></p>
+
+<h3 id="create-a-simple-note-service">Create a simple Note Service</h3>
+<p>First we create a simple Spring JPA services, to store the Notes and the Authors of type Person. The implementation will be straightforward. We create an entity class for Person and Note. Fore readability the imports and other plumbing is omitted. See <a href="https://github.com/npalm/blog-graphql-spring-service">GitHub</a> for a complete implementation.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Entity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="nd">@Id</span> <span class="nd">@GeneratedValue</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="nd">@Column</span><span class="o">(</span><span class="n">unique</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">email</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Entity</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Note</span> <span class="o">{</span>
+    <span class="nd">@Id</span> <span class="nd">@GeneratedValue</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">note</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">ZonedDateTime</span> <span class="n">createdOn</span><span class="o">;</span>
+
+    <span class="nd">@ManyToOne</span><span class="o">(</span><span class="n">fetch</span> <span class="o">=</span> <span class="n">FetchType</span><span class="o">.</span><span class="na">EAGER</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">Person</span> <span class="n">author</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Next we define two spring JPA repositories to store the entities above in our database.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">PersonRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">();</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NoteRepository</span> <span class="kd">extends</span> <span class="n">CrudRepository</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Finally, we define the services interface which we will use to implement the GraphQL queries,</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NotesService</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="n">Note</span> <span class="nf">save</span><span class="o">(</span><span class="n">Note</span> <span class="n">note</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">&gt;</span> <span class="nf">findById</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">();</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>So that is all to create a simple service with basic JPA (persistence) capacity. Time to focus on adding GraphQL to our service.</p>
+
+<h3 id="implement-a-query">Implement a query</h3>
+<p>As base library we use <code class="highlighter-rouge">graphql-java-tools</code> this library requires a GraphQL schema to implement GrahpQL. The first step is to define a schema for our queries. The schema defines our GraphQL root, for now only the query. Next the queries we will implement and the types we use. We define two queries. The first one to look op a note and the second one to find all notes based on a filter. Next, we define the types. As you can see a Note has a relation to a Person object. By querying for a note we can get immediately the authors name for example.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>schema {
+    query: Query,
+}
+
+type Query {
+    note(id: Long!): Note
+    notes: [Note]
+}
+
+# Object to represent a note
+type Note {
+    id: ID!
+    note: String
+    createdOn : String
+    author: Person
+}
+
+# Object to represent a note
+type Person {
+    id: ID!
+    name: String
+    email: String
+}
+
+
+</code></pre></div></div>
+
+<h3 id="implement-mutation">Implement Mutation</h3>
+<p>We have now defined a first version of a GraphQL schema. The second step is to connect the schema to the Note Service. GraphQL java tools expects for each query, a resolver function. Therefore, we need to implement <code class="highlighter-rouge">GraphQLQueryResolver</code> from graphql-tools.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Query</span> <span class="kd">implements</span> <span class="n">GraphQLQueryResolver</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">NotesService</span> <span class="n">notesService</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Query</span><span class="o">(</span><span class="n">NotesService</span> <span class="n">notesService</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">notesService</span> <span class="o">=</span> <span class="n">notesService</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">&gt;</span> <span class="nf">note</span><span class="o">(</span><span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">notesService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Note</span><span class="o">&gt;</span> <span class="nf">notes</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">notesService</span><span class="o">.</span><span class="na">findAll</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This is all, we have to do to be able to handle the queries as specified in the schema. We can now start the spring boot application and open http://locahost:8080/graphiql and query form some. Graphiql is a simple IDE to execute GraphQL queries. A much richer tool to play with your queries is <a href="https://github.com/prisma/graphql-playground">GraphQL Playground</a>. Actually no fun yet, we can only execute queries without getting any result. We simply have an empty system. We need a way to add notes to the system. In GraphQL you mutate data via a mutation. In the next step we add a mutation to the schema and update the code for executing the mutation.</p>
+
+<p>In the schema we add the mutation to the root and add a mutation to add a note to the <code class="highlighter-rouge">Mutation</code> type. Quite similar to defining the query above. For the input we define an input object for both Note and Person.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+schema {
+    ...
+    mutation: Mutation
+}
+
+type Mutation {
+    addNote(note: InputNote!, author: InputPerson!): Note
+}
+
+# Input type for the author of the note
+input InputPerson {
+    name: String!
+    email: String
+}
+
+# Input type for a new Note
+input InputNote {
+    note: String!
+}
+</code></pre></div></div>
+
+<p>Similar to implementing the query we have to implement an interface and declare methods for the mutation. Mutations have to be implemented in a class implementing the interface GraphQLMutationResolver. In this implementation we defined for the input objects converters to convert the GraphQL input object to domain objects that can be consumed by the service.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Mutation</span> <span class="kd">implements</span> <span class="n">GraphQLMutationResolver</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="n">Note</span> <span class="nf">addNote</span><span class="o">(</span><span class="kd">final</span> <span class="n">InputNote</span> <span class="n">note</span><span class="o">,</span> <span class="kd">final</span> <span class="n">InputPerson</span> <span class="n">author</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">notesService</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">InputNote</span><span class="o">.</span><span class="na">convert</span><span class="o">(</span><span class="n">note</span><span class="o">,</span> <span class="n">author</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>Let’s test the service. Build and start the service <code class="highlighter-rouge">/gradlew clean bootRun</code> and open <a href="http://localhost:8080/graphiql">http://localhost:8080/graphiql</a>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mutation {
+  addNote(note: {note: "Hello World"},
+    author: {name: "John Doe", email: "no-reply@jonn.doe"}) {
+    id
+  }
+}
+
+</code></pre></div></div>
+
+<p>And query for all available notes. This should result only in the note above.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">query</span> <span class="o">{</span>
+  <span class="n">notes</span> <span class="o">{</span>
+    <span class="n">id</span>
+    <span class="n">createdOn</span>
+    <span class="n">note</span>
+    <span class="n">author</span> <span class="o">{</span>
+      <span class="n">name</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><a href="#">
+    <img src="/assets/2019-03-21_spring-boot-graphql/query-graphiql.png" alt="Query example" />
+</a></p>
+
+<p>Add some more notes and experiment with the query. All standard features will work such as aliases, fragement and variables.</p>
+
+<h3 id="implement-subscriptions">Implement Subscriptions.</h3>
+
+<p>Another cool feature is the subscriptions. With a subscription you can subscribe to updates via a websocket. The same philosophy is followed for the subscription. You will gat your data in same structure as specified in the subscription call.</p>
+
+<p>To add subscription to our Java implements, we update the schema and add code to handle updates. To add a subscription for new notes we update the GraphQL schema first. Again update schema root and add the subscription, define the available subscriptions and add the required types.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>schema {
+    ...
+    subscription : Subscription
+}
+
+type Subscription {
+    # Subscribe to all new comments
+    notes: NoteUpdate!
+}
+
+type NoteUpdate {
+    # The note text
+    note : String
+    # The name of the author
+    authorName : String
+    # Time when the note was received
+    createdOn : String
+}
+</code></pre></div></div>
+
+<p>And once again we have to implement a resolver, this time we implement the <code class="highlighter-rouge">GraphQLSubscriptionResolver</code>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">class</span> <span class="nc">Subscription</span> <span class="kd">implements</span> <span class="n">GraphQLSubscriptionResolver</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">CommentPublisher</span> <span class="n">commentPublisher</span><span class="o">;</span>
+
+    <span class="n">Subscription</span><span class="o">(</span><span class="n">CommentPublisher</span> <span class="n">commentPublisher</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">commentPublisher</span> <span class="o">=</span> <span class="n">commentPublisher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">Publisher</span><span class="o">&lt;</span><span class="n">NoteUpdate</span><span class="o">&gt;</span> <span class="nf">notes</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">commentPublisher</span><span class="o">.</span><span class="na">getPublisher</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">Note</span> <span class="nf">save</span><span class="o">(</span><span class="n">Note</span> <span class="n">note</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+    <span class="n">notePublisher</span><span class="o">.</span><span class="na">publish</span><span class="o">(</span><span class="n">savedNoed</span><span class="o">);</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">notePublisher</code> is responsible to update messages via a WebScoket so the subscribers get the update. For the implementation check out the GitHub repo. Time to test the subscription. An easy way to test is topen the GraphiQL editor on two screens. Invoke in the first one the subscription and in the second one add a note. You will see you get an update of the new note on the first screen.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subscription {
+  notes {
+    note
+    authorName
+  }
+}
+</code></pre></div></div>
+<p><a href="#">
+    <img src="/assets/2019-03-21_spring-boot-graphql/subscription-graphiql.png" alt="Query example" />
+</a></p>
+
+<h3 id="testing">Testing</h3>
+<p>Another nice feature provided by <a href="https://github.com/graphql-java-kickstart/graphql-spring-boot">graphql-spring-boot</a> is the test utils. Testing your GraphQL queries becomes really simple. The library provide a <code class="highlighter-rouge">GraphQLTestTemplate</code> which makes it easy to invoke the GraphQL endpoint by with a query. The result is the JSON object. Let’s have a quick look on some code. First define the query in <code class="highlighter-rouge">queries/find-notes.graphql</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>query FindNotes {
+  notes {
+    id
+    note
+    createdOn
+    author {
+      name
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>Now create a test.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@SpringBootTest</span><span class="o">(</span><span class="n">webEnvironment</span> <span class="o">=</span> <span class="n">SpringBootTest</span><span class="o">.</span><span class="na">WebEnvironment</span><span class="o">.</span><span class="na">RANDOM_PORT</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GraphQLNoteTest</span> <span class="kd">extends</span> <span class="n">GraphQLBaseTest</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">GraphQLTestTemplate</span> <span class="n">graphQLTestTemplate</span><span class="o">;</span>
+
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">findNotes</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+
+        <span class="n">GraphQLResponse</span> <span class="n">findResponse</span> <span class="o">=</span> <span class="n">graphQLTestTemplate</span><span class="o">.</span><span class="na">perform</span><span class="o">(</span><span class="s">"queries/find-notes.graphql"</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+        <span class="n">assertTrue</span><span class="o">(</span><span class="n">findResponse</span><span class="o">.</span><span class="na">isOk</span><span class="o">());</span>
+
+        <span class="c1">// asserts to check the content</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>That is all, of course you should add some assert to check the content as well. For more details check out the <a href="https://github.com/npalm/blog-graphql-spring-service">GitHub</a> repo of this blog.</p>
+
+<h3 id="some-thoughts">Some thoughts</h3>
+
+<p>The example above shows how you can enable your Spring Boot service with a GraphQL API. Adding a GraphQL layer to your existing (simple) service is fairly easy with the tools. But GraphQL will become really powerful when you combine multiple (REST) API in one GraphQL endpoint to create a fluent and understandable API.</p>
+
+<p>If a java based approach is in that case the best way to go, I don’t know yet. In that case it could be interesting to dive into <a href="https://github.com/google/rejoiner">Rejoiner</a>.</p>
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/03/15/mob-programming/" data-toggle="tooltip" data-placement="top" title="Mob Programming">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
