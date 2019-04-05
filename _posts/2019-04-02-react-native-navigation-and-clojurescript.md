@@ -16,6 +16,13 @@ kramdown:
 *A beginner's guide on realizing proper navigation in a React Native application
 using ClojureScript and shadow-cljs*
 
+<p style="text-align: right">
+  <a href="https://github.com/svdo/CLJSReactNativeNavigation" target="sourcecode"><img
+    src="{{ site.baseurl }}/assets/2019-04-02-rnn-clojurescript/GitHub-Mark-120px-plus.png"
+    height="40" width="40"
+    alt="GitHub"
+    style="display: inline; margin-right: 10px;" />Source code for this post</a></p>
+
 That's a big bunch of words. Let me briefly introduce them to you, so that I can
 then dive deeper into some of them. "Beginner" in this case means that, a week
 before I started doing this, I had practically zero experience with
