@@ -1,19 +1,17 @@
 ---
 layout:     post
 title:      "React Native Navigation and ClojureScript"
-subtitle:   "A beginner's guide on realizing proper navigation in a React Native
+subtitle:   "A beginner's guide to realizing proper navigation in a React Native
             application using ClojureScript and shadow-cljs"
 date:       2019-04-02
 authors:    [stefan]
 header-img: "assets/2019-04-02-rnn-clojurescript/background.jpeg"
 tags:       [clojure, clojurescript, functional, react, react-native, shadow-cljs]
-kramdown:
-    gfm_quirks: true
 ---
 
 # React Native Navigation and ClojureScript
 
-*A beginner's guide on realizing proper navigation in a React Native application
+*A beginner's guide to realizing proper navigation in a React Native application
 using ClojureScript and shadow-cljs*
 
 <p style="text-align: right">
@@ -84,7 +82,6 @@ We're going to use the standalone version of shadow-cljs,
 
 ``` bash
 yarn add --dev shadow-cljs
-yarn add --dev shadow-cljs
 ```
 
 Now we need to configure shadow-cljs a bit. We create a file called
@@ -92,17 +89,17 @@ Now we need to configure shadow-cljs a bit. We create a file called
 
 ``` clojure
 {:source-paths
- ["src/main"              ;; production code
-  "src/test"]             ;; yes we're going to add tests as well!
+ ["src/main"                     ;; production code
+  "src/test"]                    ;; yes we're going to add tests as well!
 
  :dependencies
  [[reagent "0.8.1"]]
 
  :builds
- {:myapp                  ;; the target definition
-  {:target :react-native  ;; the target type
-   :init-fn myapp/init    ;; react native's entry point
-   :output-dir "build"}}} ;; where to put the built JS
+ {:myapp                         ;; the target definition
+  {:target :react-native         ;; the target type
+   :init-fn myapp/init           ;; react native's entry point
+   :output-dir "build"}}}        ;; where to put the built JS
 ```
 
 This is telling shadow-cljs that there is a target called "myapp", that
@@ -289,7 +286,7 @@ to call [`Navigation.bindComponent`][navBtnPressed]. So our wrapper also calls
 `bindComponent` and forwards `navigationButtonPressed`. Forwarding other
 life cycle methods is left as an exercise for the reader.
 
-Here's the main code for the wrapper:
+Here's the main code for the wrapper ([full version][wrapper]):
 
 ``` clojure
 ;; current namespace is `env`
@@ -452,8 +449,8 @@ iOS. I seem to be at odds with most of the rest of the world on this, but I
 happen to think that it is very important to present the user with an
 experience that is (as much as possible) identical to that of native apps. You
 shouldn't be able to tell from the user experience whether the app was written
-using native technology or cross platform technology. Not even when they update
-their OS to a new major version. So if my app uses a navigation stack, it has to
+using native technology or cross platform technology. Not even when you update
+your OS to a new major version. So if my app uses a navigation stack, it has to
 be the native one. Maybe I'm more sensitive to this then others, but I get
 really upset by apps that don't support the normal gesture for going back up the
 navigation stack. I also get annoyed when the animation that is used while going
@@ -494,3 +491,4 @@ this guide. So it is only fair to mention which versions I was using for this:
 [navBtnPressed]: https://wix.github.io/react-native-navigation/#/docs/events?id=navigationbuttonpressed-event
 [thheller]: https://github.com/thheller
 [patreon]: https://www.patreon.com/thheller
+[wrapper]: https://github.com/svdo/CLJSReactNativeNavigation/blob/master/src/main/env.cljc
