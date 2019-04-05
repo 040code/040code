@@ -462,10 +462,10 @@ this guide. So it is only fair to mention which versions I was using for this:
 |-------------------------|----------------------------|
 | node                    | 11.10.1                    |
 | npm                     | 6.5.0-next.0               |
-| react                   | 16.8.5                     |
-| react-native            | 0.59.1                     |
+| react                   | 16.8.3                     |
+| react-native            | 0.59.3                     |
 | react-native-cli        | 2.0.1                      |
-| react-native-navigation | 2.15.0                     |
+| react-native-navigation | 2.16.0                     |
 | shadow-cljs             | 2.8.26                     |
 | Xcode                   | 10.2                       |
 | iOS SDK                 | 12.2                       |
