@@ -5,6 +5,13 @@
   white-space: nowrap;    // this sets all children inside to nowrap
 }
 
+/* clojure formatting depends on white-space pre, because otherwise
+ * entire code blocks collapse into one line.
+ */
+.language-clojure .highlight pre code * {
+  white-space: pre;
+}
+
 .highlight pre {
   overflow-x: auto;       // this sets the scrolling in x
 }

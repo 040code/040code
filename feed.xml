@@ -1,4 +1,503 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2019-04-06T21:55:13+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">GraphQL + Spring Boot</title><link href="https://040code.github.io//2019/03/21/spring-boot-graphql/" rel="alternate" type="text/html" title="GraphQL + Spring Boot" /><published>2019-03-21T00:00:00+00:00</published><updated>2019-03-21T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/21/spring-boot-graphql</id><content type="html" xml:base="https://040code.github.io//2019/03/21/spring-boot-graphql/">&lt;h3 id=&quot;introduction&quot;&gt;Introduction&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://040code.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://040code.github.io//" rel="alternate" type="text/html" /><updated>2019-04-08T15:31:44+00:00</updated><id>https://040code.github.io//</id><title type="html">040 Code</title><subtitle>A developers blog</subtitle><entry><title type="html">React Native Navigation and ClojureScript</title><link href="https://040code.github.io//2019/04/02/react-native-navigation-and-clojurescript/" rel="alternate" type="text/html" title="React Native Navigation and ClojureScript" /><published>2019-04-02T00:00:00+00:00</published><updated>2019-04-02T00:00:00+00:00</updated><id>https://040code.github.io//2019/04/02/react-native-navigation-and-clojurescript</id><content type="html" xml:base="https://040code.github.io//2019/04/02/react-native-navigation-and-clojurescript/">&lt;h1 id=&quot;react-native-navigation-and-clojurescript&quot;&gt;React Native Navigation and ClojureScript&lt;/h1&gt;
+
+&lt;p&gt;&lt;em&gt;A beginner’s guide to realizing proper navigation in a React Native application
+using ClojureScript and shadow-cljs&lt;/em&gt;&lt;/p&gt;
+
+&lt;p style=&quot;text-align: right&quot;&gt;
+  &lt;a href=&quot;https://github.com/svdo/CLJSReactNativeNavigation&quot; target=&quot;sourcecode&quot;&gt;&lt;img src=&quot;/assets/2019-04-02-rnn-clojurescript/GitHub-Mark-120px-plus.png&quot; height=&quot;40&quot; width=&quot;40&quot; alt=&quot;GitHub&quot; style=&quot;display: inline; margin-right: 10px;&quot; /&gt;Source code for this post&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s a big bunch of words. Let me briefly introduce them to you, so that I can
+then dive deeper into some of them. “Beginner” in this case means that, a week
+before I started doing this, I had practically zero experience with
+Clojure(Script) and React Native. I do have quite a bit of experience using
+React, and also writing native iOS applications (Swift/Objective-C).&lt;/p&gt;
+
+&lt;p&gt;“Guide” means that I’m going to explain to you how I accomplished my goal.
+You’ll have to interpret it and follow along if you want to do the same. Future
+versions of any of the tools may break this guide.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://wix.github.io/react-native-navigation&quot;&gt;React Native Navigation&lt;/a&gt; is a framework for &lt;a href=&quot;https://facebook.github.io/react-native&quot;&gt;React Native&lt;/a&gt;. Which is a
+framework for building cross-platform apps for iOS and Android using JavaScript,
+but you probably already knew that part. &lt;a href=&quot;https://clojurescript.org&quot;&gt;ClojureScript&lt;/a&gt; is a functional
+programming language. It’s a variant of Clojure that compiles to JavaScript.
+“Proper navigation” is, admittedly, a bit subjective; I’ll explain this part in
+more detail below. Finally, &lt;a href=&quot;http://shadow-cljs.org&quot;&gt;shadow-cljs&lt;/a&gt; is the toolchain I used
+ as an easy way to integrate a bunch of ClojureScript code into an originally
+Javascript-based project.&lt;/p&gt;
+
+&lt;p&gt;A summary of this guide is:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Setup a new React Native project (using &lt;code class=&quot;highlighter-rouge&quot;&gt;react-native&lt;/code&gt; cli).&lt;/li&gt;
+  &lt;li&gt;Add shadow-cljs to be able to use ClojureScript in that project.&lt;/li&gt;
+  &lt;li&gt;Add and setup &lt;code class=&quot;highlighter-rouge&quot;&gt;react-native-navigation&lt;/code&gt; dependency.&lt;/li&gt;
+  &lt;li&gt;Create a bit of infrastructure on the ClojureScript side to be able to use
+the React Native Navigation APIs while using shadow-cljs’ hot reloading.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So let’s get started. I executed all these steps exactly as I’m describing here,
+the result of which you can find in &lt;a href=&quot;https://github.com/svdo/CLJSReactNativeNavigation&quot;&gt;my GitHub repo&lt;/a&gt;. Commit messages
+include all details about the commands I used. If you want to read my
+rant about wanting to use native navigation, keep reading till the very end of
+this post :)&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Please note that this post &lt;em&gt;does not&lt;/em&gt; include all the code that you need
+to make it work, that would be too much for a web page. Please refer to
+&lt;a href=&quot;https://github.com/svdo/CLJSReactNativeNavigation&quot;&gt;the final solution in my GitHub repo&lt;/a&gt; if you want to reproduce all of it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;1-create-react-native-project&quot;&gt;1. Create React Native Project&lt;/h1&gt;
+
+&lt;p&gt;This step is very easy. First, if you haven’t got it yet, install
+&lt;code class=&quot;highlighter-rouge&quot;&gt;react-native-cli&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-g&lt;/span&gt; react-native-cli
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then create a new project:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;react-native init CLJSReactNativeNavigation
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So far so good, nothing new here, let’s move on.&lt;/p&gt;
+
+&lt;h1 id=&quot;2-add-shadow-cljs&quot;&gt;2. Add shadow-cljs&lt;/h1&gt;
+
+&lt;p&gt;We’re going to use the standalone version of shadow-cljs,
+&lt;a href=&quot;https://shadow-cljs.github.io/docs/UsersGuide.html#_build_tool_integration&quot;&gt;as recommended&lt;/a&gt;. So we add the npm dependency for shadow-cljs:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yarn add &lt;span class=&quot;nt&quot;&gt;--dev&lt;/span&gt; shadow-cljs
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we need to configure shadow-cljs a bit. We create a file called
+&lt;code class=&quot;highlighter-rouge&quot;&gt;shadow-cljs.edn&lt;/code&gt; and give it the following content:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:source-paths&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;src/main&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                     &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; production code&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;src/test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                    &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; yes we're going to add tests as well!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+ &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:dependencies&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reagent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0.8.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+ &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:builds&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:myapp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; the target definition&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:target&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:react-native&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; the target type&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:init-fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;myapp/init&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;           &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; react native's entry point&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:output-dir&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;build&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;        &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; where to put the built JS&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is telling shadow-cljs that there is a target called “myapp”, that
+it’s a React Native target, that the entry point of our app is the function
+&lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt; in the &lt;code class=&quot;highlighter-rouge&quot;&gt;myapp&lt;/code&gt; namespace, and that the output should be written to the
+folder &lt;code class=&quot;highlighter-rouge&quot;&gt;build&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now let’s create that &lt;code class=&quot;highlighter-rouge&quot;&gt;myapp&lt;/code&gt; namespace. In &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main&lt;/code&gt; create a file called
+&lt;code class=&quot;highlighter-rouge&quot;&gt;myapp.cljs&lt;/code&gt; with the following contents:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ns&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reagent.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:refer&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;react-native&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:refer&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppRegistry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app-root&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn/View&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:style&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:flex-direction&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;column&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:margin&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:align-items&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;center&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:background-color&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;white&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn/Text&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:style&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:font-size&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:font-weight&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:margin-bottom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:text-align&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;center&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+    &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi Shadow!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.registerComponent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppRegistry&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CLJSReactNativeNavigation&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;r/reactify-component&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app-root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Time to check this out! Run the following commands in your terminal:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;yarn shadow-cljs compile myapp
+yarn react-native run-ios
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Tada!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/2019-04-02-rnn-clojurescript/Hi%20Shadow%21.png&quot; height=&quot;50%&quot; width=&quot;50%&quot; alt=&quot;Tada!&quot; style=&quot;margin: 0 auto;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;hot-reloading&quot;&gt;Hot Reloading&lt;/h2&gt;
+
+&lt;p&gt;When using shadow-cljs, you also get its variant of hot reloading. You don’t
+need to use the developer menu to enable it, but you do need to add a bit of
+code to make it work: (a) you need to had a function that performs the reload,
+and (b) you need to enable hot reloading in the config.&lt;/p&gt;
+
+&lt;h3 id=&quot;add-reload-function&quot;&gt;Add reload function&lt;/h3&gt;
+
+&lt;p&gt;Let me just give you the code of &lt;code class=&quot;highlighter-rouge&quot;&gt;myapp.cljs&lt;/code&gt; and then explain what’s going on.&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ns&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;myapp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:require&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reagent.core&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:refer&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;react-native&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:refer&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppRegistry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defonce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;component-to-update&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn/Text&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:style&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:font-size&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:font-weight&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:margin-bottom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:text-align&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;center&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hi Shadow!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app-root&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rn/View&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:style&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:flex-direction&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;column&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:margin&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;40&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:align-items&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;center&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                       &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:background-color&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;white&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]])&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updatable-app-root&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;with-meta&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app-root&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:component-did-mount&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                     &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;reset!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;component-to-update&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))}))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reload&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:dev/after-load&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.forceUpdate&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;component-to-update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.registerComponent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppRegistry&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CLJSReactNativeNavigation&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;r/reactify-component&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;updatable-app-root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is what it does:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The text content (“Hi Shadow!”) is extracted into a separate component
+(&lt;code class=&quot;highlighter-rouge&quot;&gt;content&lt;/code&gt;), because the call &lt;a href=&quot;https://reactjs.org/docs/react-component.html#forceupdate&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;forceUpdate&lt;/code&gt;&lt;/a&gt; that we’ll use
+updates everything &lt;em&gt;below&lt;/em&gt; the application root component, not the root
+component itself.&lt;/li&gt;
+  &lt;li&gt;The app-root component is annotated with a &lt;code class=&quot;highlighter-rouge&quot;&gt;component-did-mount&lt;/code&gt; handler
+(&lt;code class=&quot;highlighter-rouge&quot;&gt;updatable-app-root&lt;/code&gt;). This handler stores the actual JavaScript object
+that represents the root component into the atom &lt;code class=&quot;highlighter-rouge&quot;&gt;component-to-update&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;A function &lt;code class=&quot;highlighter-rouge&quot;&gt;reload&lt;/code&gt; is added, which takes the value of that atom and calls
+the method &lt;a href=&quot;https://reactjs.org/docs/react-component.html#forceupdate&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;forceUpdate&lt;/code&gt;&lt;/a&gt; on it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;One final step remains: enabling hot reloading in &lt;code class=&quot;highlighter-rouge&quot;&gt;shadow-cljs.edn&lt;/code&gt;. It’s new
+content is:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:source-paths&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;src/main&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                     &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; production code&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;src/test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                    &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; yes we're going to add tests as well!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+ &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:dependencies&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reagent&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0.8.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+ &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:builds&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+ &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:myapp&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; the target definition&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:target&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:react-native&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;         &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; the target type&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:init-fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;myapp/init&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;           &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; react native's entry point&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:output-dir&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;build&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;           &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; where to put the built JS&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+   &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:devtools&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:autoload&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; enables hot-reloading&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you reload the app, changing the text in the &lt;code class=&quot;highlighter-rouge&quot;&gt;content&lt;/code&gt; component should
+cause the app to automatically update!&lt;/p&gt;
+
+&lt;h1 id=&quot;3-add-react-native-navigation&quot;&gt;3. Add React Native Navigation&lt;/h1&gt;
+
+&lt;p&gt;This bit is a somewhat tedious I’m afraid. You’ll have to go through &lt;a href=&quot;https://wix.github.io/react-native-navigation/#/docs/Installing&quot;&gt;the
+instructions to setup React Native Navigation&lt;/a&gt;. Add the npm
+dependency, update your Xcode project, update iOS source code, update Android
+build files, and update Android source code. Tip for Android part: Please don’t
+blindly copy-paste. Some of the instructions refer are not up to date, some
+parts are not really needed, etc. If you want you can have a look at
+&lt;a href=&quot;https://github.com/svdo/CLJSReactNativeNavigation&quot;&gt;how I did it&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Obviously you’ll skip the last step of the instructions, namely the part where
+the JavaScript code is updated to use React Native Navigation. We’ll address
+that in ClojureScript next.&lt;/p&gt;
+
+&lt;h1 id=&quot;4-integrate-and-wrap&quot;&gt;4. Integrate and Wrap&lt;/h1&gt;
+
+&lt;p&gt;Ok, roll up your sleeves, because here comes the interesting part.&lt;/p&gt;
+
+&lt;h2 id=&quot;wrapper-functionality&quot;&gt;Wrapper functionality&lt;/h2&gt;
+
+&lt;p&gt;In JavaScript we would need to do something like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Navigation&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'react-native-navigation'&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;Navigation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;registerComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'navigation.playground.WelcomeScreen'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;Navigation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;events&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;registerAppLaunchedListener&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;Navigation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setRoot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;component&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'navigation.playground.WelcomeScreen'&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Obviously in ClojureScript we need to do something similar. There’s a problem
+though: we need a handle to the actual JavaScript component in order to call
+&lt;code class=&quot;highlighter-rouge&quot;&gt;forceUpdate&lt;/code&gt; on it (for hot reloading). React Native Navigation has made the
+design choice that it creates new root components for screens that you push
+on the navigation stack. So also for those components we need a handle and
+call &lt;code class=&quot;highlighter-rouge&quot;&gt;forceUpdate&lt;/code&gt;. We accomplish this by not registering the component itself
+with &lt;code class=&quot;highlighter-rouge&quot;&gt;Navigation&lt;/code&gt;, but a wrapper of that component.&lt;/p&gt;
+
+&lt;p&gt;This causes another problem though. React Native Navigation gives components
+that you register a &lt;code class=&quot;highlighter-rouge&quot;&gt;componentId&lt;/code&gt;. It uses this for its internal registration
+so that it can make navigation work. For example, when you push a new screen
+onto the navigation stack, it uses the &lt;code class=&quot;highlighter-rouge&quot;&gt;componentId&lt;/code&gt; to find the screen from
+which you are pushing. The problem is that we registered the &lt;em&gt;wrapper&lt;/em&gt;, but
+we’re navigating from the &lt;em&gt;wrapped component&lt;/em&gt;. Which does not have a
+&lt;code class=&quot;highlighter-rouge&quot;&gt;componentId&lt;/code&gt;, because we never registered it with &lt;code class=&quot;highlighter-rouge&quot;&gt;Navigation&lt;/code&gt;. Solution:
+make the wrapper in such a way that it passes its &lt;code class=&quot;highlighter-rouge&quot;&gt;componentId&lt;/code&gt; on to the
+wrapped component.&lt;/p&gt;
+
+&lt;p&gt;But there is more! React Native Navigation defines some additional life cycle
+methods, such as &lt;code class=&quot;highlighter-rouge&quot;&gt;navigationButtonPressed&lt;/code&gt;. And for that to work, you need
+to call &lt;a href=&quot;https://wix.github.io/react-native-navigation/#/docs/events?id=navigationbuttonpressed-event&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Navigation.bindComponent&lt;/code&gt;&lt;/a&gt;. So our wrapper also calls
+&lt;code class=&quot;highlighter-rouge&quot;&gt;bindComponent&lt;/code&gt; and forwards &lt;code class=&quot;highlighter-rouge&quot;&gt;navigationButtonPressed&lt;/code&gt;. Forwarding other
+life cycle methods is left as an exercise for the reader.&lt;/p&gt;
+
+&lt;p&gt;Here’s the main code for the wrapper (&lt;a href=&quot;https://github.com/svdo/CLJSReactNativeNavigation/blob/master/src/main/env.cljc&quot;&gt;full version&lt;/a&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;;; current namespace is `env`&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defonce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id-seq-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defonce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mounted-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;defonce&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screens-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;register&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get-props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;::key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+           &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;::id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-state&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+           &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:component-id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-componentId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;crc&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;                    &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; crc is create-react-class&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+              &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:displayName&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Wrapper&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:getInitialState&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;swap!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id-seq-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;inc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                             &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:componentDidMount&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;bind-component&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;swap!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mounted-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                         &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;assoc-in&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-state&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:componentWillUnmount&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;swap!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mounted-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;dissoc&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-state&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.-id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+
+               &lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;;; FIXME: forward other lifecycles the same way&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:navigationButtonPressed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:keys&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;navigation-button-pressed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screens-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get-props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;js/console.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;navigationButtonPressed&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                                    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;boolean&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;navigation-button-pressed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pr-str&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;when&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;navigation-button-pressed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;navigation-button-pressed&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:componentDidAppear&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;js/console.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;componentDidAppear&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:componentDidDisappear&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;js/console.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;componentDidDisappear&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+               &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:render&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;this-as&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                  &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:keys&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screens-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                        &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get-props&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;js/console.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;render&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;pr-str&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;props&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;r/as-element&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))))})]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;register-component&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;wrapper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This stores the mounted components in &lt;code class=&quot;highlighter-rouge&quot;&gt;mounted-ref&lt;/code&gt;, which we can then use
+for the hot reloading:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reload&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:dev/after-load&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;doseq&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instances&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mounted-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instances&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;js/console.log&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;forceUpdate&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.forceUpdate&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;js&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;inst&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;register&lt;/code&gt; method uses an atom &lt;code class=&quot;highlighter-rouge&quot;&gt;screens-ref&lt;/code&gt; to forward life cycle methods,
+so we need to provide a function for screens to add themselves:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add-screen&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screen-def&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;swap!&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screens-ref&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;assoc&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screen-def&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;using-it&quot;&gt;Using it&lt;/h2&gt;
+
+&lt;p&gt;Initially, in &lt;code class=&quot;highlighter-rouge&quot;&gt;myapp/init&lt;/code&gt; we called React Native’s &lt;code class=&quot;highlighter-rouge&quot;&gt;registerComponent&lt;/code&gt;. Now
+we call our &lt;code class=&quot;highlighter-rouge&quot;&gt;env/register&lt;/code&gt; instead. We could just call &lt;code class=&quot;highlighter-rouge&quot;&gt;(env/register &quot;App&quot;)&lt;/code&gt;,
+but we want to pass some options for the navigation bar.&lt;/p&gt;
+
+&lt;p&gt;Furthermore we need to call the &lt;code class=&quot;highlighter-rouge&quot;&gt;Navigation.events().registerAppLaunchedListener&lt;/code&gt;
+JavaScript function to set the navigation root for our app.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt; function is now:&lt;/p&gt;
+
+&lt;div class=&quot;language-clojure highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;defn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;env/register&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;App&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:topBar&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:visible&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                          &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:title&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:text&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My App&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                          &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:rightButtons&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;add&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:systemItem&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;add&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}]}})&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rnn/Navigation.events&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.registerAppLaunchedListener&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+       &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+         &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;-&amp;gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:root&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+               &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:stack&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+                &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:children&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:component&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;App&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}]}}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+              &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;clj-&amp;gt;js&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+              &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rnn/Navigation.setRoot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))))))&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;credits&quot;&gt;Credits&lt;/h1&gt;
+
+&lt;p&gt;That’s it! Done! Just four simple, easy, almost trivial steps! Well maybe not
+so trivial. I guess a ClojureScript beginner couldn’t have come up with this.
+Well, in fact I &lt;em&gt;am&lt;/em&gt; a ClojureScript beginner and I &lt;em&gt;did not&lt;/em&gt; come up with this
+solution myself. All the credits go to &lt;a href=&quot;https://github.com/thheller&quot;&gt;Thomas Heller&lt;/a&gt;, the author of
+&lt;a href=&quot;http://shadow-cljs.org&quot;&gt;shadow-cljs&lt;/a&gt;. He has been amazing in his support by answering
+all of my beginner-level questions, and then he ended up conjuring this
+solution and committing it to my repository. He actually spent hours on this
+I believe, and that level of support from a community is truly awesome
+(and rare). He doesn’t seem to be advertising it very much, but you can become
+his &lt;a href=&quot;https://www.patreon.com/thheller&quot;&gt;patreon&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;why-react-native-navigation&quot;&gt;Why React Native Navigation&lt;/h1&gt;
+
+&lt;p&gt;What’s special about React Native Navigation is that it is implemented using the
+real platform native components, specifically
+&lt;a href=&quot;https://developer.apple.com/documentation/uikit/uinavigationcontroller&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;UINavigationController&lt;/code&gt;&lt;/a&gt; on
+iOS. I seem to be at odds with most of the rest of the world on this, but I
+happen to think that it is very important to present the user with an
+experience that is (as much as possible) identical to that of native apps. You
+shouldn’t be able to tell from the user experience whether the app was written
+using native technology or cross platform technology. Not even when you update
+your OS to a new major version. So if my app uses a navigation stack, it has to
+be the native one. Maybe I’m more sensitive to this then others, but I get
+really upset by apps that don’t support the normal gesture for going back up the
+navigation stack. I also get annoyed when the animation that is used while going
+back is slightly non-standard. Using the native components is the only way to
+accomplish that. Other components can come close, but not close enough for me.&lt;/p&gt;
+
+&lt;h3 id=&quot;versions&quot;&gt;Versions&lt;/h3&gt;
+
+&lt;p&gt;Like I said in the beginning, future versions of any of the tools may break
+this guide. So it is only fair to mention which versions I was using for this:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Tool&lt;/th&gt;
+      &lt;th&gt;Version&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;node&lt;/td&gt;
+      &lt;td&gt;11.10.1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;npm&lt;/td&gt;
+      &lt;td&gt;6.5.0-next.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;react&lt;/td&gt;
+      &lt;td&gt;16.8.3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;react-native&lt;/td&gt;
+      &lt;td&gt;0.59.3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;react-native-cli&lt;/td&gt;
+      &lt;td&gt;2.0.1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;react-native-navigation&lt;/td&gt;
+      &lt;td&gt;2.16.0&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;shadow-cljs&lt;/td&gt;
+      &lt;td&gt;2.8.26&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Xcode&lt;/td&gt;
+      &lt;td&gt;10.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;iOS SDK&lt;/td&gt;
+      &lt;td&gt;12.2&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Android SDK&lt;/td&gt;
+      &lt;td&gt;API levels 26, 27, 28&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;Build tools 27.0.3, 28.0.3&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;System images: android-28&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Stefan&quot;, &quot;last_name&quot;=&gt;&quot;van den Oord&quot;, &quot;github&quot;=&gt;&quot;svdo&quot;, &quot;linkedin&quot;=&gt;&quot;stefanvandenoord&quot;, &quot;permalink&quot;=&gt;&quot;/author/stefan/&quot;, &quot;header-img&quot;=&gt;&quot;img/Stefan-header.jpeg&quot;, &quot;avatar&quot;=&gt;&quot;stefan.png&quot;, &quot;bio&quot;=&gt;&quot;I love software development. I'm a generalist and I like learning new things all the time. I particulary enjoy using extreme programming, including practices like pair programming, test-driven design, etc. I also enjoy teaching others about it, for example at conferences, or using coding dojos.&quot;}</name></author><category term="clojure" /><category term="clojurescript" /><category term="functional" /><category term="react" /><category term="react-native" /><category term="shadow-cljs" /><summary type="html">React Native Navigation and ClojureScript</summary></entry><entry><title type="html">GraphQL + Spring Boot</title><link href="https://040code.github.io//2019/03/21/spring-boot-graphql/" rel="alternate" type="text/html" title="GraphQL + Spring Boot" /><published>2019-03-21T00:00:00+00:00</published><updated>2019-03-21T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/21/spring-boot-graphql</id><content type="html" xml:base="https://040code.github.io//2019/03/21/spring-boot-graphql/">&lt;h3 id=&quot;introduction&quot;&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;Now GraphQL is not anymore that new kid on a block it would be nice if we can implement a service with a GraphQL interface. Spring Boot is one of the well known frameworks to build your micro services in Java. Time to assess how easy, or hard it will be to implement a GraphQL service. In this post we will not explain how &lt;a href=&quot;https://graphql.org/&quot;&gt;GraphQL&lt;/a&gt; works. We focus on a simple Java Spring Boot micro services with a JPA layer. In the GraphQL language we cover the tree major concepts, a query, a mutation and a subscription.&lt;/p&gt;
 
 &lt;p&gt;GraphQL is API is based on three main concepts. Query the backend for data using a graph based query. The query is in a JSON like style and the response is valid JSON. A major difference with REST is that wit a query you can specify excatly what you expect or want from the backend. Mutation are the way to change data in the system based on flat input object. In this example we use mutation to add new information. Finally we have subscription to subscribe for changes and get notified once something is changed via a web socket.&lt;/p&gt;
@@ -363,7 +862,7 @@ type NoteUpdate {
 
 &lt;p&gt;There is so much more to talk about. For example, the roles of mob programming and the underlying principle: &lt;em&gt;all ideas must go from somebody’s head into the computer through somebody else’s hands&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;Want to learn more? Hire Woody Zuill and/or buy his book “Mob Programming – A Whole Team Approach”. Like what you read? Contact me and let’s see how we can leverage this!&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Stefan&quot;, &quot;last_name&quot;=&gt;&quot;van den Oord&quot;, &quot;github&quot;=&gt;&quot;svdo&quot;, &quot;linkedin&quot;=&gt;&quot;stefanvandenoord&quot;, &quot;permalink&quot;=&gt;&quot;/author/stefan/&quot;, &quot;header-img&quot;=&gt;&quot;img/graphiti.jpeg&quot;, &quot;avatar&quot;=&gt;&quot;stefan.png&quot;, &quot;bio&quot;=&gt;&quot;I love software development. I'm a generalist and I like learning new things all the time. I particulary enjoy using extreme programming, including practices like pair programming, test-driven design, etc. I also enjoy teaching others about it, for example at conferences, or using coding dojos.&quot;}</name></author><category term="xp" /><summary type="html">This blog was originally posted on Feb 25, 2019.</summary></entry><entry><title type="html">Git Bisect</title><link href="https://040code.github.io//2019/03/13/git-bisect/" rel="alternate" type="text/html" title="Git Bisect" /><published>2019-03-13T00:00:00+00:00</published><updated>2019-03-13T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/13/git-bisect</id><content type="html" xml:base="https://040code.github.io//2019/03/13/git-bisect/">&lt;p&gt;I want to tell you a little story about what happened to me a few days ago.
+&lt;p&gt;Want to learn more? Hire Woody Zuill and/or buy his book “Mob Programming – A Whole Team Approach”. Like what you read? Contact me and let’s see how we can leverage this!&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Stefan&quot;, &quot;last_name&quot;=&gt;&quot;van den Oord&quot;, &quot;github&quot;=&gt;&quot;svdo&quot;, &quot;linkedin&quot;=&gt;&quot;stefanvandenoord&quot;, &quot;permalink&quot;=&gt;&quot;/author/stefan/&quot;, &quot;header-img&quot;=&gt;&quot;img/Stefan-header.jpeg&quot;, &quot;avatar&quot;=&gt;&quot;stefan.png&quot;, &quot;bio&quot;=&gt;&quot;I love software development. I'm a generalist and I like learning new things all the time. I particulary enjoy using extreme programming, including practices like pair programming, test-driven design, etc. I also enjoy teaching others about it, for example at conferences, or using coding dojos.&quot;}</name></author><category term="xp" /><summary type="html">This blog was originally posted on Feb 25, 2019.</summary></entry><entry><title type="html">Git Bisect</title><link href="https://040code.github.io//2019/03/13/git-bisect/" rel="alternate" type="text/html" title="Git Bisect" /><published>2019-03-13T00:00:00+00:00</published><updated>2019-03-13T00:00:00+00:00</updated><id>https://040code.github.io//2019/03/13/git-bisect</id><content type="html" xml:base="https://040code.github.io//2019/03/13/git-bisect/">&lt;p&gt;I want to tell you a little story about what happened to me a few days ago.
 I went to the office and a colleague of mine was not very happy. This is strange because I work for a very nice company.. What happened? I asked him what was wrong. It turned out that he updated a lot of dependencies and some code for a certain service. And now the SonarQube reporting was not working anymore with a very strange message: HTTP Error 502 Bad gateway..&lt;/p&gt;
 
 &lt;p&gt;I decided to help him, because we don’t work alone and especially when you’re stuck (and frustrated) at something it’s best to include other human beings.&lt;/p&gt;
@@ -1787,76 +2286,4 @@ paper&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/quil/quil&quot;&gt;Quil library&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/clojure-emacs/cider&quot;&gt;Emacs CIDER plugin&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://github.com/AlDanial/cloc&quot;&gt;Cloc - counting lines of code&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry><entry><title type="html">Service Discovery on AWS</title><link href="https://040code.github.io//2018/02/14/service-discovery/" rel="alternate" type="text/html" title="Service Discovery on AWS" /><published>2018-02-14T00:00:00+00:00</published><updated>2018-02-14T00:00:00+00:00</updated><id>https://040code.github.io//2018/02/14/service-discovery</id><content type="html" xml:base="https://040code.github.io//2018/02/14/service-discovery/">&lt;p&gt;Last year I wrote a &lt;a href=&quot;/2017/04/20/discovery-agent/&quot;&gt;post&lt;/a&gt; how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the &lt;a href=&quot;https://github.com/aws/amazon-ecs-agent/releases/tag/v1.15.0&quot;&gt;ECS agent 1.15&lt;/a&gt; to retrieve container meta data in the container. This feature makes the discovery agent obsolete.&lt;/p&gt;
-
-&lt;h3 id=&quot;the-problem&quot;&gt;The problem&lt;/h3&gt;
-&lt;p&gt;Looking back to the last years problem. A Spring service running in a container needs its external ip address and port to register to Eureka for service discovery. A service running in a container does not know the external exposed port and docker does not support a way to obtain the port mapping. We could inject the ip address but for the port that would not work. Since the port is unknown at start time. Of course, this in only valid when using random ports. But fixing the port can eventually cause port conflicts. Besides that, you are not able to scale the container on the same host. Therefore, it makes sense to use automatic port assignment.&lt;/p&gt;
-
-&lt;p&gt;At that time I have solved this problem by adding an agent that can be called via a REST interface to lookup the exposed port based on the container id and internal port. The agent returns the external port, and the service can use this information to register itself to Eureka. This approach worked well but since the ECS agent is now shipped with a feature to retrieve the meta data we do not need longer an extra agent anymore.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/img/ecs1.png&quot; height=&quot;80%&quot; width=&quot;80%&quot; alt=&quot;ECS&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;solution&quot;&gt;Solution&lt;/h3&gt;
-&lt;p&gt;The approach to register the container to the discovery service remains the same. During container startup, the start script obtains the external ip address, and docker exposed port. The discovered information will be passed to the Spring Boot application using environment variables. At application start the Spring service discovery client uses the environment variables to register the application to Eureka.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;#&quot;&gt;
-    &lt;img src=&quot;/assets/2018-02-14-service-discovery/sequence.png&quot; height=&quot;100%&quot; width=&quot;98%&quot; alt=&quot;Sequence Diagram&quot; /&gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Before we are able retrieve information about the container (in the container) we need to enable the feature on the ECS instance. For more details about this feature see the &lt;a href=&quot;https://docs.aws.amazon.com/AmazonECS/latest/developerguide/container-metadata.html&quot;&gt;Amazon documentation&lt;/a&gt;. To enable the meta data in the container you need to set &lt;code class=&quot;highlighter-rouge&quot;&gt;ECS_ENABLE_CONTAINER_METADATA&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;. This can be easily done by adding the line below the user data script.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;echo ECS_ENABLE_CONTAINER_METADATA=true &amp;gt;&amp;gt; /etc/ecs/ecs.config
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Now each created container by ECS on the EC2 instances will have the meta data available in the file assigned to the environment variable &lt;code class=&quot;highlighter-rouge&quot;&gt;ECS_CONTAINER_METADATA_FILE&lt;/code&gt;. An example of the meta data looks like:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{
-  &quot;Cluster&quot;: &quot;ecs-cluster&quot;,
-  &quot;ContainerInstanceARN&quot;: &quot;arn:aws:ecs:eu-west-1:1234445678:some-id&quot;,
-  &quot;TaskARN&quot;: &quot;arn:aws:ecs:eu-west-1:1234445678:some-other-id&quot;,
-  &quot;ContainerID&quot;: &quot;container-id&quot;,
-  &quot;ContainerName&quot;: &quot;my-service&quot;,
-  &quot;DockerContainerName&quot;: &quot;docker-container-name&quot;,
-  &quot;ImageID&quot;: &quot;image-id&quot;,
-  &quot;ImageName&quot;: &quot;docker-image&quot;,
-  &quot;PortMappings&quot;: [
-    {
-      &quot;ContainerPort&quot;: 8080,
-      &quot;HostPort&quot;: 320001,
-      &quot;BindIp&quot;: &quot;0.0.0.0&quot;,
-      &quot;Protocol&quot;: &quot;tcp&quot;
-    }
-  ],
-  &quot;Networks&quot;: [
-    {
-      &quot;NetworkMode&quot;: &quot;default&quot;,
-      &quot;IPv4Addresses&quot;: [
-        &quot;172.17.0.2&quot;
-      ]
-    }
-  ],
-  &quot;MetadataFileStatus&quot;: &quot;READY&quot;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Next we fetch the ip address and port during container start. The ip address we still get through the standard amazon info endpoint.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export EUREKA_INSTANCE_IP_ADDRESS=$(curl --retry 5 --connect-timeout 3 -s 169.254.169.254/latest/meta-data/local-ipv4)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;We extract the port mapping from the metadata using &lt;code class=&quot;highlighter-rouge&quot;&gt;jq&lt;/code&gt;. We assume the service will run in the container on port 8080. Otherwise you can make this configurable as well.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;export EUREKE_INSTANCE_NON_SECURE_PORT=$(cat ${ECS_CONTAINER_METADATA_FILE} | jq -c -r &quot;.PortMappings[] | select(.ContainerPort == 8080) | .HostPort&quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;By using the Spring properties as environment variables, we can inject the information to the Spring application. Alternatively, you can use other names and assign the values in the &lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt; file, see the example below.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;eureka:
-  instance:
-    preferIpAddress: true
-    ip-address: ${EXTERNAL_IP}
-    non-secure-port: ${EXTERNAL_PORT}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;With this approach the discovery agent becomes obsolete and we can retrieve the information for discovery through standard Amazon features. The example I have described in this post is just one way to implement service discovery in ECS, many alternatives are available.&lt;/p&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Niek&quot;, &quot;last_name&quot;=&gt;&quot;Palm&quot;, &quot;github&quot;=&gt;&quot;npalm&quot;, &quot;twitter&quot;=&gt;&quot;niekos77&quot;, &quot;linkedin&quot;=&gt;&quot;niekpalm&quot;, &quot;permalink&quot;=&gt;&quot;/author/niek/&quot;, &quot;header-img&quot;=&gt;&quot;img/noodle_niek.jpg&quot;, &quot;avatar&quot;=&gt;&quot;niek.jpg&quot;, &quot;email&quot;=&gt;&quot;dev.npalm@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;I am developing for more than a decade software, mainly based on open source stacks. Currently I am having a full stack focus with my strengths on the backend related services, cloud and continuous delivery. Technologies that me keep busy now a days are: AWS, Terraform, Spring Cloud, React, React Native, Continuous Deliver, Docker, Elastic Search and much more. \n\n But cool technologies are not my only passions. I love to just crab by backpack and go around. Creating some nice meals and exploring the creative area of a cook is one of my favourite hobbies. Drinking a great craft beer is something that I love too. And from time to time the body needs some real exercise so I like to have a run or do a hike.&quot;}</name><email>dev.npalm@gmail.com</email></author><category term="aws" /><category term="spring" /><category term="docker" /><summary type="html">Last year I wrote a post how to implement service discovery for Spring Boot applications running in Docker containers on AWS ECS. At that time the Amazon ECS agent does not have support to discover the docker exposed ports inside the container. In November 2017 Amazon released a feature in the ECS agent 1.15 to retrieve container meta data in the container. This feature makes the discovery agent obsolete.</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>{&quot;first_name&quot;=&gt;&quot;Maarten&quot;, &quot;last_name&quot;=&gt;&quot;Metz&quot;, &quot;github&quot;=&gt;&quot;mmzsource&quot;, &quot;twitter&quot;=&gt;&quot;MMz_&quot;, &quot;linkedin&quot;=&gt;&quot;maartenmetz&quot;, &quot;permalink&quot;=&gt;&quot;/author/maarten/&quot;, &quot;header-img&quot;=&gt;&quot;img/htc.jpg&quot;, &quot;avatar&quot;=&gt;&quot;maarten.png&quot;, &quot;email&quot;=&gt;&quot;mmz.source@gmail.com&quot;, &quot;bio&quot;=&gt;&quot;Maarten Metz works as a senior software designer at Philips Research and has almost 2 decades of professional coding experience. He holds a Master degree in Human Computer Interaction from the Technical University in Eindhoven. His knowledge and experience range from requirements analysis to system maintenance and everything in between. \n\n His professional interests include interaction design, software requirements, – architecture, – design, – construction, – test automation and everything else that makes a system work. He has held presentations and workshops on various topics including Clojure, lean software development, problem solving, professional development, CQRS and mining code repositories.&quot;}</name><email>mmz.source@gmail.com</email></author><category term="clojure" /><category term="functional" /><summary type="html">Introduction</summary></entry></feed>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A developers blog">
+
+    <title>React Native Navigation and ClojureScript - 040 Code</title>
+
+    <link rel="canonical" href="https://040code.github.io//2019/04/02/react-native-navigation-and-clojurescript/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <link type="application/atom+xml" rel="alternate" href="https://040code.github.io//feed.xml" title="040 Code" />
+
+    
+
+    
+
+
+</head>
+
+
+<body>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">040 Code</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                
+                  
+                  <li>
+                      <a href="/author/niek/">Niek Palm</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/maarten/">Maarten Metz</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/jeroen/">Jeroen Knoops</a>
+                  </li>
+
+
+                  
+                
+                  
+                  <li>
+                      <a href="/author/stefan/">Stefan van den Oord</a>
+                  </li>
+
+
+                  
+                
+            </ul>
+
+        </div>
+
+
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    
+
+
+
+<!-- Post Header -->
+<header class="intro-header" style="background-image: url('/assets/2019-04-02-rnn-clojurescript/background.jpeg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>React Native Navigation and ClojureScript</h1>
+                    
+                    <h2 class="subheading">A beginner's guide to realizing proper navigation in a React Native application using ClojureScript and shadow-cljs</h2>
+                    
+                    <span class="meta">Posted by:
+                      
+                          <a href="/author/stefan/">
+                            Stefan van den Oord
+                          </a>
+                          
+                      
+                      on 2019-04-02</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<!-- Post Content -->
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+
+
+        <a class="badge " href="/blog/tag/clojure/">Clojure</a><a class="badge " href="/blog/tag/clojurescript/">Clojure Script</a><a class="badge " href="/blog/tag/functional/">Functional</a><a class="badge " href="/blog/tag/react/">React</a><a class="badge " href="/blog/tag/react-native/">React Native</a><a class="badge " href="/blog/tag/shadow-cljs/">shadow-cljs</a>
+
+
+				<h1 id="react-native-navigation-and-clojurescript">React Native Navigation and ClojureScript</h1>
+
+<p><em>A beginner’s guide to realizing proper navigation in a React Native application
+using ClojureScript and shadow-cljs</em></p>
+
+<p style="text-align: right">
+  <a href="https://github.com/svdo/CLJSReactNativeNavigation" target="sourcecode"><img src="/assets/2019-04-02-rnn-clojurescript/GitHub-Mark-120px-plus.png" height="40" width="40" alt="GitHub" style="display: inline; margin-right: 10px;" />Source code for this post</a></p>
+
+<p>That’s a big bunch of words. Let me briefly introduce them to you, so that I can
+then dive deeper into some of them. “Beginner” in this case means that, a week
+before I started doing this, I had practically zero experience with
+Clojure(Script) and React Native. I do have quite a bit of experience using
+React, and also writing native iOS applications (Swift/Objective-C).</p>
+
+<p>“Guide” means that I’m going to explain to you how I accomplished my goal.
+You’ll have to interpret it and follow along if you want to do the same. Future
+versions of any of the tools may break this guide.</p>
+
+<p><a href="https://wix.github.io/react-native-navigation">React Native Navigation</a> is a framework for <a href="https://facebook.github.io/react-native">React Native</a>. Which is a
+framework for building cross-platform apps for iOS and Android using JavaScript,
+but you probably already knew that part. <a href="https://clojurescript.org">ClojureScript</a> is a functional
+programming language. It’s a variant of Clojure that compiles to JavaScript.
+“Proper navigation” is, admittedly, a bit subjective; I’ll explain this part in
+more detail below. Finally, <a href="http://shadow-cljs.org">shadow-cljs</a> is the toolchain I used
+ as an easy way to integrate a bunch of ClojureScript code into an originally
+Javascript-based project.</p>
+
+<p>A summary of this guide is:</p>
+
+<ol>
+  <li>Setup a new React Native project (using <code class="highlighter-rouge">react-native</code> cli).</li>
+  <li>Add shadow-cljs to be able to use ClojureScript in that project.</li>
+  <li>Add and setup <code class="highlighter-rouge">react-native-navigation</code> dependency.</li>
+  <li>Create a bit of infrastructure on the ClojureScript side to be able to use
+the React Native Navigation APIs while using shadow-cljs’ hot reloading.</li>
+</ol>
+
+<p>So let’s get started. I executed all these steps exactly as I’m describing here,
+the result of which you can find in <a href="https://github.com/svdo/CLJSReactNativeNavigation">my GitHub repo</a>. Commit messages
+include all details about the commands I used. If you want to read my
+rant about wanting to use native navigation, keep reading till the very end of
+this post :)</p>
+
+<blockquote>
+  <p>Please note that this post <em>does not</em> include all the code that you need
+to make it work, that would be too much for a web page. Please refer to
+<a href="https://github.com/svdo/CLJSReactNativeNavigation">the final solution in my GitHub repo</a> if you want to reproduce all of it.</p>
+</blockquote>
+
+<h1 id="1-create-react-native-project">1. Create React Native Project</h1>
+
+<p>This step is very easy. First, if you haven’t got it yet, install
+<code class="highlighter-rouge">react-native-cli</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm <span class="nb">install</span> <span class="nt">-g</span> react-native-cli
+</code></pre></div></div>
+
+<p>Then create a new project:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>react-native init CLJSReactNativeNavigation
+</code></pre></div></div>
+
+<p>So far so good, nothing new here, let’s move on.</p>
+
+<h1 id="2-add-shadow-cljs">2. Add shadow-cljs</h1>
+
+<p>We’re going to use the standalone version of shadow-cljs,
+<a href="https://shadow-cljs.github.io/docs/UsersGuide.html#_build_tool_integration">as recommended</a>. So we add the npm dependency for shadow-cljs:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn add <span class="nt">--dev</span> shadow-cljs
+</code></pre></div></div>
+
+<p>Now we need to configure shadow-cljs a bit. We create a file called
+<code class="highlighter-rouge">shadow-cljs.edn</code> and give it the following content:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="no">:source-paths</span><span class="w">
+ </span><span class="p">[</span><span class="s">"src/main"</span><span class="w">                     </span><span class="c1">;; production code</span><span class="w">
+  </span><span class="s">"src/test"</span><span class="p">]</span><span class="w">                    </span><span class="c1">;; yes we're going to add tests as well!</span><span class="w">
+
+ </span><span class="no">:dependencies</span><span class="w">
+ </span><span class="p">[[</span><span class="n">reagent</span><span class="w"> </span><span class="s">"0.8.1"</span><span class="p">]]</span><span class="w">
+
+ </span><span class="no">:builds</span><span class="w">
+ </span><span class="p">{</span><span class="no">:myapp</span><span class="w">                         </span><span class="c1">;; the target definition</span><span class="w">
+  </span><span class="p">{</span><span class="no">:target</span><span class="w"> </span><span class="no">:react-native</span><span class="w">         </span><span class="c1">;; the target type</span><span class="w">
+   </span><span class="no">:init-fn</span><span class="w"> </span><span class="n">myapp/init</span><span class="w">           </span><span class="c1">;; react native's entry point</span><span class="w">
+   </span><span class="no">:output-dir</span><span class="w"> </span><span class="s">"build"</span><span class="p">}}}</span><span class="w">        </span><span class="c1">;; where to put the built JS</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This is telling shadow-cljs that there is a target called “myapp”, that
+it’s a React Native target, that the entry point of our app is the function
+<code class="highlighter-rouge">init</code> in the <code class="highlighter-rouge">myapp</code> namespace, and that the output should be written to the
+folder <code class="highlighter-rouge">build</code>.</p>
+
+<p>Now let’s create that <code class="highlighter-rouge">myapp</code> namespace. In <code class="highlighter-rouge">src/main</code> create a file called
+<code class="highlighter-rouge">myapp.cljs</code> with the following contents:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="n">myapp</span><span class="w">
+  </span><span class="p">(</span><span class="no">:require</span><span class="w"> </span><span class="p">[</span><span class="n">reagent.core</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="no">:refer</span><span class="w"> </span><span class="p">[</span><span class="n">atom</span><span class="p">]]</span><span class="w">
+            </span><span class="p">[</span><span class="s">"react-native"</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">rn</span><span class="w"> </span><span class="no">:refer</span><span class="w"> </span><span class="p">[</span><span class="n">AppRegistry</span><span class="p">]]))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">app-root</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">[</span><span class="no">:&gt;</span><span class="w"> </span><span class="n">rn/View</span><span class="w"> </span><span class="p">{</span><span class="no">:style</span><span class="w"> </span><span class="p">{</span><span class="no">:flex-direction</span><span class="w"> </span><span class="s">"column"</span><span class="w">
+                       </span><span class="no">:margin</span><span class="w"> </span><span class="mi">40</span><span class="w">
+                       </span><span class="no">:align-items</span><span class="w"> </span><span class="s">"center"</span><span class="w">
+                       </span><span class="no">:background-color</span><span class="w"> </span><span class="s">"white"</span><span class="p">}}</span><span class="w">
+
+   </span><span class="p">[</span><span class="no">:&gt;</span><span class="w"> </span><span class="n">rn/Text</span><span class="w"> </span><span class="p">{</span><span class="no">:style</span><span class="w"> </span><span class="p">{</span><span class="no">:font-size</span><span class="w"> </span><span class="mi">30</span><span class="w">
+                        </span><span class="no">:font-weight</span><span class="w"> </span><span class="s">"100"</span><span class="w">
+                        </span><span class="no">:margin-bottom</span><span class="w"> </span><span class="mi">20</span><span class="w">
+                        </span><span class="no">:text-align</span><span class="w"> </span><span class="s">"center"</span><span class="p">}}</span><span class="w">
+
+    </span><span class="s">"Hi Shadow!"</span><span class="p">]])</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.registerComponent</span><span class="w"> </span><span class="n">AppRegistry</span><span class="w">
+                      </span><span class="s">"CLJSReactNativeNavigation"</span><span class="w">
+                      </span><span class="o">#</span><span class="p">(</span><span class="nf">r/reactify-component</span><span class="w"> </span><span class="n">app-root</span><span class="p">)))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Time to check this out! Run the following commands in your terminal:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yarn shadow-cljs compile myapp
+yarn react-native run-ios
+</code></pre></div></div>
+
+<p>Tada!</p>
+
+<p><img src="/assets/2019-04-02-rnn-clojurescript/Hi%20Shadow%21.png" height="50%" width="50%" alt="Tada!" style="margin: 0 auto;" /></p>
+
+<h2 id="hot-reloading">Hot Reloading</h2>
+
+<p>When using shadow-cljs, you also get its variant of hot reloading. You don’t
+need to use the developer menu to enable it, but you do need to add a bit of
+code to make it work: (a) you need to had a function that performs the reload,
+and (b) you need to enable hot reloading in the config.</p>
+
+<h3 id="add-reload-function">Add reload function</h3>
+
+<p>Let me just give you the code of <code class="highlighter-rouge">myapp.cljs</code> and then explain what’s going on.</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="n">myapp</span><span class="w">
+  </span><span class="p">(</span><span class="no">:require</span><span class="w"> </span><span class="p">[</span><span class="n">reagent.core</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="no">:refer</span><span class="w"> </span><span class="p">[</span><span class="n">atom</span><span class="p">]]</span><span class="w">
+            </span><span class="p">[</span><span class="s">"react-native"</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="n">rn</span><span class="w"> </span><span class="no">:refer</span><span class="w"> </span><span class="p">[</span><span class="n">AppRegistry</span><span class="p">]]))</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">component-to-update</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="n">nil</span><span class="p">))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">[</span><span class="no">:&gt;</span><span class="w"> </span><span class="n">rn/Text</span><span class="w"> </span><span class="p">{</span><span class="no">:style</span><span class="w"> </span><span class="p">{</span><span class="no">:font-size</span><span class="w"> </span><span class="mi">30</span><span class="w">
+                       </span><span class="no">:font-weight</span><span class="w"> </span><span class="s">"100"</span><span class="w">
+                       </span><span class="no">:margin-bottom</span><span class="w"> </span><span class="mi">20</span><span class="w">
+                       </span><span class="no">:text-align</span><span class="w"> </span><span class="s">"center"</span><span class="p">}}</span><span class="w">
+   </span><span class="s">"Hi Shadow!"</span><span class="p">])</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">app-root</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">[</span><span class="no">:&gt;</span><span class="w"> </span><span class="n">rn/View</span><span class="w"> </span><span class="p">{</span><span class="no">:style</span><span class="w"> </span><span class="p">{</span><span class="no">:flex-direction</span><span class="w"> </span><span class="s">"column"</span><span class="w">
+                       </span><span class="no">:margin</span><span class="w"> </span><span class="mi">40</span><span class="w">
+                       </span><span class="no">:align-items</span><span class="w"> </span><span class="s">"center"</span><span class="w">
+                       </span><span class="no">:background-color</span><span class="w"> </span><span class="s">"white"</span><span class="p">}}</span><span class="w">
+   </span><span class="p">[</span><span class="n">content</span><span class="p">]])</span><span class="w">
+
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">updatable-app-root</span><span class="w">
+  </span><span class="p">(</span><span class="nb">with-meta</span><span class="w"> </span><span class="n">app-root</span><span class="w">
+    </span><span class="p">{</span><span class="no">:component-did-mount</span><span class="w">
+     </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="nf">this-as</span><span class="w"> </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+                     </span><span class="p">(</span><span class="nf">reset!</span><span class="w"> </span><span class="n">component-to-update</span><span class="w"> </span><span class="n">this</span><span class="p">)))}))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">reload</span><span class="w"> </span><span class="p">{</span><span class="no">:dev/after-load</span><span class="w"> </span><span class="n">true</span><span class="p">}</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.forceUpdate</span><span class="w"> </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="o">@</span><span class="n">component-to-update</span><span class="p">))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.registerComponent</span><span class="w"> </span><span class="n">AppRegistry</span><span class="w">
+                      </span><span class="s">"CLJSReactNativeNavigation"</span><span class="w">
+                      </span><span class="o">#</span><span class="p">(</span><span class="nf">r/reactify-component</span><span class="w"> </span><span class="n">updatable-app-root</span><span class="p">)))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This is what it does:</p>
+
+<ul>
+  <li>The text content (“Hi Shadow!”) is extracted into a separate component
+(<code class="highlighter-rouge">content</code>), because the call <a href="https://reactjs.org/docs/react-component.html#forceupdate"><code class="highlighter-rouge">forceUpdate</code></a> that we’ll use
+updates everything <em>below</em> the application root component, not the root
+component itself.</li>
+  <li>The app-root component is annotated with a <code class="highlighter-rouge">component-did-mount</code> handler
+(<code class="highlighter-rouge">updatable-app-root</code>). This handler stores the actual JavaScript object
+that represents the root component into the atom <code class="highlighter-rouge">component-to-update</code>.</li>
+  <li>A function <code class="highlighter-rouge">reload</code> is added, which takes the value of that atom and calls
+the method <a href="https://reactjs.org/docs/react-component.html#forceupdate"><code class="highlighter-rouge">forceUpdate</code></a> on it.</li>
+</ul>
+
+<p>One final step remains: enabling hot reloading in <code class="highlighter-rouge">shadow-cljs.edn</code>. It’s new
+content is:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="no">:source-paths</span><span class="w">
+ </span><span class="p">[</span><span class="s">"src/main"</span><span class="w">                     </span><span class="c1">;; production code</span><span class="w">
+  </span><span class="s">"src/test"</span><span class="p">]</span><span class="w">                    </span><span class="c1">;; yes we're going to add tests as well!</span><span class="w">
+
+ </span><span class="no">:dependencies</span><span class="w">
+ </span><span class="p">[[</span><span class="n">reagent</span><span class="w"> </span><span class="s">"0.8.1"</span><span class="p">]]</span><span class="w">
+
+ </span><span class="no">:builds</span><span class="w">
+ </span><span class="p">{</span><span class="no">:myapp</span><span class="w">                         </span><span class="c1">;; the target definition</span><span class="w">
+  </span><span class="p">{</span><span class="no">:target</span><span class="w"> </span><span class="no">:react-native</span><span class="w">         </span><span class="c1">;; the target type</span><span class="w">
+   </span><span class="no">:init-fn</span><span class="w"> </span><span class="n">myapp/init</span><span class="w">           </span><span class="c1">;; react native's entry point</span><span class="w">
+   </span><span class="no">:output-dir</span><span class="w"> </span><span class="s">"build"</span><span class="w">           </span><span class="c1">;; where to put the built JS</span><span class="w">
+   </span><span class="no">:devtools</span><span class="w"> </span><span class="p">{</span><span class="no">:autoload</span><span class="w"> </span><span class="n">true</span><span class="p">}}}}</span><span class="w"> </span><span class="c1">;; enables hot-reloading</span><span class="w">
+</span></code></pre></div></div>
+
+<p>If you reload the app, changing the text in the <code class="highlighter-rouge">content</code> component should
+cause the app to automatically update!</p>
+
+<h1 id="3-add-react-native-navigation">3. Add React Native Navigation</h1>
+
+<p>This bit is a somewhat tedious I’m afraid. You’ll have to go through <a href="https://wix.github.io/react-native-navigation/#/docs/Installing">the
+instructions to setup React Native Navigation</a>. Add the npm
+dependency, update your Xcode project, update iOS source code, update Android
+build files, and update Android source code. Tip for Android part: Please don’t
+blindly copy-paste. Some of the instructions refer are not up to date, some
+parts are not really needed, etc. If you want you can have a look at
+<a href="https://github.com/svdo/CLJSReactNativeNavigation">how I did it</a>.</p>
+
+<p>Obviously you’ll skip the last step of the instructions, namely the part where
+the JavaScript code is updated to use React Native Navigation. We’ll address
+that in ClojureScript next.</p>
+
+<h1 id="4-integrate-and-wrap">4. Integrate and Wrap</h1>
+
+<p>Ok, roll up your sleeves, because here comes the interesting part.</p>
+
+<h2 id="wrapper-functionality">Wrapper functionality</h2>
+
+<p>In JavaScript we would need to do something like this:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">Navigation</span> <span class="p">}</span> <span class="k">from</span> <span class="s1">'react-native-navigation'</span>
+<span class="nx">Navigation</span><span class="p">.</span><span class="nx">registerComponent</span><span class="p">(</span><span class="s1">'navigation.playground.WelcomeScreen'</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">App</span><span class="p">)</span>
+<span class="nx">Navigation</span><span class="p">.</span><span class="nx">events</span><span class="p">().</span><span class="nx">registerAppLaunchedListener</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">Navigation</span><span class="p">.</span><span class="nx">setRoot</span><span class="p">({</span>
+    <span class="na">root</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">component</span><span class="p">:</span> <span class="p">{</span>
+        <span class="na">name</span><span class="p">:</span> <span class="s1">'navigation.playground.WelcomeScreen'</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+</code></pre></div></div>
+
+<p>Obviously in ClojureScript we need to do something similar. There’s a problem
+though: we need a handle to the actual JavaScript component in order to call
+<code class="highlighter-rouge">forceUpdate</code> on it (for hot reloading). React Native Navigation has made the
+design choice that it creates new root components for screens that you push
+on the navigation stack. So also for those components we need a handle and
+call <code class="highlighter-rouge">forceUpdate</code>. We accomplish this by not registering the component itself
+with <code class="highlighter-rouge">Navigation</code>, but a wrapper of that component.</p>
+
+<p>This causes another problem though. React Native Navigation gives components
+that you register a <code class="highlighter-rouge">componentId</code>. It uses this for its internal registration
+so that it can make navigation work. For example, when you push a new screen
+onto the navigation stack, it uses the <code class="highlighter-rouge">componentId</code> to find the screen from
+which you are pushing. The problem is that we registered the <em>wrapper</em>, but
+we’re navigating from the <em>wrapped component</em>. Which does not have a
+<code class="highlighter-rouge">componentId</code>, because we never registered it with <code class="highlighter-rouge">Navigation</code>. Solution:
+make the wrapper in such a way that it passes its <code class="highlighter-rouge">componentId</code> on to the
+wrapped component.</p>
+
+<p>But there is more! React Native Navigation defines some additional life cycle
+methods, such as <code class="highlighter-rouge">navigationButtonPressed</code>. And for that to work, you need
+to call <a href="https://wix.github.io/react-native-navigation/#/docs/events?id=navigationbuttonpressed-event"><code class="highlighter-rouge">Navigation.bindComponent</code></a>. So our wrapper also calls
+<code class="highlighter-rouge">bindComponent</code> and forwards <code class="highlighter-rouge">navigationButtonPressed</code>. Forwarding other
+life cycle methods is left as an exercise for the reader.</p>
+
+<p>Here’s the main code for the wrapper (<a href="https://github.com/svdo/CLJSReactNativeNavigation/blob/master/src/main/env.cljc">full version</a>):</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">;; current namespace is `env`</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">id-seq-ref</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">mounted-ref</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="p">{}))</span><span class="w">
+</span><span class="p">(</span><span class="nf">defonce</span><span class="w"> </span><span class="n">screens-ref</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="p">{}))</span><span class="w">
+
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">register</span><span class="w"> </span><span class="p">[</span><span class="nb">key</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">get-props</span><span class="w">
+        </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[</span><span class="n">this</span><span class="p">]</span><span class="w">
+          </span><span class="p">{</span><span class="no">::key</span><span class="w"> </span><span class="nb">key</span><span class="w">
+           </span><span class="no">::id</span><span class="w"> </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">.-state</span><span class="w"> </span><span class="n">.-id</span><span class="p">)</span><span class="w">
+           </span><span class="no">:component-id</span><span class="w"> </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">.-props</span><span class="w"> </span><span class="n">.-componentId</span><span class="p">)})</span><span class="w">
+
+        </span><span class="n">wrapper</span><span class="w">
+        </span><span class="p">(</span><span class="nf">crc</span><span class="w"> </span><span class="o">#</span><span class="n">js</span><span class="w">                    </span><span class="c1">;; crc is create-react-class</span><span class="w">
+              </span><span class="p">{</span><span class="no">:displayName</span><span class="w">
+               </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="s">"Wrapper"</span><span class="p">)</span><span class="w">
+
+               </span><span class="no">:getInitialState</span><span class="w">
+               </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">id-seq-ref</span><span class="w"> </span><span class="nb">inc</span><span class="p">)]</span><span class="w">
+                 </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="o">#</span><span class="n">js</span><span class="w"> </span><span class="p">{</span><span class="no">:key</span><span class="w"> </span><span class="nb">key</span><span class="w">
+                             </span><span class="no">:id</span><span class="w"> </span><span class="n">id</span><span class="p">}))</span><span class="w">
+
+               </span><span class="no">:componentDidMount</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="nf">bind-component</span><span class="w"> </span><span class="n">this</span><span class="p">)</span><span class="w">
+                  </span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">mounted-ref</span><span class="w">
+                         </span><span class="n">assoc-in</span><span class="w"> </span><span class="p">[</span><span class="nb">key</span><span class="w"> </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">.-state</span><span class="w"> </span><span class="n">.-id</span><span class="p">)]</span><span class="w"> </span><span class="n">this</span><span class="p">)))</span><span class="w">
+
+               </span><span class="no">:componentWillUnmount</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">mounted-ref</span><span class="w"> </span><span class="n">update</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="nb">dissoc</span><span class="w"> </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">.-state</span><span class="w"> </span><span class="n">.-id</span><span class="p">))))</span><span class="w">
+
+
+               </span><span class="c1">;; FIXME: forward other lifecycles the same way</span><span class="w">
+               </span><span class="no">:navigationButtonPressed</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">navigation-button-pressed</span><span class="p">]}</span><span class="w">
+                        </span><span class="p">(</span><span class="nb">get</span><span class="w"> </span><span class="o">@</span><span class="n">screens-ref</span><span class="w"> </span><span class="nb">key</span><span class="p">)</span><span class="w">
+
+                        </span><span class="n">props</span><span class="w">
+                        </span><span class="p">(</span><span class="nf">get-props</span><span class="w"> </span><span class="n">this</span><span class="p">)]</span><span class="w">
+
+                    </span><span class="p">(</span><span class="nf">js/console.log</span><span class="w"> </span><span class="s">"navigationButtonPressed"</span><span class="w">
+                                    </span><span class="nb">key</span><span class="w">
+                                    </span><span class="p">(</span><span class="nb">boolean</span><span class="w"> </span><span class="n">navigation-button-pressed</span><span class="p">)</span><span class="w">
+                                    </span><span class="p">(</span><span class="nb">pr-str</span><span class="w"> </span><span class="n">props</span><span class="p">))</span><span class="w">
+                    </span><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="n">navigation-button-pressed</span><span class="w">
+                      </span><span class="p">(</span><span class="nf">navigation-button-pressed</span><span class="w"> </span><span class="n">props</span><span class="p">)))))</span><span class="w">
+
+               </span><span class="no">:componentDidAppear</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="nf">js/console.log</span><span class="w"> </span><span class="s">"componentDidAppear"</span><span class="w"> </span><span class="nb">key</span><span class="p">)))</span><span class="w">
+
+               </span><span class="no">:componentDidDisappear</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="nf">js/console.log</span><span class="w"> </span><span class="s">"componentDidDisappear"</span><span class="w"> </span><span class="nb">key</span><span class="p">)))</span><span class="w">
+
+               </span><span class="no">:render</span><span class="w">
+               </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+                 </span><span class="p">(</span><span class="nf">this-as</span><span class="w">
+                  </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">this</span><span class="w">
+
+                  </span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[{</span><span class="no">:keys</span><span class="w"> </span><span class="p">[</span><span class="n">render</span><span class="p">]}</span><span class="w">
+                        </span><span class="p">(</span><span class="nb">get</span><span class="w"> </span><span class="o">@</span><span class="n">screens-ref</span><span class="w"> </span><span class="nb">key</span><span class="p">)</span><span class="w">
+
+                        </span><span class="n">props</span><span class="w">
+                        </span><span class="p">(</span><span class="nf">get-props</span><span class="w"> </span><span class="n">this</span><span class="p">)]</span><span class="w">
+
+                    </span><span class="p">(</span><span class="nf">js/console.log</span><span class="w"> </span><span class="s">"render"</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="p">(</span><span class="nb">pr-str</span><span class="w"> </span><span class="n">props</span><span class="p">))</span><span class="w">
+                    </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">render</span><span class="w"> </span><span class="n">props</span><span class="p">)</span><span class="w">
+                        </span><span class="p">(</span><span class="nf">r/as-element</span><span class="p">)))))})]</span><span class="w">
+
+    </span><span class="p">(</span><span class="nf">register-component</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="n">wrapper</span><span class="p">))))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This stores the mounted components in <code class="highlighter-rouge">mounted-ref</code>, which we can then use
+for the hot reloading:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">reload</span><span class="w"> </span><span class="p">{</span><span class="no">:dev/after-load</span><span class="w"> </span><span class="n">true</span><span class="p">}</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">doseq</span><span class="w"> </span><span class="p">[[</span><span class="nb">key</span><span class="w"> </span><span class="n">instances</span><span class="p">]</span><span class="w"> </span><span class="o">@</span><span class="n">mounted-ref</span><span class="w">
+          </span><span class="p">[</span><span class="n">id</span><span class="w"> </span><span class="n">inst</span><span class="p">]</span><span class="w"> </span><span class="n">instances</span><span class="p">]</span><span class="w">
+    </span><span class="p">(</span><span class="nf">js/console.log</span><span class="w"> </span><span class="s">"forceUpdate"</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w">
+    </span><span class="p">(</span><span class="nf">.forceUpdate</span><span class="w"> </span><span class="o">^</span><span class="n">js</span><span class="w"> </span><span class="n">inst</span><span class="p">)))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">register</code> method uses an atom <code class="highlighter-rouge">screens-ref</code> to forward life cycle methods,
+so we need to provide a function for screens to add themselves:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">add-screen</span><span class="w"> </span><span class="p">[</span><span class="nb">key</span><span class="w"> </span><span class="n">screen-def</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">screens-ref</span><span class="w"> </span><span class="nb">assoc</span><span class="w"> </span><span class="nb">key</span><span class="w"> </span><span class="n">screen-def</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="using-it">Using it</h2>
+
+<p>Initially, in <code class="highlighter-rouge">myapp/init</code> we called React Native’s <code class="highlighter-rouge">registerComponent</code>. Now
+we call our <code class="highlighter-rouge">env/register</code> instead. We could just call <code class="highlighter-rouge">(env/register "App")</code>,
+but we want to pass some options for the navigation bar.</p>
+
+<p>Furthermore we need to call the <code class="highlighter-rouge">Navigation.events().registerAppLaunchedListener</code>
+JavaScript function to set the navigation root for our app.</p>
+
+<p>The <code class="highlighter-rouge">init</code> function is now:</p>
+
+<div class="language-clojure highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">env/register</span><span class="w"> </span><span class="s">"App"</span><span class="w">
+                </span><span class="p">{</span><span class="no">:topBar</span><span class="w"> </span><span class="p">{</span><span class="no">:visible</span><span class="w"> </span><span class="s">"true"</span><span class="w">
+                          </span><span class="no">:title</span><span class="w"> </span><span class="p">{</span><span class="no">:text</span><span class="w"> </span><span class="s">"My App"</span><span class="p">}</span><span class="w">
+                          </span><span class="no">:rightButtons</span><span class="w"> </span><span class="p">[{</span><span class="no">:id</span><span class="w"> </span><span class="s">"add"</span><span class="w"> </span><span class="no">:systemItem</span><span class="w"> </span><span class="s">"add"</span><span class="p">}]}})</span><span class="w">
+
+  </span><span class="p">(</span><span class="nb">-&gt;</span><span class="w"> </span><span class="p">(</span><span class="nf">rnn/Navigation.events</span><span class="p">)</span><span class="w">
+      </span><span class="p">(</span><span class="nf">.registerAppLaunchedListener</span><span class="w">
+       </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w">
+         </span><span class="p">(</span><span class="nf">-&gt;&gt;</span><span class="w"> </span><span class="p">{</span><span class="no">:root</span><span class="w">
+               </span><span class="p">{</span><span class="no">:stack</span><span class="w">
+                </span><span class="p">{</span><span class="no">:children</span><span class="w"> </span><span class="p">[{</span><span class="no">:component</span><span class="w"> </span><span class="p">{</span><span class="no">:name</span><span class="w"> </span><span class="s">"App"</span><span class="p">}}]}}}</span><span class="w">
+              </span><span class="p">(</span><span class="nf">clj-&gt;js</span><span class="p">)</span><span class="w">
+              </span><span class="p">(</span><span class="nf">rnn/Navigation.setRoot</span><span class="p">))))))</span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="credits">Credits</h1>
+
+<p>That’s it! Done! Just four simple, easy, almost trivial steps! Well maybe not
+so trivial. I guess a ClojureScript beginner couldn’t have come up with this.
+Well, in fact I <em>am</em> a ClojureScript beginner and I <em>did not</em> come up with this
+solution myself. All the credits go to <a href="https://github.com/thheller">Thomas Heller</a>, the author of
+<a href="http://shadow-cljs.org">shadow-cljs</a>. He has been amazing in his support by answering
+all of my beginner-level questions, and then he ended up conjuring this
+solution and committing it to my repository. He actually spent hours on this
+I believe, and that level of support from a community is truly awesome
+(and rare). He doesn’t seem to be advertising it very much, but you can become
+his <a href="https://www.patreon.com/thheller">patreon</a>.</p>
+
+<h1 id="why-react-native-navigation">Why React Native Navigation</h1>
+
+<p>What’s special about React Native Navigation is that it is implemented using the
+real platform native components, specifically
+<a href="https://developer.apple.com/documentation/uikit/uinavigationcontroller"><code class="highlighter-rouge">UINavigationController</code></a> on
+iOS. I seem to be at odds with most of the rest of the world on this, but I
+happen to think that it is very important to present the user with an
+experience that is (as much as possible) identical to that of native apps. You
+shouldn’t be able to tell from the user experience whether the app was written
+using native technology or cross platform technology. Not even when you update
+your OS to a new major version. So if my app uses a navigation stack, it has to
+be the native one. Maybe I’m more sensitive to this then others, but I get
+really upset by apps that don’t support the normal gesture for going back up the
+navigation stack. I also get annoyed when the animation that is used while going
+back is slightly non-standard. Using the native components is the only way to
+accomplish that. Other components can come close, but not close enough for me.</p>
+
+<h3 id="versions">Versions</h3>
+
+<p>Like I said in the beginning, future versions of any of the tools may break
+this guide. So it is only fair to mention which versions I was using for this:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Version</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>node</td>
+      <td>11.10.1</td>
+    </tr>
+    <tr>
+      <td>npm</td>
+      <td>6.5.0-next.0</td>
+    </tr>
+    <tr>
+      <td>react</td>
+      <td>16.8.3</td>
+    </tr>
+    <tr>
+      <td>react-native</td>
+      <td>0.59.3</td>
+    </tr>
+    <tr>
+      <td>react-native-cli</td>
+      <td>2.0.1</td>
+    </tr>
+    <tr>
+      <td>react-native-navigation</td>
+      <td>2.16.0</td>
+    </tr>
+    <tr>
+      <td>shadow-cljs</td>
+      <td>2.8.26</td>
+    </tr>
+    <tr>
+      <td>Xcode</td>
+      <td>10.2</td>
+    </tr>
+    <tr>
+      <td>iOS SDK</td>
+      <td>12.2</td>
+    </tr>
+    <tr>
+      <td>Android SDK</td>
+      <td>API levels 26, 27, 28</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>Build tools 27.0.3, 28.0.3</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>System images: android-28</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/03/21/spring-boot-graphql/" data-toggle="tooltip" data-placement="top" title="GraphQL + Spring Boot">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<hr>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href="/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.linkedin.com/in/niekpalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li>
+                        <a href="https://twitter.com/niekos77">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                    
+                    <li>
+                        <a href="https://github.com/npalm">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul> -->
+                <p class="copyright text-muted">Copyright &copy; 040 Code 2019</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Disqus -->
+
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/clean-blog.min.js "></script>
+
+
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-97020149-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+
+</html>
