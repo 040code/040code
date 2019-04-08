@@ -76,6 +76,9 @@ blockchain:
 react:
   slug: react
   name: React
+react-native:
+  slug: react-native
+  name: React Native
 serverless:
   slug: serverless
   name: Serverless
@@ -100,3 +103,6 @@ rust:
 xp:
   slug: xp
   name: Extreme Programming
+shadow-cljs:
+  slug: shadow-cljs
+  name: shadow-cljs
