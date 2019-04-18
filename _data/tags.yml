@@ -106,3 +106,6 @@ xp:
 shadow-cljs:
   slug: shadow-cljs
   name: shadow-cljs
+google:
+  slug: google
+  name: Google
